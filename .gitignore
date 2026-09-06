@@ -7,7 +7,7 @@ __pycache__/
 .ruff_cache/
 repositories/
 
-# An?lisis y archivos temporales
+# CodeQL y archivos temporales
 codeql-databases/
 codeql-results/
 *.sarif
@@ -20,3 +20,4 @@ tmp/
 work/
 build/
 dist/
+results.json

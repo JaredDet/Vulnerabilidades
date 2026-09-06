@@ -126,11 +126,11 @@ El paquete también se puede ejecutar con `uv run python -m miner --help`.
 
 ## Entrega
 
-Incluye el enlace al repositorio del proyecto y `results.json` de una ejecución
-completa. No incluyas `.env`, ambientes virtuales, `work/`, repositorios clonados,
+Entrega el enlace al repositorio del proyecto y, por separado, `results.json` de una
+ejecución completa. El JSON generado está excluido de Git. No incluyas `.env`, ambientes virtuales, `work/`, repositorios clonados,
 bases de datos o SARIF temporales. `uv.lock` y `.env.example` sí se versionan.
 
-### Ejecución incluida
+### Ejecución de referencia
 
 `results.json` se generó con una ejecución completa sobre `pallets`, CodeQL 2.26.4
 y `--timeout 180`: 17 repositorios, 13 analizados, 3 sin lenguajes compatibles,
