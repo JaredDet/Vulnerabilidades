@@ -6,6 +6,23 @@ from miner.models import Finding, OrganizationResult, RepositoryResult
 from miner.report import write_report
 
 
+def test_findings_sorted_by_file_line_and_rule(tmp_path):
+    findings = [
+        Finding(rule_id=rule, message="Example", file=file, start_line=line)
+        for file, line, rule in [("z.py", 1, "a"), ("a.py", 20, "a"),
+                                 ("a.py", 2, "z"), ("a.py", 2, "a")]
+    ]
+    result = OrganizationResult(organization="org", repositories=[
+        RepositoryResult(name="org/repo", url="https://github.com/org/repo",
+                         status="analyzed", findings=findings)
+    ])
+    output = write_report(result, tmp_path / "out.json")
+    restored = OrganizationResult.model_validate_json(
+        output.read_text(encoding="utf-8"))
+    assert [(f.file, f.start_line, f.rule_id) for f in restored.repositories[0].findings] == [
+        ("a.py", 2, "a"), ("a.py", 2, "z"), ("a.py", 20, "a"), ("z.py", 1, "a")
+    ]
+    assert result.repositories[0].findings[0].file == "z.py"
 
 
 def test_report_stable(tmp_path):

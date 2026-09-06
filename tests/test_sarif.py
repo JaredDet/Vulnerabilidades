@@ -65,3 +65,10 @@ def test_missing_file(tmp_path):
         parse_sarif(tmp_path / "missing.sarif")
 
 
+def test_conflicting_rule_reference(tmp_path):
+    run = {
+        "tool": {"driver": {"rules": [{"id": "py/expected"}]}},
+        "results": [{"ruleId": "py/other", "ruleIndex": 0, "message": {"text": "Problem"}}],
+    }
+    with pytest.raises(SarifError):
+        parse_sarif(write_sarif(tmp_path, [run]))

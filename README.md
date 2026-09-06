@@ -138,7 +138,7 @@ y `--timeout 180`: 17 repositorios, 13 analizados, 3 sin lenguajes compatibles,
 de la base C/C++; el motivo queda registrado en el JSON. Son alertas estáticas,
 no una confirmación manual de vulnerabilidades explotables.
 
-La validación del proyecto incluye 83 pruebas pytest aprobadas y construcción
+La validación del proyecto incluye 85 pruebas pytest aprobadas y construcción
 correcta del wheel mediante `uv build`.
 
 ### Organización de las pruebas
