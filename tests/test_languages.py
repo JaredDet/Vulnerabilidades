@@ -1,6 +1,6 @@
 import pytest
 
-from languages import get_codeql_languages
+from miner.languages import get_codeql_languages
 
 AVAILABLE = {"cpp", "csharp", "go", "java", "javascript", "python", "ruby", "rust", "swift"}
 

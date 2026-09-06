@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from sarif import SarifError, parse_sarif
+from miner.sarif import SarifError, parse_sarif
 
 
 def write_sarif(tmp_path, runs):
@@ -63,3 +63,5 @@ def test_invalid_document(tmp_path, contents):
 def test_missing_file(tmp_path):
     with pytest.raises(SarifError):
         parse_sarif(tmp_path / "missing.sarif")
+
+

@@ -97,6 +97,20 @@ y puede diferir del commit clonado. No se inspecciona el árbol local para detec
 
 ## Estructura
 
+```text
+miner/
+├── src/miner/       # Paquete Python de la aplicación
+├── tests/           # Pruebas por componente
+├── work/            # Clones, bases y SARIF; excluido de Git
+├── results.json     # Resultado consolidado de la ejecución
+├── pyproject.toml
+├── uv.lock
+├── .env.example
+└── README.md
+```
+
+Los módulos siguientes están dentro de `src/miner/`:
+
 - `github_api.py`: Requests, autenticación, paginación y lenguajes.
 - `clone.py`: clonación Git.
 - `languages.py`: equivalencias y selección de extractores.
@@ -104,9 +118,11 @@ y puede diferir del commit clonado. No se inspecciona el árbol local para detec
 - `sarif.py`: interpretación de SARIF 2.1.0.
 - `models.py`: modelos Pydantic.
 - `report.py`: JSON estable y escritura atómica.
-- `miner.py`: coordinación y aislamiento de errores.
+- `pipeline.py`: coordinación y aislamiento de errores.
 - `cli.py`: aplicación Typer.
 - `tests/`: pruebas pytest con HTTP/CodeQL simulados y clonación local.
+
+El paquete también se puede ejecutar con `uv run python -m miner --help`.
 
 ## Entrega
 
@@ -124,3 +140,16 @@ no una confirmación manual de vulnerabilidades explotables.
 
 La validación del proyecto incluye 83 pruebas pytest aprobadas y construcción
 correcta del wheel mediante `uv build`.
+
+### Organización de las pruebas
+
+Cada componente tiene su archivo en `tests/`: `test_github_api.py`, `test_clone.py`,
+`test_languages.py`, `test_codeql.py`, `test_sarif.py`, `test_models.py`,
+`test_report.py`, `test_cli.py` y `test_miner.py`.
+Las pruebas no consultan GitHub ni ejecutan CodeQL; la clonación real se prueba
+con un repositorio temporal local. No necesitan el token ni cargar `.env`.
+
+```powershell
+uv run pytest -q
+uv run pytest tests/test_sarif.py tests/test_report.py -q
+```

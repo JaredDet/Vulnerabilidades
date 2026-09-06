@@ -2,7 +2,6 @@
 
 from collections.abc import Iterable
 
-
 # https://docs.github.com/en/code-security/reference/code-scanning/workflow-configuration-options
 # Equivalencias de nombres; la disponibilidad se obtiene del CLI.
 CODEQL_LANGUAGE_ALIASES: dict[str, str] = {
@@ -28,5 +27,6 @@ def get_codeql_languages(
     """
     available = set(available_languages) - AUXILIARY_EXTRACTORS
     normalized = (language.strip().lower() for language in languages)
-    candidates = {CODEQL_LANGUAGE_ALIASES.get(name, name) for name in normalized}
+    candidates = {CODEQL_LANGUAGE_ALIASES.get(
+        name, name) for name in normalized}
     return sorted(candidates & available)

@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from urllib.parse import unquote
 
-from models import Finding
+from .models import Finding
 
 
 class SarifError(RuntimeError):

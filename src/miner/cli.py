@@ -6,9 +6,9 @@ from typing import Annotated
 
 import typer
 
-from codeql import CodeQLError
-from github_api import GitHubAPIError, get_organization_repositories
-from miner import scan_organization
+from .codeql import CodeQLError
+from .github_api import GitHubAPIError, get_organization_repositories
+from .pipeline import scan_organization
 
 app = typer.Typer(add_completion=False, pretty_exceptions_enable=False)
 

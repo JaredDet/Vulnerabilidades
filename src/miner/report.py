@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from models import OrganizationResult
+from .models import OrganizationResult
 
 
 def write_report(result: OrganizationResult, output: Path) -> Path:

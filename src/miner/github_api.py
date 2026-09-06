@@ -1,9 +1,8 @@
 from urllib.parse import quote
 
 import requests
+from .models import Repository
 from pydantic import ValidationError
-
-from models import Repository
 
 GITHUB_API_URL = "https://api.github.com"
 GITHUB_API_VERSION = "2022-11-28"
@@ -50,7 +49,8 @@ def get_repository_languages(full_name: str, token: str) -> list[str]:
     parts = full_name.strip().split("/")
     if len(parts) != 2 or not all(parts) or not token.strip():
         raise ValueError("Se requiere owner/repositorio y un token no vacío")
-    path = "/repos/" + "/".join(quote(part, safe="") for part in parts) + "/languages"
+    path = "/repos/" + "/".join(quote(part, safe="")
+                                for part in parts) + "/languages"
     with requests.Session() as client:
         client.headers.update(_build_headers(token.strip()))
         data = _get_json(client, path)
@@ -58,7 +58,8 @@ def get_repository_languages(full_name: str, token: str) -> list[str]:
         not isinstance(name, str) or not name.strip()
         or type(size) is not int or size < 0 for name, size in data.items()
     ):
-        raise GitHubAPIError("GitHub devolvió un listado de lenguajes inválido")
+        raise GitHubAPIError(
+            "GitHub devolvió un listado de lenguajes inválido")
     return sorted(name for name, size in data.items() if size > 0)
 
 
@@ -66,7 +67,8 @@ def _parse_repository(data: object) -> Repository:
     try:
         return Repository.model_validate(data)
     except ValidationError:
-        raise GitHubAPIError("GitHub devolvió datos de repositorio inválidos") from None
+        raise GitHubAPIError(
+            "GitHub devolvió datos de repositorio inválidos") from None
 
 
 def _get_json(client: requests.Session, path: str, params: dict | None = None) -> object:
@@ -81,11 +83,13 @@ def _get_json(client: requests.Session, path: str, params: dict | None = None) -
     except requests.HTTPError as error:
         raise _http_error(error.response) from None
     except requests.Timeout:
-        raise GitHubAPIError("Se agotó el tiempo de espera al consultar GitHub") from None
+        raise GitHubAPIError(
+            "Se agotó el tiempo de espera al consultar GitHub") from None
     except requests.exceptions.JSONDecodeError:
         raise GitHubAPIError("GitHub devolvió JSON inválido") from None
     except requests.RequestException:
-        raise GitHubAPIError("No se pudo completar la conexión con GitHub") from None
+        raise GitHubAPIError(
+            "No se pudo completar la conexión con GitHub") from None
     return data
 
 
@@ -95,7 +99,8 @@ def _get_repository_page(
     data = _get_json(client, f"/orgs/{quote(organization, safe='')}/repos",
                      {"per_page": page_size, "page": page, "type": "all"})
     if not isinstance(data, list):
-        raise GitHubAPIError("GitHub devolvió una respuesta que no es una lista")
+        raise GitHubAPIError(
+            "GitHub devolvió una respuesta que no es una lista")
     return [_parse_repository(repository) for repository in data]
 
 

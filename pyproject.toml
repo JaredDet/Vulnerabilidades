@@ -9,14 +9,14 @@ dependencies = [
 ]
 
 [project.scripts]
-miner = "cli:app"
+miner = "miner.cli:app"
 
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-py-modules = ["github_api", "clone", "languages", "codeql", "models", "sarif", "report", "miner", "cli"]
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [dependency-groups]
 dev = ["pytest>=8,<10"]

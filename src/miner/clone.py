@@ -1,10 +1,10 @@
-import os
 import base64
+import os
 import re
 import subprocess
 from pathlib import Path
 
-from models import Repository
+from .models import Repository
 
 REPOSITORY_NAME_PART_PATTERN = re.compile(r"[A-Za-z0-9_.-]+")
 DEFAULT_CLONE_DIRECTORY = Path("repositories")
@@ -32,15 +32,18 @@ def _prepare_destination(full_name: str, destination: Path) -> Path:
             raise CloneError(f"El destino ya existe: {target}")
         target.parent.mkdir(parents=True, exist_ok=True)
     except OSError:
-        raise CloneError("No se pudo acceder al destino de clonación") from None
+        raise CloneError(
+            "No se pudo acceder al destino de clonación") from None
     return target
 
 
 def _run_git_clone(repository: Repository, target: Path, timeout: float, token: str | None = None) -> None:
-    environment = {**os.environ, "GIT_TERMINAL_PROMPT": "0", "GCM_INTERACTIVE": "Never"}
+    environment = {**os.environ, "GIT_TERMINAL_PROMPT": "0",
+                   "GCM_INTERACTIVE": "Never"}
     if token:
         # Configuración del proceso: el secreto no se guarda en .git/config ni argv.
-        credentials = base64.b64encode(f"x-access-token:{token}".encode()).decode()
+        credentials = base64.b64encode(
+            f"x-access-token:{token}".encode()).decode()
         environment.update({
             "GIT_CONFIG_COUNT": "2",
             "GIT_CONFIG_KEY_0": "http.https://github.com/.extraheader",
