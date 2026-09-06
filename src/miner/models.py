@@ -2,7 +2,14 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, computed_field
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    SerializerFunctionWrapHandler,
+    computed_field,
+    model_serializer,
+)
 
 
 class Repository(BaseModel):
@@ -71,6 +78,11 @@ class OrganizationResult(BaseModel):
     organization: str
     repositories: list[RepositoryResult]
 
+    @model_serializer(mode="wrap")
+    def serialize_report(self, handler: SerializerFunctionWrapHandler) -> dict:
+        data = handler(self)
+        return {key: data[key] for key in ("organization", "summary", "repositories") if key in data}
+
     @computed_field
     @property
     def summary(self) -> Summary:
@@ -78,6 +90,7 @@ class OrganizationResult(BaseModel):
         return Summary(
             repositories=len(statuses), analyzed=statuses.count("analyzed"),
             unsupported=statuses.count("unsupported"), partial=statuses.count("partial"),
-            failed=sum(status not in {"analyzed", "unsupported", "partial"} for status in statuses),
+            failed=sum(status not in {
+                       "analyzed", "unsupported", "partial"} for status in statuses),
             findings=sum(repo.findings_count for repo in self.repositories),
         )

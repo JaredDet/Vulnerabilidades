@@ -1,8 +1,10 @@
+from http import HTTPStatus
 from urllib.parse import quote
 
 import requests
-from .models import Repository
 from pydantic import ValidationError
+
+from .models import Repository
 
 GITHUB_API_URL = "https://api.github.com"
 GITHUB_API_VERSION = "2022-11-28"
@@ -22,16 +24,16 @@ class GitHubHTTPError(GitHubAPIError):
 
 def _http_error(response: requests.Response) -> GitHubHTTPError:
     status = response.status_code
-    if status == 429 or (status == 403 and (
+    if status == HTTPStatus.TOO_MANY_REQUESTS or (status == HTTPStatus.FORBIDDEN and (
         response.headers.get("X-RateLimit-Remaining") == "0"
         or "Retry-After" in response.headers
     )):
         message = "Se alcanzó el límite de solicitudes de GitHub; intenta más tarde"
     else:
         message = {
-            401: "GitHub rechazó el token; comprueba su validez y caducidad",
-            403: "GitHub denegó el acceso; revisa permisos y restricciones de la organización",
-            404: "La organización no existe o no es visible con este token",
+            HTTPStatus.UNAUTHORIZED: "GitHub rechazó el token; comprueba su validez y caducidad",
+            HTTPStatus.FORBIDDEN: "GitHub denegó el acceso; revisa permisos y restricciones de la organización",
+            HTTPStatus.NOT_FOUND: "La organización no existe o no es visible con este token",
         }.get(status, f"GitHub devolvió un error HTTP {status}")
     return GitHubHTTPError(status, message)
 
