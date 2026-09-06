@@ -1,0 +1,22 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.egg-info/
+.ruff_cache/
+repositories/
+
+# An?lisis y archivos temporales
+codeql-databases/
+codeql-results/
+*.sarif
+.pytest_cache/
+.coverage
+htmlcov/
+tmp/
+*.tmp
+.uv-cache/
+work/
+build/
+dist/

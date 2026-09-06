@@ -1,0 +1,25 @@
+[project]
+name = "miner"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.32,<3",
+    "typer>=0.12,<1",
+    "pydantic>=2,<3",
+]
+
+[project.scripts]
+miner = "cli:app"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["github_api", "clone", "languages", "codeql", "models", "sarif", "report", "miner", "cli"]
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
