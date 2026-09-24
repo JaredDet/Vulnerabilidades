@@ -1,0 +1,30 @@
+@startuml
+title miner clone --organization <org>
+actor Usuario
+participant "CLI" as CLI
+participant "clone.pipeline" as Pipeline
+participant "clone.github_api" as API
+participant "Git" as Git
+database "Disco local" as Disk
+
+Usuario -> CLI: clone -o pallets
+CLI -> CLI: Cargar .env y validar GITHUB_TOKEN
+CLI -> Pipeline: clone_organization(org, token, workspace, timeout)
+Pipeline -> API: Listar y validar todos los repositorios
+API --> Pipeline: Repositorios
+note right of API: Un error global termina el comando.
+Pipeline -> Disk: Crear work/clone-<id>/
+loop Repositorios ordenados por nombre
+    Pipeline -> Git: clone --depth 1
+    alt Clonacion correcta
+        Git -> Disk: repositories/<org>/<repo>/
+        Pipeline -> Pipeline: Registrar ruta local
+    else Fallo de clonacion
+        Pipeline -> Pipeline: Registrar error y continuar
+    end
+    Pipeline --> CLI: Progreso para stderr
+end
+Pipeline -> Disk: Guardar clones.json (tambien si esta vacio)
+Pipeline --> CLI: OrganizationCloneResult
+CLI --> Usuario: JSON con rutas, errores y conteos en stdout
+@enduml

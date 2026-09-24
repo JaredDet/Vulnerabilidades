@@ -90,7 +90,7 @@ def test_clone_persists_result_for_later_analysis(tmp_path, monkeypatch):
 @pytest.mark.parametrize("run_id", ["../existing", "scan/existing", "C:\\work", ""])
 def test_run_id_cannot_be_a_path(tmp_path, run_id):
     save_clones(tmp_path / "clone-existing")
-    with pytest.raises(ValueError, match="--ruta"):
+    with pytest.raises(ValueError, match="--run-id"):
         pipeline.load_latest_clones("org", workspace=tmp_path, run_id=run_id)
 
 

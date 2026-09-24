@@ -30,7 +30,7 @@ def load_latest_clones(
     candidates: list[tuple[int, Path]] = []
     if run_id is not None:
         if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
-            raise ValueError("--ruta debe ser solo el identificador de la ejecución")
+            raise ValueError("--run-id debe ser solo el identificador de la ejecución")
         matches = [workspace / f"{prefix}{run_id}" for prefix in ("scan-", "clone-")]
         matches = [path for path in matches if path.is_dir()]
         if len(matches) != 1:

@@ -22,3 +22,4 @@ organizations/
 build/
 dist/
 results.json
+sbom-results.json

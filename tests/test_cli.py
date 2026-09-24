@@ -43,7 +43,7 @@ def test_analyze_cli_never_clones(monkeypatch, tmp_path):
     monkeypatch.setattr(cli, "analyze_organization", analyze)
     result = CliRunner().invoke(cli.app, [
         "analyze", "--organization", "org", "--output", str(tmp_path / "out.json"),
-        "--ruta", "example", "--codeql", "custom-codeql", "--timeout", "42",
+        "--run-id", "example", "--codeql", "custom-codeql", "--timeout", "42",
     ])
     assert result.exit_code == 0
     clone.assert_not_called()

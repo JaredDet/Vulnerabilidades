@@ -11,6 +11,7 @@ from .analysis.codeql import CodeQLError
 from .analysis.pipeline import analyze_organization
 from .clone.github_api import GitHubAPIError, get_organization_repositories
 from .clone.pipeline import clone_organization, load_latest_clones
+from .sbom.pipeline import generate_organization_sbom
 
 load_dotenv()
 
@@ -41,8 +42,8 @@ def analyze(
     run_id: Annotated[
         str | None,
         typer.Option(
-            "--ruta",
-            help="Identificador después de scan- o clone- (por ejemplo, xkfbl6pl). Si se omite, usa la clonación más reciente.",
+            "--run-id",
+            help="ID after scan- or clone- (e.g. xkfbl6pl). Uses the latest clone run if omitted.",
         ),
     ] = None,
     timeout: Annotated[float, typer.Option("--timeout", min=1)] = 600,
@@ -118,8 +119,48 @@ def list_repositories(organization: str) -> None:
 @app.command()
 def sbom(
     organization: Annotated[str, typer.Option("--organization", "-o")],
-    output: Annotated[Path, typer.Option("--output")] = Path("sbom-results.json"),
-) -> None: ...
+    run_id: Annotated[
+        str | None,
+        typer.Option("--run-id", help="ID after scan- or clone- (e.g. xkfbl6pl). Uses the latest clone run if omitted."),
+    ] = None,
+    output: Annotated[
+        Path,
+        typer.Option("--output"),
+    ] = Path("sbom-results.json"),
+    syft: Annotated[
+        str,
+        typer.Option("--syft"),
+    ] = "syft",
+    timeout: Annotated[
+        float,
+        typer.Option("--timeout", min=1),
+    ] = 600,
+) -> None:
+    """Genera los SBOM de la clonación más reciente."""
+
+    try:
+        report = generate_organization_sbom(
+            organization,
+            output,
+            run_id=run_id,
+            executable=syft,
+            timeout=timeout,
+            progress=lambda text: typer.echo(text, err=True),
+        )
+    except (ValueError, RuntimeError) as error:
+        typer.echo(str(error), err=True)
+        raise typer.Exit(1) from None
+    except OSError:
+        typer.echo(
+            "No se pudo acceder al directorio de trabajo o guardar el JSON",
+            err=True,
+        )
+        raise typer.Exit(1) from None
+
+    typer.echo(
+        f"JSON: {output}; repositorios: {len(report.repositories)}",
+        err=True,
+    )
 
 
 if __name__ == "__main__":
