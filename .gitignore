@@ -18,6 +18,7 @@ tmp/
 *.tmp
 .uv-cache/
 work/
+organizations/
 build/
 dist/
 results.json

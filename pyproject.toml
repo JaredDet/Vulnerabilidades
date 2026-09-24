@@ -6,6 +6,7 @@ dependencies = [
     "requests>=2.32,<3",
     "typer>=0.12,<1",
     "pydantic>=2,<3",
+    "python-dotenv>=1.2.3",
 ]
 
 [project.scripts]

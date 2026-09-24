@@ -1,155 +1,112 @@
-# Miner de vulnerabilidades
+# Miner
 
-Aplicación Python que consulta los repositorios accesibles de una organización,
-clona cada uno, selecciona lenguajes mediante la API de GitHub y los extractores
-instalados de CodeQL, ejecuta sus consultas estándar de seguridad y transforma
-SARIF en un JSON consolidado con modelos Pydantic.
+Herramienta para listar y clonar repositorios de una organización de GitHub,
+analizarlos con CodeQL y guardar los hallazgos en JSON.
 
-## Instalación
+## Preparación
 
-Requiere Python 3.11+, Git, uv y CodeQL CLI con extractores y paquetes de consultas.
-Instala el bundle de CodeQL siguiendo la [documentación oficial](https://docs.github.com/en/code-security/how-tos/scan-code-for-vulnerabilities/scan-from-command-line/setting-up-the-codeql-cli).
-Git y CodeQL deben estar en PATH; también se puede indicar `--codeql`.
+Requiere Python 3.11+, uv y Git. Para analizar también necesitas CodeQL CLI
+con sus extractores y paquetes de consultas instalados. Git y CodeQL deben
+estar en `PATH`; puedes indicar otra ruta de CodeQL con `--codeql`.
 
 ```powershell
 uv sync
-git --version
-codeql version
-codeql resolve languages
-codeql resolve packs
+Copy-Item .env.example .env
 ```
 
-El proyecto se ha probado con CodeQL 2.26.4 en Windows. Los lenguajes compilados
-pueden requerir sus compiladores, dependencias y herramientas de construcción.
-La disponibilidad de un extractor no garantiza que el proyecto se pueda construir.
-CodeQL puede ejecutar pasos de construcción del repositorio: utiliza un entorno
-de análisis apropiado para el código que vas a procesar.
+Completa `GITHUB_TOKEN` en `.env` con un token que pueda leer los repositorios.
+La aplicación carga `.env` automáticamente mediante `python-dotenv`; también
+puedes definir la variable en el entorno. `.env` está excluido de Git.
+`uv sync` instala las dependencias, incluidas Typer y python-dotenv.
 
-## Token
-
-Crea un token personal de GitHub con lectura de los repositorios necesarios.
-Para públicos basta acceso público de lectura. Para privados, el token necesita
-acceso al repositorio y permisos de lectura de Metadata y Contents, además de las
-autorizaciones que exija la organización.
-
-Copia `.env.example` a `.env` e introduce el token solo en `.env`, que está excluido
-de Git. El ejemplo contiene únicamente `GITHUB_TOKEN=`. No incluyas credenciales en
-commits, URLs, ejemplos o documentación. También puedes definir `GITHUB_TOKEN`
-directamente en el entorno; en ese caso omite `--env-file .env`.
-
-## Ejecución
+## Uso
 
 ```powershell
-uv run --env-file .env miner scan --organization pallets --output results.json
+# Listar repositorios
+uv run miner list pallets
+
+# Solo clonar, sin ejecutar CodeQL
+uv run miner clone --organization pallets
+
+# Analizar la clonación más reciente, sin volver a clonar
+uv run miner analyze --organization pallets --output results.json
+
+# Elegir una ejecución concreta (también acepta las carpetas scan antiguas)
+uv run miner analyze --organization pallets --ruta xkfbl6pl
 ```
 
-En Windows, si CodeQL no está en PATH:
+`clone` muestra un JSON con las rutas locales, errores y conteos en stdout.
+`analyze` busca la clonación más reciente de la organización y analiza sus
+repositorios locales. Si no hay clones, indica que debes ejecutar `clone` primero.
+El progreso de ambos comandos va a stderr. `analyze` reemplaza al comando `scan`.
+
+| Opción | Comando | Uso |
+| --- | --- | --- |
+| `--workspace RUTA` | `clone` | Cambiar el directorio donde guardar las ejecuciones. |
+| `--ruta ID` | `analyze` | Elegir una ejecución por su identificador, sin `scan-`, `clone-` ni la ruta completa. |
+| `--timeout SEGUNDOS` | `clone` | Límite por clonación; por defecto, 300. |
+| `--timeout SEGUNDOS` | `analyze` | Límite por creación de base y análisis; por defecto, 600. |
+| `--output ARCHIVO` | `analyze` | Reporte JSON; por defecto, `results.json`. |
+| `--codeql RUTA` | `analyze` | Ejecutable de CodeQL; por defecto, `codeql`. |
 
 ```powershell
-uv run --env-file .env miner scan --organization pallets --output results.json --codeql "C:\Program Files (x86)\codeql\codeql.exe"
+uv run miner analyze --organization pallets --codeql "C:\Program Files (x86)\codeql\codeql.exe"
+uv run miner --help
 ```
 
-Opciones: `--workspace work` controla los archivos de trabajo y `--timeout 600`
-limita cada creación de base y cada análisis a ese número de segundos. La clonación
-tiene un límite de 300 segundos. Cada ejecución crea un subdirectorio nuevo para
-evitar sobrescribir clones y bases. Esos archivos quedan disponibles para diagnóstico
-y no forman parte de la entrega; puedes eliminarlos cuando termines.
+Cada ejecución guarda sus clones en
+`organizations/<organización>/work/clone-<id>/repositories/`.
+Al terminar, guarda las rutas y los fallos en `clones.json` dentro de esa ejecución.
+Sin `--ruta`, `analyze` busca en `organizations/<organización>/work/`.
+Por ejemplo, `--ruta xkfbl6pl` selecciona `scan-xkfbl6pl` dentro de esa carpeta.
+La búsqueda de `analyze` usa este directorio estándar; los clones guardados con
+un `--workspace` personalizado pueden procesarse mediante la API de Python.
+Las carpetas antiguas `scan-*` se leen directamente desde sus repositorios Git;
+no permiten recuperar los fallos de clonación que no dejaron un repositorio.
+El análisis crea un directorio `analysis-<id>/` dentro de esa misma ejecución
+para las bases CodeQL y los archivos SARIF.
 
-```powershell
-uv run --env-file .env miner list pallets
-uv run miner scan --help
-uv run pytest -q
-```
+**SBOM está pendiente:** el comando `sbom` y sus módulos todavía no generan resultados.
 
-El comando antiguo `miner pallets` se reemplaza por `miner list pallets`.
-La organización se recibe siempre por consola. El token se obtiene del entorno
-y se transmite a Git mediante configuración temporal del proceso, sin guardarlo
-en el remoto del repositorio clonado.
+## Resultados
 
-## Resultados y errores
+CodeQL detecta los lenguajes al crear el clúster de bases y ejecuta la suite
+`<lenguaje>-code-scanning.qls`. Los proyectos compilados pueden necesitar sus
+dependencias y herramientas de construcción.
 
-El JSON incluye organización, resumen, resultados por repositorio y hallazgos.
-`languages` contiene los identificadores cuyos análisis terminaron correctamente;
-`detected_languages` conserva lo detectado por GitHub y `analyses` registra cada intento.
-Cada hallazgo incluye regla, mensaje, nivel SARIF y ubicación principal si existe.
-El nivel (`error`, `warning`, `note`, `none`) no es una puntuación CVSS.
+El reporte incluye un resumen, resultados por repositorio y resultados por
+lenguaje en `languages`. Cada hallazgo contiene regla, mensaje, nivel SARIF y
+ubicación cuando está disponible. Son alertas estáticas, no vulnerabilidades
+confirmadas.
 
-Estados: `analyzed`, `clone_failed`, `unsupported`, `language_detection_failed`,
-`database_failed`, `analysis_failed`, `sarif_failed`, `partial` y `failed`.
-`partial` significa que algunos lenguajes se analizaron y otros fallaron.
-Los fallos incluyen una razón y no detienen otros repositorios. Un fallo global
-(token inválido, listado incompleto, CodeQL ausente o imposibilidad de escribir)
-termina el comando con código distinto de cero. Una ejecución completa con fallos
-individuales termina con cero: el resumen del JSON informa esos fallos.
+Los fallos individuales quedan en el resultado y no detienen los demás
+repositorios. `partial` indica que algunos lenguajes se analizaron y otros
+fallaron. Revisa el resumen aunque el comando termine con código cero.
+Los errores globales de consulta o escritura terminan con código distinto de cero.
+El reporte se actualiza de forma atómica después de cada repositorio; una
+organización vacía también genera un JSON.
 
-Se guarda un avance atómico después de cada repositorio y un JSON final al terminar.
-Los mensajes van a stderr; nunca se mezclan con el JSON. Los repositorios se ordenan
-por nombre y los hallazgos por archivo, línea, regla y criterios de desempate.
-Los conteos del resumen se calculan desde los modelos. Con iguales datos de entrada
-la organización del JSON es estable; cambios en repositorios, API, dependencias o
-paquetes CodeQL pueden cambiar los resultados.
-
-Se utiliza la suite oficial `<lenguaje>-code-scanning.qls` del paquete
-`codeql/<lenguaje>-queries`. No se descarga automáticamente durante el análisis:
-debe estar instalado. Los extractores auxiliares se excluyen; YAML no se interpreta
-como un workflow de GitHub Actions. El listado de lenguajes de GitHub es orientativo
-y puede diferir del commit clonado. No se inspecciona el árbol local para detectarlos.
-
-## Estructura
+## Desarrollo
 
 ```text
-miner/
-├── src/miner/       # Paquete Python de la aplicación
-├── tests/           # Pruebas por componente
-├── work/            # Clones, bases y SARIF; excluido de Git
-├── results.json     # Resultado consolidado de la ejecución
-├── pyproject.toml
-├── uv.lock
-├── .env.example
-└── README.md
+src/miner/
+    cli.py        # Comandos y composición de los flujos
+    clone/        # GitHub, clonación y modelos de clones
+    analysis/     # CodeQL, SARIF, modelos y reporte
+    sbom/         # Pendiente de implementar
+tests/
 ```
 
-Los módulos siguientes están dentro de `src/miner/`:
-
-- `github_api.py`: Requests, autenticación, paginación y lenguajes.
-- `clone.py`: clonación Git.
-- `languages.py`: equivalencias y selección de extractores.
-- `codeql.py`: ejecución del CLI, bases y análisis.
-- `sarif.py`: interpretación de SARIF 2.1.0.
-- `models.py`: modelos Pydantic.
-- `report.py`: JSON estable y escritura atómica.
-- `pipeline.py`: coordinación y aislamiento de errores.
-- `cli.py`: aplicación Typer.
-- `tests/`: pruebas pytest con HTTP/CodeQL simulados y clonación local.
-
-El paquete también se puede ejecutar con `uv run python -m miner --help`.
-
-## Entrega
-
-Entrega el enlace al repositorio del proyecto y, por separado, `results.json` de una
-ejecución completa. El JSON generado está excluido de Git. No incluyas `.env`, ambientes virtuales, `work/`, repositorios clonados,
-bases de datos o SARIF temporales. `uv.lock` y `.env.example` sí se versionan.
-
-### Ejecución de referencia
-
-`results.json` se generó con una ejecución completa sobre `pallets`, CodeQL 2.26.4
-y `--timeout 180`: 17 repositorios, 13 analizados, 3 sin lenguajes compatibles,
-1 parcial y 86 hallazgos. En MarkupSafe se analizó Python y falló la creación
-de la base C/C++; el motivo queda registrado en el JSON. Son alertas estáticas,
-no una confirmación manual de vulnerabilidades explotables.
-
-La validación del proyecto incluye 85 pruebas pytest aprobadas y construcción
-correcta del wheel mediante `uv build`.
-
-### Organización de las pruebas
-
-Cada componente tiene su archivo en `tests/`: `test_github_api.py`, `test_clone.py`,
-`test_languages.py`, `test_codeql.py`, `test_sarif.py`, `test_models.py`,
-`test_report.py`, `test_cli.py` y `test_miner.py`.
-Las pruebas no consultan GitHub ni ejecutan CodeQL; la clonación real se prueba
-con un repositorio temporal local. No necesitan el token ni cargar `.env`.
+`clone.pipeline.clone_organization` devuelve las rutas y los fallos de clonación.
+`analysis.pipeline.analyze_organization` recibe ese resultado sin volver a
+consultar GitHub ni clonar. Esta separación permite reutilizar los clones desde
+Python y conectar el flujo de SBOM más adelante.
 
 ```powershell
 uv run pytest -q
-uv run pytest tests/test_sarif.py tests/test_report.py -q
 ```
+
+Las pruebas simulan GitHub y CodeQL y verifican Git con un repositorio temporal
+local. No requieren un token válido ni CodeQL instalado.
+
+Los clones, bases, SARIF, entornos locales y `results.json` están excluidos de Git.

@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from miner.models import Repository
+from miner.clone.models import Repository
 
 
 @pytest.mark.parametrize("value", ["", "   ", 123, None])

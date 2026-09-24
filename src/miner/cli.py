@@ -5,17 +5,24 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from dotenv import load_dotenv
 
-from .codeql import CodeQLError
-from .github_api import GitHubAPIError, get_organization_repositories
-from .pipeline import scan_organization
+from .analysis.codeql import CodeQLError
+from .analysis.pipeline import analyze_organization
+from .clone.github_api import GitHubAPIError, get_organization_repositories
+from .clone.pipeline import clone_organization, load_latest_clones
 
-app = typer.Typer(add_completion=False, pretty_exceptions_enable=False)
+load_dotenv()
+
+app = typer.Typer(
+    add_completion=False,
+    pretty_exceptions_enable=False,
+)
 
 
 @app.callback()
 def main() -> None:
-    """Analiza repositorios de una organización con CodeQL."""
+    """Clona y analiza repositorios de una organización."""
 
 
 def _token() -> str:
@@ -27,27 +34,73 @@ def _token() -> str:
 
 
 @app.command()
-def scan(
+def analyze(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     output: Annotated[Path, typer.Option("--output")] = Path("results.json"),
     codeql: Annotated[str, typer.Option("--codeql")] = "codeql",
-    workspace: Annotated[Path, typer.Option("--workspace")] = Path("work"),
+    run_id: Annotated[
+        str | None,
+        typer.Option(
+            "--ruta",
+            help="Identificador después de scan- o clone- (por ejemplo, xkfbl6pl). Si se omite, usa la clonación más reciente.",
+        ),
+    ] = None,
     timeout: Annotated[float, typer.Option("--timeout", min=1)] = 600,
 ) -> None:
-    """Clona, analiza y consolida todos los repositorios accesibles."""
+    """Analiza la clonación más reciente de una organización, sin volver a clonar."""
     token = _token()
     try:
-        report = scan_organization(organization, token, output, workspace=workspace,
-                                   executable=codeql, timeout=timeout,
-                                   progress=lambda text: typer.echo(text, err=True))
+        clones = load_latest_clones(
+            organization,
+            run_id=run_id,
+        )
+        typer.echo(f"Clones: {clones.workspace}", err=True)
+        report = analyze_organization(
+            clones,
+            output,
+            token=token,
+            executable=codeql,
+            timeout=timeout,
+            progress=lambda text: typer.echo(text, err=True),
+        )
     except (GitHubAPIError, CodeQLError, ValueError) as error:
         typer.echo(str(error), err=True)
         raise typer.Exit(1) from None
     except OSError:
-        typer.echo("No se pudo acceder al directorio de trabajo o guardar el JSON", err=True)
+        typer.echo(
+            "No se pudo acceder al directorio de trabajo o guardar el JSON", err=True
+        )
         raise typer.Exit(1) from None
-    typer.echo(f"JSON: {output}; repositorios: {report.summary.repositories}; "
-               f"hallazgos: {report.summary.findings}", err=True)
+    typer.echo(
+        f"JSON: {output}; repositorios: {report.summary.repositories}; "
+        f"hallazgos: {report.summary.findings}",
+        err=True,
+    )
+
+
+@app.command()
+def clone(
+    organization: Annotated[str, typer.Option("--organization", "-o")],
+    workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
+    timeout: Annotated[float, typer.Option("--timeout", min=1)] = 300,
+) -> None:
+    """Clona los repositorios y muestra sus rutas, sin ejecutar análisis."""
+    token = _token()
+    try:
+        result = clone_organization(
+            organization,
+            token,
+            workspace=workspace,
+            timeout=timeout,
+            progress=lambda text: typer.echo(text, err=True),
+        )
+    except (GitHubAPIError, ValueError) as error:
+        typer.echo(str(error), err=True)
+        raise typer.Exit(1) from None
+    except OSError:
+        typer.echo("No se pudo acceder al directorio de trabajo", err=True)
+        raise typer.Exit(1) from None
+    typer.echo(result.model_dump_json(indent=2))
 
 
 @app.command(name="list")
@@ -60,6 +113,13 @@ def list_repositories(organization: str) -> None:
     except (GitHubAPIError, ValueError) as error:
         typer.echo(str(error), err=True)
         raise typer.Exit(1) from None
+
+
+@app.command()
+def sbom(
+    organization: Annotated[str, typer.Option("--organization", "-o")],
+    output: Annotated[Path, typer.Option("--output")] = Path("sbom-results.json"),
+) -> None: ...
 
 
 if __name__ == "__main__":
