@@ -1,27 +1,7 @@
 @startuml
-title miner list <organization>
 actor Usuario
-participant "CLI" as CLI
-participant "clone.github_api" as API
-participant "GitHub" as GitHub
-
-Usuario -> CLI: list pallets
-CLI -> CLI: Cargar .env y validar GITHUB_TOKEN
-CLI -> API: get_organization_repositories(org, token)
-loop Hasta completar la paginacion
-    API -> GitHub: GET /orgs/{org}/repos
-    GitHub --> API: Pagina de repositorios
-    API -> API: Validar datos
-end
-alt Consulta completa
-    API --> CLI: Lista de Repository
-    CLI --> Usuario: Nombre y URL en stdout
-else Error de consulta o validacion
-    API --> CLI: GitHubAPIError
-    CLI --> Usuario: Error en stderr y salida 1
-end
-note right of CLI
-Sin token: salida 2.
-No clona ni ejecuta herramientas de analisis.
-end note
+Usuario -> Miner: list
+Miner -> GitHub: Obtener repositorios
+GitHub --> Miner: Repositorios
+Miner --> Usuario: Lista de repositorios
 @enduml

@@ -1,53 +1,6 @@
 @startuml
-title miner sbom --organization <org> [--run-id <id>]
 actor Usuario
-participant "CLI" as CLI
-participant "sbom.pipeline" as Pipeline
-participant "clone.pipeline" as Clones
-participant "Git" as Git
-participant "Syft" as Syft
-participant "sbom.report" as Report
-database "Disco local" as Disk
-
-Usuario -> CLI: sbom -o pallets [--run-id id]
-CLI -> Pipeline: generate_organization_sbom(org, output, run_id)
-Pipeline -> Clones: load_latest_clones(org, run_id)
-Clones -> Disk: Leer clones.json o repositorios de scan antiguo
-Clones --> Pipeline: Clones y fallos previos
-note right of Clones
-Sin ID: clonacion mas reciente.
-Con ID: ejecucion exacta.
-No requiere token ni vuelve a clonar.
-end note
-opt Hay al menos un clon disponible
-    Pipeline -> Syft: version --output json (timeout 30 s)
-    Syft --> Pipeline: Version o error global
-end
-Pipeline -> Disk: Crear sbom-<id>/ dentro de la clonacion
-loop Repositorios ordenados por nombre
-    alt Clon fallido
-        Pipeline -> Pipeline: Registrar failed y motivo
-    else Clon disponible
-        Pipeline -> Git: rev-parse HEAD (timeout 30 s)
-        Git --> Pipeline: Commit o error
-        opt Commit obtenido
-            Pipeline -> Syft: scan <source> --output=cyclonedx-json=<file>
-            Syft -> Disk: SBOM CycloneDX JSON
-            Pipeline -> Disk: Leer documento y contar componentes
-        end
-        Pipeline -> Pipeline: Registrar generated o failed
-    end
-    Pipeline -> Report: write_report
-    Report -> Disk: Ordenar y reemplazar JSON atomicamente
-end
-opt Sin repositorios
-    Pipeline -> Report: Escribir reporte vacio
-end
-Pipeline --> CLI: SBOMReport
-CLI --> Usuario: Ruta del reporte y cantidad de repositorios
-note over Pipeline, Disk
-Cada ejecucion usa una carpeta nueva.
-Conserva los SBOM anteriores.
-Los errores por repositorio permiten continuar.
-end note
+Usuario -> Miner: sbom
+Miner -> Syft: Generar SBOM
+Syft --> Miner: SBOM
 @enduml

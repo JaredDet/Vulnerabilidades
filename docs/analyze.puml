@@ -1,46 +1,6 @@
 @startuml
-title miner analyze --organization <org> [--run-id <id>]
 actor Usuario
-participant "CLI" as CLI
-participant "clone.pipeline" as Clones
-participant "analysis.pipeline" as Pipeline
-participant "CodeQL" as CodeQL
-participant "analysis.sarif" as SARIF
-participant "analysis.report" as Report
-database "Disco local" as Disk
-
-Usuario -> CLI: analyze -o pallets [--run-id id]
-CLI -> CLI: Cargar .env y validar GITHUB_TOKEN
-CLI -> Clones: load_latest_clones(org, run_id)
-Clones -> Disk: Leer clones.json o repositorios de scan antiguo
-Clones --> CLI: OrganizationCloneResult
-note right of Clones
-Sin ID: clonacion mas reciente.
-Con ID: ejecucion exacta.
-Sin clones: error, no vuelve a clonar.
-end note
-CLI -> Pipeline: analyze_organization(clones, output, token)
-Pipeline -> Disk: Crear analysis-<id>/ dentro de la clonacion
-loop Repositorios ordenados por nombre
-    alt Clon fallido
-        Pipeline -> Pipeline: Registrar clone_failed
-    else Clon disponible
-        Pipeline -> CodeQL: Crear cluster de bases
-        CodeQL --> Pipeline: Bases por lenguaje o error
-        loop Cada base de lenguaje disponible
-            Pipeline -> CodeQL: Analizar con suite code-scanning
-            CodeQL -> Disk: results.sarif
-            Pipeline -> SARIF: parse_sarif
-            SARIF --> Pipeline: Hallazgos o error
-        end
-        Pipeline -> Pipeline: Consolidar estado y hallazgos
-    end
-    Pipeline -> Report: write_report
-    Report -> Disk: Ordenar y reemplazar JSON atomicamente
-end
-opt Sin repositorios
-    Pipeline -> Report: Escribir reporte vacio
-end
-Pipeline --> CLI: OrganizationResult
-CLI --> Usuario: Ruta del reporte y resumen en stderr
+Usuario -> Miner: analyze
+Miner -> CodeQL: Analizar repositorios
+CodeQL --> Miner: Resultados
 @enduml
