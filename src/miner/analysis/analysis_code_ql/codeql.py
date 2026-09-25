@@ -2,6 +2,7 @@
 
 import os
 import re
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -43,13 +44,13 @@ def create_database(
         if not source.is_dir():
             raise CodeQLError("La carpeta de código fuente no existe")
 
-        if database.exists():
-            raise CodeQLError(f"El destino de la base ya existe: {database}")
-
         if database.is_relative_to(source):
             raise CodeQLError(
                 "La base debe quedar fuera de la carpeta de código fuente"
             )
+
+        if database.exists():
+            shutil.rmtree(database)
 
         database.parent.mkdir(parents=True, exist_ok=True)
 
@@ -121,6 +122,7 @@ def analyze_database(
                 "No se encontró una base de datos CodeQL en la ruta indicada"
             )
 
+        # TODO: verify if the results file name follows the results-scan-XXXXX convention upon creation.
         if output.exists():
             raise CodeQLError(f"El archivo de resultados ya existe: {output}")
 

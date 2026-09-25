@@ -7,13 +7,20 @@ from typing import Annotated
 import typer
 from dotenv import load_dotenv
 
-from .analysis.codeql import CodeQLError
-from .analysis.pipeline import analyze_organization
+from miner.analysis.analysis_dependencies.pipeline import (
+    scan_organization_vulnerabilities,
+)
+
+from .analysis.analysis_code_ql.codeql import CodeQLError
+from .analysis.analysis_code_ql.pipeline import analyze_organization
 from .clone.github_api import GitHubAPIError, get_organization_repositories
 from .clone.pipeline import clone_organization, load_latest_clones
 from .sbom.pipeline import generate_organization_sbom
 
 load_dotenv()
+
+DEFAULT_CLONE_TIMEOUT = 300
+DEFAULT_ANALYSIS_TIMEOUT = 600
 
 app = typer.Typer(
     add_completion=False,
@@ -46,7 +53,9 @@ def analyze(
             help="ID after scan- or clone- (e.g. xkfbl6pl). Uses the latest clone run if omitted.",
         ),
     ] = None,
-    timeout: Annotated[float, typer.Option("--timeout", min=1)] = 600,
+    timeout: Annotated[
+        float, typer.Option("--timeout", min=1)
+    ] = DEFAULT_ANALYSIS_TIMEOUT,
 ) -> None:
     """Analiza la clonación más reciente de una organización, sin volver a clonar."""
     token = _token()
@@ -83,7 +92,7 @@ def analyze(
 def clone(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
-    timeout: Annotated[float, typer.Option("--timeout", min=1)] = 300,
+    timeout: Annotated[float, typer.Option("--timeout", min=1)] = DEFAULT_CLONE_TIMEOUT,
 ) -> None:
     """Clona los repositorios y muestra sus rutas, sin ejecutar análisis."""
     token = _token()
@@ -121,7 +130,10 @@ def sbom(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     run_id: Annotated[
         str | None,
-        typer.Option("--run-id", help="ID after scan- or clone- (e.g. xkfbl6pl). Uses the latest clone run if omitted."),
+        typer.Option(
+            "--run-id",
+            help="ID after scan- or clone- (e.g. xkfbl6pl). Uses the latest clone run if omitted.",
+        ),
     ] = None,
     output: Annotated[
         Path,
@@ -134,7 +146,7 @@ def sbom(
     timeout: Annotated[
         float,
         typer.Option("--timeout", min=1),
-    ] = 600,
+    ] = DEFAULT_ANALYSIS_TIMEOUT,
 ) -> None:
     """Genera los SBOM de la clonación más reciente."""
 
@@ -144,6 +156,55 @@ def sbom(
             output,
             run_id=run_id,
             executable=syft,
+            timeout=timeout,
+            progress=lambda text: typer.echo(text, err=True),
+        )
+    except (ValueError, RuntimeError) as error:
+        typer.echo(str(error), err=True)
+        raise typer.Exit(1) from None
+    except OSError:
+        typer.echo(
+            "No se pudo acceder al directorio de trabajo o guardar el JSON",
+            err=True,
+        )
+        raise typer.Exit(1) from None
+
+    typer.echo(
+        f"JSON: {output}; repositorios: {len(report.repositories)}",
+        err=True,
+    )
+
+
+@app.command()
+def vulnerabilities(
+    organization: Annotated[str, typer.Option("--organization", "-o")],
+    run_id: Annotated[
+        str | None,
+        typer.Option(
+            "--run-id",
+            help="ID after sbom- (e.g. 7o9x8nb_). Uses the latest SBOM run if omitted.",
+        ),
+    ] = None,
+    output: Annotated[
+        Path,
+        typer.Option("--output"),
+    ] = Path("vulnerability-results.json"),
+    grype: Annotated[
+        str,
+        typer.Option("--grype"),
+    ] = "grype",
+    timeout: Annotated[
+        float,
+        typer.Option("--timeout", min=1),
+    ] = DEFAULT_ANALYSIS_TIMEOUT,
+) -> None:
+    """Analiza las vulnerabilidades de los SBOM de una organización."""
+    try:
+        report = scan_organization_vulnerabilities(
+            organization,
+            output,
+            run_id=run_id,
+            executable=grype,
             timeout=timeout,
             progress=lambda text: typer.echo(text, err=True),
         )

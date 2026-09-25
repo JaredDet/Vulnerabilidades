@@ -4,11 +4,74 @@ from collections.abc import Callable
 from pathlib import Path
 from tempfile import mkdtemp
 
-from ..clone.models import OrganizationCloneResult, Repository
+from ...clone.models import OrganizationCloneResult, Repository
 from .codeql import CodeQLError, analyze_database, create_database
 from .models import LanguageResult, OrganizationResult, RepositoryResult
 from .report import write_report
 from .sarif import SarifError, parse_sarif
+
+
+def _create_analysis_directory(
+    workspace: Path,
+) -> Path:
+    """Crea el directorio para una ejecución de análisis."""
+    analysis_root = (workspace / "analysis_results").resolve()
+    analysis_root.mkdir(parents=True, exist_ok=True)
+
+    return Path(
+        mkdtemp(
+            prefix="analysis-",
+            dir=analysis_root,
+        )
+    ).resolve()
+
+
+def _process_repositories(
+    clones: OrganizationCloneResult,
+    root: Path,
+    token: str,
+    executable: str,
+    timeout: float,
+    progress: Callable[[str], None],
+) -> OrganizationResult:
+    """Analiza los repositorios de la organización."""
+    repositories = sorted(
+        clones.repositories,
+        key=lambda item: item.repository.full_name,
+    )
+
+    report = OrganizationResult(
+        organization=clones.organization,
+        repositories=[],
+    )
+
+    for index, item in enumerate(repositories, 1):
+        repository = item.repository
+
+        progress(f"[{index}/{len(repositories)}] Analizando {repository.full_name}")
+
+        if item.source is None:
+            result = RepositoryResult(
+                name=repository.full_name,
+                url=repository.clone_url.removesuffix(".git"),
+                status="clone_failed",
+                error=item.error,
+            )
+        else:
+            result = analyze_repository(
+                repository,
+                item.source,
+                root / repository.full_name.replace("/", "-"),
+                token=token,
+                executable=executable,
+                timeout=timeout,
+            )
+
+        report.repositories.append(result)
+
+        progress(f"  {result.status}" + (f": {result.error}" if result.error else ""))
+
+    return report
 
 
 def analyze_organization(
@@ -24,36 +87,24 @@ def analyze_organization(
     if not token.strip() or timeout <= 0:
         raise ValueError("Se requiere GITHUB_TOKEN y timeout positivo")
 
-    clones.workspace.mkdir(parents=True, exist_ok=True)
-    root = Path(mkdtemp(prefix="analysis-", dir=clones.workspace)).resolve()
-    report = OrganizationResult(organization=clones.organization, repositories=[])
-    repositories = sorted(clones.repositories, key=lambda item: item.repository.full_name)
+    analysis_directory = _create_analysis_directory(
+        clones.workspace,
+    )
 
-    for index, item in enumerate(repositories, 1):
-        repository = item.repository
-        progress(f"[{index}/{len(repositories)}] Analizando {repository.full_name}")
-        if item.source is None:
-            result = RepositoryResult(
-                name=repository.full_name,
-                url=repository.clone_url.removesuffix(".git"),
-                status="clone_failed",
-                error=item.error,
-            )
-        else:
-            result = analyze_repository(
-                repository,
-                item.source,
-                root / repository.full_name,
-                token=token,
-                executable=executable,
-                timeout=timeout,
-            )
-        report.repositories.append(result)
-        progress(f"  {result.status}" + (f": {result.error}" if result.error else ""))
-        write_report(report, output)
+    report_path = analysis_directory / "codeql-results.json"
 
-    if not repositories:
-        write_report(report, output)
+    report = _process_repositories(
+        clones,
+        analysis_directory,
+        token,
+        executable,
+        timeout,
+        progress,
+    )
+
+    write_report(report, report_path)
+    write_report(report, output)
+
     return report
 
 

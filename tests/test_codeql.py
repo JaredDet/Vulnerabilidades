@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from miner.analysis.codeql import (
+from miner.analysis.analysis_code_ql.codeql import (
     CodeQLError,
     analyze_database,
     create_database,

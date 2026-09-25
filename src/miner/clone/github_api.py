@@ -8,7 +8,7 @@ from .models import Repository
 
 GITHUB_API_URL = "https://api.github.com"
 GITHUB_API_VERSION = "2022-11-28"
-DEFAULT_PAGE_SIZE = 10
+PAGE_SIZE = 100
 REQUEST_TIMEOUT = 30
 
 
@@ -117,8 +117,6 @@ def _get_repository_page(
 def get_organization_repositories(
     organization: str,
     token: str,
-    *,
-    page_size: int = DEFAULT_PAGE_SIZE,
 ) -> list[Repository]:
     """Devuelve los repositorios accesibles de una organización.
 
@@ -134,9 +132,6 @@ def get_organization_repositories(
     if not token:
         raise ValueError("El token de GitHub no puede estar vacío")
 
-    if not 1 <= page_size <= 100:
-        raise ValueError("page_size debe estar entre 1 y 100")
-
     repositories: list[Repository] = []
     page = 1
 
@@ -148,12 +143,12 @@ def get_organization_repositories(
                 client,
                 organization,
                 page,
-                page_size,
+                PAGE_SIZE,
             )
 
             repositories.extend(page_repositories)
 
-            if len(page_repositories) < page_size:
+            if len(page_repositories) < PAGE_SIZE:
                 break
 
             page += 1

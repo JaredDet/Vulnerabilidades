@@ -2,8 +2,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from miner.analysis.report import write_report
-from miner.analysis.models import Finding, LanguageResult, OrganizationResult, RepositoryResult
+from miner.analysis.analysis_code_ql.report import write_report
+from miner.analysis.analysis_code_ql.models import Finding, LanguageResult, OrganizationResult, RepositoryResult
 
 
 def test_findings_sorted_by_file_line_and_rule(tmp_path):

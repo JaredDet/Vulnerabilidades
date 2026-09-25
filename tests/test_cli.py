@@ -5,7 +5,7 @@ from typer.testing import CliRunner
 
 from miner import cli
 from miner.clone import github_api as api
-from miner.analysis.models import OrganizationResult
+from miner.analysis.analysis_code_ql.models import OrganizationResult
 from miner.clone.models import CloneResult, OrganizationCloneResult, Repository
 
 

@@ -3,13 +3,12 @@
 import json
 import subprocess
 from collections.abc import Callable
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from pathlib import Path
 from tempfile import mkdtemp
 
 from ..clone.models import CloneResult
 from ..clone.pipeline import load_latest_clones
-
 from .models import SBOMReport, SBOMResult
 from .report import write_report
 from .syft import generate_sbom, get_version
@@ -58,10 +57,60 @@ def _count_components(sbom_path: Path) -> int:
 
     components = data.get("components", [])
 
-    if not isinstance(components, list) or any(not isinstance(item, dict) for item in components):
+    if not isinstance(components, list) or any(
+        not isinstance(item, dict) for item in components
+    ):
         raise RuntimeError("El SBOM contiene una lista de componentes inválida")  # noqa: TRY004
 
     return len(components)
+
+
+def _create_sbom_directory(
+    workspace: Path,
+) -> Path:
+    """Crea el directorio para una ejecución de SBOM."""
+    sbom_root = (workspace / "sboms").resolve()
+    sbom_root.mkdir(parents=True, exist_ok=True)
+
+    return Path(
+        mkdtemp(
+            prefix="sbom-",
+            dir=sbom_root,
+        )
+    ).resolve()
+
+
+def _process_repositories(
+    organization: str,
+    repositories: list[CloneResult],
+    output_directory: Path,
+    syft_version: str,
+    executable: str,
+    timeout: float,
+    progress: Callable[[str], None],
+) -> SBOMReport:
+    """Genera los SBOM de los repositorios."""
+    report = SBOMReport(
+        organization=organization,
+        repositories=[],
+    )
+
+    for index, clone in enumerate(repositories, 1):
+        progress(f"[{index}/{len(repositories)}] {clone.repository.full_name}")
+
+        result = _process_repository(
+            clone,
+            output_directory,
+            syft_version,
+            executable,
+            timeout,
+        )
+
+        report.repositories.append(result)
+
+        progress(f"  {result.status}" + (f": {result.error}" if result.error else ""))
+
+    return report
 
 
 def _process_repository(
@@ -72,7 +121,7 @@ def _process_repository(
     timeout: float,
 ) -> SBOMResult:
     full_name = clone.repository.full_name
-    output = output_directory / f"{full_name}.json"
+    output = output_directory / f"{full_name.replace('/', '-')}.json"
     commit = "unknown"
     generation_date = datetime.now(UTC)
 
@@ -125,7 +174,6 @@ def generate_organization_sbom(
     progress: Callable[[str], None] = print,
 ) -> SBOMReport:
     """Genera los SBOM de los repositorios del último scan."""
-
     organization = organization.strip()
 
     if not organization:
@@ -134,35 +182,42 @@ def generate_organization_sbom(
     if timeout <= 0:
         raise ValueError("timeout debe ser mayor que cero")
 
-    clones = load_latest_clones(organization, workspace=workspace, run_id=run_id)
-    progress(f"Clones: {clones.workspace}")
-    repositories = sorted(clones.repositories, key=lambda item: item.repository.full_name)
-    syft_version = get_version(executable) if any(item.source is not None for item in repositories) else "unknown"
-    sbom_directory = Path(mkdtemp(prefix="sbom-", dir=clones.workspace)).resolve()
-
-    report = SBOMReport(
-        organization=organization,
-        repositories=[],
+    clones = load_latest_clones(
+        organization,
+        workspace=workspace,
+        run_id=run_id,
     )
 
-    for index, clone in enumerate(repositories, 1):
-        progress(f"[{index}/{len(repositories)}] {clone.repository.full_name}")
+    progress(f"Clones: {clones.workspace}")
 
-        result = _process_repository(
-            clone,
-            sbom_directory,
-            syft_version,
-            executable,
-            timeout,
-        )
+    repositories = sorted(
+        clones.repositories,
+        key=lambda item: item.repository.full_name,
+    )
 
-        report.repositories.append(result)
+    syft_version = (
+        get_version(executable)
+        if any(item.source is not None for item in repositories)
+        else "unknown"
+    )
 
-        progress(f"  {result.status}" + (f": {result.error}" if result.error else ""))
+    sbom_directory = _create_sbom_directory(
+        clones.workspace,
+    )
 
-        write_report(report, output)
+    report_path = sbom_directory / "sbom-results.json"
 
-    if not repositories:
-        write_report(report, output)
+    report = _process_repositories(
+        organization,
+        repositories,
+        sbom_directory,
+        syft_version,
+        executable,
+        timeout,
+        progress,
+    )
+
+    write_report(report, report_path)
+    write_report(report, output)
 
     return report

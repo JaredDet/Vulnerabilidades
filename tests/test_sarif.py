@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from miner.analysis.sarif import SarifError, parse_sarif
+from miner.analysis.analysis_code_ql.sarif import SarifError, parse_sarif
 
 
 def write_sarif(tmp_path, runs):
