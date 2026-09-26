@@ -1,11 +1,21 @@
 """Modelos de resultados de generación de SBOM."""
 
 from datetime import datetime
+from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic.dataclasses import dataclass
 
 SBOMStatus = Literal["generated", "failed"]
+
+
+@dataclass(frozen=True)
+class SBOMExecution:
+    output_directory: Path
+    syft_version: str
+    executable: str
+    timeout: float
 
 
 class SBOMResult(BaseModel):

@@ -1,6 +1,28 @@
+from collections.abc import Callable
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, computed_field
+from pydantic.dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class CloneExecution:
+    root: Path
+    token: str
+    timeout: float
+    progress: Callable[[str], None]
+
+    def __init__(
+        self,
+        root: Path,
+        token: str,
+        timeout: float,
+        progress: Callable[[str], None],
+    ) -> None:
+        self.root = root
+        self.token = token
+        self.timeout = timeout
+        self.progress = progress
 
 
 class Repository(BaseModel):

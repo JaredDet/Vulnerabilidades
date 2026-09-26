@@ -1,11 +1,21 @@
 """Modelos de resultados del análisis de vulnerabilidades."""
 
 from datetime import datetime
+from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic.dataclasses import dataclass
 
 VulnerabilityStatus = Literal["analyzed", "failed"]
+
+
+@dataclass(frozen=True)
+class GrypeExecution:
+    output_directory: Path
+    grype_version: str
+    executable: str
+    timeout: float
 
 
 class VulnerabilityResult(BaseModel):

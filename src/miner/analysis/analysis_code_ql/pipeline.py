@@ -2,28 +2,29 @@
 
 from collections.abc import Callable
 from pathlib import Path
-from tempfile import mkdtemp
+
+from core.exceptions import AppException
+from core.filesystem import create_temporary_directory
 
 from ...clone.models import OrganizationCloneResult, Repository
-from .codeql import CodeQLError, analyze_database, create_database
+from .codeql import analyze_database, create_database
+from .constants import (
+    CODEQL_DATABASE_FILENAME,
+    DEFAULT_ANALYSIS_TIMEOUT,
+    DEFAULT_CODEQL_EXECUTABLE,
+)
+from .errors import CodeQLErrors, SarifErrors
 from .models import LanguageResult, OrganizationResult, RepositoryResult
 from .report import write_report
-from .sarif import SarifError, parse_sarif
+from .sarif import parse_sarif
 
 
-def _create_analysis_directory(
-    workspace: Path,
-) -> Path:
+def _create_analysis_directory(workspace: Path) -> Path:
     """Crea el directorio para una ejecución de análisis."""
-    analysis_root = (workspace / "analysis_results").resolve()
-    analysis_root.mkdir(parents=True, exist_ok=True)
-
-    return Path(
-        mkdtemp(
-            prefix="analysis-",
-            dir=analysis_root,
-        )
-    ).resolve()
+    return create_temporary_directory(
+        workspace / "analysis_results",
+        "analysis-",
+    )
 
 
 def _process_repositories(
@@ -79,18 +80,18 @@ def analyze_organization(
     output: Path,
     *,
     token: str,
-    executable: str = "codeql",
-    timeout: float = 600,
+    executable: str = DEFAULT_CODEQL_EXECUTABLE,
+    timeout: float = DEFAULT_ANALYSIS_TIMEOUT,
     progress: Callable[[str], None] = print,
 ) -> OrganizationResult:
     """Analiza clones preparados y escribe avances, sin consultar GitHub ni clonar."""
-    if not token.strip() or timeout <= 0:
-        raise ValueError("Se requiere GITHUB_TOKEN y timeout positivo")
+    if not token.strip():
+        raise CodeQLErrors.TokenRequired
 
-    analysis_directory = _create_analysis_directory(
-        clones.workspace,
-    )
+    if timeout <= 0:
+        raise CodeQLErrors.InvalidTimeout
 
+    analysis_directory = _create_analysis_directory(clones.workspace)
     report_path = analysis_directory / "codeql-results.json"
 
     report = _process_repositories(
@@ -116,7 +117,7 @@ def _language_databases(database: Path) -> list[tuple[str, Path]]:
         if not path.is_dir():
             continue
 
-        if not (path / "codeql-database.yml").is_file():
+        if not (path / CODEQL_DATABASE_FILENAME).is_file():
             continue
 
         databases.append((path.name, path))
@@ -132,7 +133,6 @@ def _analyze_language(
     timeout: float,
 ) -> LanguageResult:
     """Analiza una base CodeQL correspondiente a un lenguaje."""
-
     sarif = root / language / "results.sarif"
 
     try:
@@ -143,16 +143,16 @@ def _analyze_language(
             executable=executable,
             timeout=timeout,
         )
-    except CodeQLError as error:
+    except AppException as error:
         return LanguageResult(
             language=language,
             status="analysis_failed",
-            error=str(error),
+            error=error.message,
         )
 
     try:
         findings = parse_sarif(sarif)
-    except SarifError as error:
+    except SarifErrors as error:
         return LanguageResult(
             language=language,
             status="sarif_failed",
@@ -182,12 +182,12 @@ def _analyze_repository(
             executable=executable,
             timeout=timeout,
         )
-    except CodeQLError as error:
+    except AppException as error:
         return RepositoryResult(
             name=repository.full_name,
             url=repository.clone_url.removesuffix(".git"),
             status="database_failed",
-            error=str(error),
+            error=error.message,
         )
 
     databases = _language_databases(database)
@@ -235,11 +235,10 @@ def analyze_repository(
     source: Path,
     root: Path,
     token: str,
-    executable: str = "codeql",
-    timeout: float = 600,
+    executable: str = DEFAULT_CODEQL_EXECUTABLE,
+    timeout: float = DEFAULT_ANALYSIS_TIMEOUT,
 ) -> RepositoryResult:
     """Analiza un repositorio ya preparado y consolida sus hallazgos."""
-
     try:
         return _analyze_repository(
             repository,

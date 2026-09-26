@@ -3,12 +3,17 @@
 import subprocess
 from pathlib import Path
 
-DEFAULT_GRYPE_EXECUTABLE = "grype"
-DEFAULT_SCAN_TIMEOUT = 600
-
-
-class GrypeError(RuntimeError):
-    """No se pudo ejecutar Grype o interpretar su resultado."""
+from .constants import (
+    DEFAULT_GRYPE_EXECUTABLE,
+    DEFAULT_SCAN_TIMEOUT,
+    DEFAULT_VERSION_TIMEOUT,
+    GRYPE_FILE_OPTION,
+    GRYPE_OUTPUT_OPTION,
+    GRYPE_SBOM_PREFIX,
+    GRYPE_SCAN_OUTPUT,
+    GRYPE_VERSION_COMMAND,
+)
+from .errors import GrypeErrors
 
 
 def get_version(
@@ -17,24 +22,28 @@ def get_version(
     """Obtiene la versión instalada de Grype."""
     try:
         result = subprocess.run(
-            [executable, "version"],
+            [
+                executable,
+                GRYPE_VERSION_COMMAND,
+            ],
             check=True,
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=DEFAULT_VERSION_TIMEOUT,
         )
-    except FileNotFoundError:
-        raise GrypeError("No se encontró Grype") from None
     except subprocess.TimeoutExpired:
-        raise GrypeError("Grype excedió el tiempo al obtener su versión") from None
+        raise GrypeErrors.VersionTimeout from None
+    except FileNotFoundError:
+        raise GrypeErrors.GrypeNotAvailable from None
     except subprocess.CalledProcessError:
-        raise GrypeError("No se pudo obtener la versión de Grype") from None
+        raise GrypeErrors.VersionFailed from None
     except OSError:
-        raise GrypeError("No se pudo ejecutar Grype") from None
+        raise GrypeErrors.GrypeAccessFailed from None
 
     version = result.stdout.strip()
+
     if not version:
-        raise GrypeError("Grype no devolvió su versión")
+        raise GrypeErrors.InvalidVersionResponse
 
     return version
 
@@ -48,48 +57,42 @@ def scan_vulnerabilities(
 ) -> Path:
     """Analiza un SBOM con Grype y guarda el resultado en JSON."""
     if timeout <= 0:
-        raise ValueError("timeout debe ser mayor que cero")
+        raise GrypeErrors.InvalidTimeout
+
+    sbom = Path(sbom_path).resolve()
+    output = Path(output_path).resolve()
+
+    if not sbom.is_file():
+        raise GrypeErrors.SbomNotFound
+
+    if output.exists():
+        raise GrypeErrors.ResultAlreadyExists
 
     try:
-        sbom = Path(sbom_path).resolve()
-        output = Path(output_path).resolve()
-
-        if not sbom.is_file():
-            raise GrypeError("El archivo SBOM no existe")
-
-        if output.exists():
-            raise GrypeError(f"El archivo de resultados ya existe: {output}")
-
         output.parent.mkdir(parents=True, exist_ok=True)
 
         subprocess.run(
             [
                 executable,
-                f"sbom:{sbom}",
-                "--output=json",
-                f"--file={output}",
+                f"{GRYPE_SBOM_PREFIX}{sbom}",
+                f"{GRYPE_FILE_OPTION}={output}",
+                f"{GRYPE_OUTPUT_OPTION}={GRYPE_SCAN_OUTPUT}",
             ],
             check=True,
             capture_output=True,
             text=True,
             timeout=timeout,
         )
-
     except FileNotFoundError:
-        raise GrypeError("No se encontró Grype o una ruta necesaria") from None
-
+        raise GrypeErrors.GrypeNotAvailable from None
     except subprocess.TimeoutExpired:
-        raise GrypeError("Se agotó el tiempo al buscar vulnerabilidades") from None
-
-    except subprocess.CalledProcessError as error:
-        raise GrypeError(
-            f"Grype no pudo completar el análisis (código {error.returncode})"
-        ) from None
-
+        raise GrypeErrors.ScanTimeout from None
+    except subprocess.CalledProcessError:
+        raise GrypeErrors.ScanFailed from None
     except OSError:
-        raise GrypeError("No se pudo ejecutar Grype o acceder a sus archivos") from None
+        raise GrypeErrors.GrypeAccessFailed from None
 
     if not output.is_file():
-        raise GrypeError("Grype terminó sin generar el archivo de resultados")
+        raise GrypeErrors.ResultsNotGenerated
 
     return output

@@ -1,0 +1,22 @@
+import re
+
+DEFAULT_CODEQL_EXECUTABLE = "codeql"
+DEFAULT_DATABASE_TIMEOUT = 600
+DEFAULT_ANALYSIS_TIMEOUT = 600
+
+CODEQL_LANGUAGE_PATTERN = re.compile(r"[a-z][a-z0-9-]*")
+
+SECURITY_SUITE_TEMPLATE = (
+    "codeql/{language}-queries:codeql-suites/{language}-code-scanning.qls"
+)
+
+CODEQL_DATABASE_FILENAME = "codeql-database.yml"
+CODEQL_DATABASE_COMMAND = "database"
+CODEQL_CREATE_COMMAND = "create"
+CODEQL_ANALYZE_COMMAND = "analyze"
+CODEQL_SARIF_FORMAT = "sarifv2.1.0"
+
+GITHUB_TOKEN_ENVIRONMENT_VARIABLE = "GITHUB_TOKEN"
+
+SARIF_VERSION = "2.1.0"
+SARIF_ENCODING = "utf-8-sig"

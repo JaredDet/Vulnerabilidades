@@ -2,46 +2,41 @@ import json
 import subprocess
 from pathlib import Path
 
-DEFAULT_SYFT_EXECUTABLE = "syft"
-DEFAULT_SCAN_TIMEOUT = 600
+from .constants import (
+    DEFAULT_SCAN_TIMEOUT,
+    DEFAULT_SYFT_EXECUTABLE,
+    DEFAULT_VERSION_TIMEOUT,
+    SYFT_SBOM_OUTPUT,
+    SYFT_SCAN_COMMAND,
+    SYFT_VERSION_COMMAND,
+    SYFT_VERSION_OUTPUT,
+)
+from .errors import SBOMErrors
 
 
-class SyftError(RuntimeError):
-    """No se pudo ejecutar Syft o interpretar su respuesta."""
-
-
-def get_version(
-    executable: str = DEFAULT_SYFT_EXECUTABLE,
-) -> str:
+def get_version(executable: str = DEFAULT_SYFT_EXECUTABLE) -> str:
     """Devuelve la versión de Syft instalada."""
-
     try:
         result = subprocess.run(
             [
                 executable,
-                "version",
+                SYFT_VERSION_COMMAND,
                 "--output",
-                "json",
+                SYFT_VERSION_OUTPUT,
             ],
             check=True,
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=DEFAULT_VERSION_TIMEOUT,
         )
-
     except subprocess.TimeoutExpired:
-        raise SyftError("Se agotó el tiempo al consultar la versión de Syft") from None
-
+        raise SBOMErrors.VersionTimeout from None
     except FileNotFoundError:
-        raise SyftError("No se encontró Syft o una ruta necesaria") from None
-
-    except subprocess.CalledProcessError as error:
-        raise SyftError(
-            f"Syft no pudo obtener su versión (código {error.returncode})"
-        ) from None
-
+        raise SBOMErrors.SyftNotAvailable from None
+    except subprocess.CalledProcessError:
+        raise SBOMErrors.VersionFailed from None
     except OSError:
-        raise SyftError("No se pudo ejecutar Syft") from None
+        raise SBOMErrors.SyftAccessFailed from None
 
     try:
         data = json.loads(result.stdout)
@@ -51,7 +46,7 @@ def get_version(
             raise ValueError
 
     except (json.JSONDecodeError, KeyError, TypeError, ValueError):
-        raise SyftError("Syft devolvió una versión con formato inválido") from None
+        raise SBOMErrors.InvalidVersionResponse from None
 
     return version.strip()
 
@@ -64,53 +59,46 @@ def generate_sbom(
     timeout: float = DEFAULT_SCAN_TIMEOUT,
 ) -> Path:
     """Genera un SBOM CycloneDX JSON para un directorio."""
-
     if timeout <= 0:
-        raise ValueError("timeout debe ser mayor que cero")
+        raise SBOMErrors.InvalidTimeout
+
+    source = Path(source_path).resolve()
+    output = Path(output_path).resolve()
+
+    if not source.is_dir():
+        raise SBOMErrors.SourceNotFound
+
+    if output.exists():
+        raise SBOMErrors.SbomAlreadyExists
+
+    if output.is_relative_to(source):
+        raise SBOMErrors.SbomInsideSource
 
     try:
-        source = Path(source_path).resolve()
-        output = Path(output_path).resolve()
-
-        if not source.is_dir():
-            raise SyftError("La carpeta del repositorio no existe")
-
-        if output.exists():
-            raise SyftError(f"El archivo SBOM ya existe: {output}")
-
-        if output.is_relative_to(source):
-            raise SyftError("El SBOM debe quedar fuera de la carpeta del repositorio")
-
         output.parent.mkdir(parents=True, exist_ok=True)
 
         subprocess.run(
             [
                 executable,
-                "scan",
+                SYFT_SCAN_COMMAND,
                 str(source),
-                f"--output=cyclonedx-json={output}",
+                f"--output={SYFT_SBOM_OUTPUT}={output}",
             ],
             check=True,
             capture_output=True,
             text=True,
             timeout=timeout,
         )
-
     except FileNotFoundError:
-        raise SyftError("No se encontró Syft o una ruta necesaria") from None
-
+        raise SBOMErrors.SyftNotAvailable from None
     except subprocess.TimeoutExpired:
-        raise SyftError("Se agotó el tiempo al generar el SBOM") from None
-
-    except subprocess.CalledProcessError as error:
-        raise SyftError(
-            f"Syft no pudo generar el SBOM (código {error.returncode})"
-        ) from None
-
+        raise SBOMErrors.GenerationTimeout from None
+    except subprocess.CalledProcessError:
+        raise SBOMErrors.GenerationFailed from None
     except OSError:
-        raise SyftError("No se pudo ejecutar Syft o acceder a sus archivos") from None
+        raise SBOMErrors.SyftAccessFailed from None
 
     if not output.is_file():
-        raise SyftError("Syft terminó sin generar el archivo SBOM")
+        raise SBOMErrors.SbomNotGenerated
 
     return output

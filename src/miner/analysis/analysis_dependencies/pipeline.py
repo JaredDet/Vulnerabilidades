@@ -3,124 +3,180 @@
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
-from tempfile import mkdtemp
 
-from ...clone.pipeline import load_latest_clones
+from core.exceptions import AppException
+from core.filesystem import create_temporary_directory
+
+from ...clone.loader import load_latest_clones
+from ...sbom.constants import (
+    SBOM_DIRECTORY,
+    SBOM_REPORT_FILENAME,
+    SBOM_RUN_PREFIX,
+)
 from ...sbom.models import SBOMReport, SBOMResult
+from .constants import (
+    DEFAULT_GRYPE_EXECUTABLE,
+    DEFAULT_SCAN_TIMEOUT,
+    VULNERABILITY_DIRECTORY,
+    VULNERABILITY_REPORT_FILENAME,
+    VULNERABILITY_RUN_PREFIX,
+)
+from .errors import GrypeErrors
 from .grype import get_version, scan_vulnerabilities
-from .models import VulnerabilityReport, VulnerabilityResult
+from .models import GrypeExecution, VulnerabilityReport, VulnerabilityResult
 from .report import write_report
 
 
-def _create_vulnerability_directory(
-    workspace: Path,
-) -> Path:
+def _create_vulnerability_directory(workspace: Path) -> Path:
     """Crea el directorio para una ejecución de vulnerabilidades."""
-    vulnerability_root = (workspace / "vulnerabilities").resolve()
-    vulnerability_root.mkdir(parents=True, exist_ok=True)
-
-    return Path(
-        mkdtemp(
-            prefix="vulnerability-",
-            dir=vulnerability_root,
-        )
-    ).resolve()
+    return create_temporary_directory(
+        workspace / VULNERABILITY_DIRECTORY,
+        VULNERABILITY_RUN_PREFIX,
+    )
 
 
-def _load_sbom_report(
-    sbom_directory: Path,
-) -> SBOMReport:
+def _find_sbom_runs(sbom_root: Path) -> list[Path]:
+    """Encuentra las ejecuciones de SBOM disponibles."""
+    if not sbom_root.is_dir():
+        raise GrypeErrors.SbomDirectoryNotFound
+
+    return sorted(
+        (
+            directory
+            for directory in sbom_root.iterdir()
+            if directory.is_dir() and directory.name.startswith(SBOM_RUN_PREFIX)
+        ),
+        key=lambda directory: directory.stat().st_mtime_ns,
+        reverse=True,
+    )
+
+
+def _find_sbom_run_by_id(sbom_root: Path, run_id: str) -> Path:
+    """Encuentra una ejecución de SBOM por su identificador."""
+    directory = sbom_root / (
+        run_id if run_id.startswith(SBOM_RUN_PREFIX) else f"{SBOM_RUN_PREFIX}{run_id}"
+    )
+
+    if not directory.is_dir():
+        raise GrypeErrors.SbomRunNotFound
+
+    return directory
+
+
+def _find_sbom_directory(workspace: Path, run_id: str | None) -> Path:
+    """Encuentra la ejecución de SBOM a utilizar."""
+    sbom_root = workspace / SBOM_DIRECTORY
+
+    if run_id is not None:
+        return _find_sbom_run_by_id(sbom_root, run_id)
+
+    runs = _find_sbom_runs(sbom_root)
+
+    if not runs:
+        raise GrypeErrors.SbomRunNotFound
+
+    return runs[0]
+
+
+def _load_sbom_report(sbom_directory: Path) -> SBOMReport:
     """Carga el reporte de la ejecución de SBOM."""
-    report_path = sbom_directory / "sbom-results.json"
+    report_path = sbom_directory / SBOM_REPORT_FILENAME
 
     try:
         return SBOMReport.model_validate_json(report_path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        raise RuntimeError("No se pudo leer el reporte de SBOM") from None
+        raise GrypeErrors.InvalidSbomReport from None
 
 
-def _find_sbom_directory(
-    workspace: Path,
-    run_id: str | None,
+def _get_repository_output(
+    sbom: SBOMResult,
+    output_directory: Path,
 ) -> Path:
-    """Encuentra la ejecución de SBOM a utilizar."""
-    sbom_root = (workspace / "sboms").resolve()
+    filename = f"{sbom.full_name.replace('/', '-')}.json"
+    return output_directory / filename
 
-    if not sbom_root.is_dir():
-        raise RuntimeError("No existe el directorio de SBOMs")
 
-    if run_id is not None:
-        sbom_directory = sbom_root / f"sbom-{run_id}"
+def _get_sbom_source(sbom: SBOMResult) -> Path:
+    """Obtiene y valida la ruta del SBOM."""
+    if sbom.status != "generated":
+        raise GrypeErrors.SbomGenerationFailed
 
-        if not sbom_directory.is_dir():
-            raise RuntimeError(f"No se encontró la ejecución de SBOM: sbom-{run_id}")
+    source = Path(sbom.sbom_path)
 
-        return sbom_directory
+    if not source.is_file():
+        raise GrypeErrors.SbomFileNotFound
 
-    sbom_directories = sorted(
-        (
-            directory
-            for directory in sbom_root.iterdir()
-            if directory.is_dir() and directory.name.startswith("sbom-")
-        ),
-        key=lambda directory: directory.stat().st_mtime,
-        reverse=True,
+    return source
+
+
+def _create_analyzed_result(
+    sbom: SBOMResult,
+    execution: GrypeExecution,
+    output: Path,
+    analysis_date: datetime,
+) -> VulnerabilityResult:
+    return VulnerabilityResult(
+        full_name=sbom.full_name,
+        commit=sbom.commit,
+        analysis_date=analysis_date,
+        grype_version=execution.grype_version,
+        status="analyzed",
+        vulnerability_count=0,
+        report_path=str(output),
     )
 
-    if not sbom_directories:
-        raise RuntimeError("No se encontró ninguna ejecución de SBOM")
 
-    return sbom_directories[0]
+def _create_failed_result(
+    sbom: SBOMResult,
+    execution: GrypeExecution,
+    output: Path,
+    analysis_date: datetime,
+    error: AppException,
+) -> VulnerabilityResult:
+    return VulnerabilityResult(
+        full_name=sbom.full_name,
+        commit=sbom.commit,
+        analysis_date=analysis_date,
+        grype_version=execution.grype_version,
+        status="failed",
+        vulnerability_count=0,
+        report_path=str(output),
+        error=error.message,
+    )
 
 
 def _process_sbom(
     sbom: SBOMResult,
-    output_directory: Path,
-    grype_version: str,
-    executable: str,
-    timeout: float,
+    execution: GrypeExecution,
 ) -> VulnerabilityResult:
-    full_name = sbom.full_name
-    output = output_directory / f"{full_name.replace('/', '-')}.json"
+    output = _get_repository_output(sbom, execution.output_directory)
     analysis_date = datetime.now(UTC)
 
     try:
-        if sbom.status != "generated":
-            raise RuntimeError(sbom.error or "El SBOM no pudo generarse")
-
-        source = Path(sbom.sbom_path)
-
-        if not source.is_file():
-            raise RuntimeError("No se encontró el archivo SBOM")
+        source = _get_sbom_source(sbom)
 
         scan_vulnerabilities(
             source,
             output,
-            executable=executable,
-            timeout=timeout,
+            executable=execution.executable,
+            timeout=execution.timeout,
         )
 
-        return VulnerabilityResult(
-            full_name=full_name,
-            commit=sbom.commit,
-            analysis_date=analysis_date,
-            grype_version=grype_version,
-            status="analyzed",
-            vulnerability_count=0,
-            report_path=str(output),
+    except AppException as error:
+        return _create_failed_result(
+            sbom,
+            execution,
+            output,
+            analysis_date,
+            error,
         )
 
-    except RuntimeError as error:
-        return VulnerabilityResult(
-            full_name=full_name,
-            commit=sbom.commit,
-            analysis_date=analysis_date,
-            grype_version=grype_version,
-            status="failed",
-            vulnerability_count=0,
-            report_path=str(output),
-            error=str(error),
-        )
+    return _create_analyzed_result(
+        sbom,
+        execution,
+        output,
+        analysis_date,
+    )
 
 
 def _get_grype_version(
@@ -137,10 +193,7 @@ def _get_grype_version(
 def _process_repositories(
     organization: str,
     repositories: list[SBOMResult],
-    output_directory: Path,
-    grype_version: str,
-    executable: str,
-    timeout: float,
+    execution: GrypeExecution,
     progress: Callable[[str], None],
 ) -> VulnerabilityReport:
     """Analiza los SBOM de los repositorios."""
@@ -152,19 +205,38 @@ def _process_repositories(
     for index, sbom in enumerate(repositories, 1):
         progress(f"[{index}/{len(repositories)}] {sbom.full_name}")
 
-        result = _process_sbom(
-            sbom,
-            output_directory,
-            grype_version,
-            executable,
-            timeout,
-        )
-
+        result = _process_sbom(sbom, execution)
         report.repositories.append(result)
 
         progress(f"  {result.status}" + (f": {result.error}" if result.error else ""))
 
     return report
+
+
+def _create_execution(
+    workspace: Path,
+    repositories: list[SBOMResult],
+    executable: str,
+    timeout: float,
+) -> GrypeExecution:
+    return GrypeExecution(
+        output_directory=_create_vulnerability_directory(workspace),
+        grype_version=_get_grype_version(repositories, executable),
+        executable=executable,
+        timeout=timeout,
+    )
+
+
+def _write_reports(
+    report: VulnerabilityReport,
+    execution: GrypeExecution,
+    output: Path,
+) -> None:
+    write_report(
+        report,
+        execution.output_directory / VULNERABILITY_REPORT_FILENAME,
+    )
+    write_report(report, output)
 
 
 def scan_organization_vulnerabilities(
@@ -173,22 +245,22 @@ def scan_organization_vulnerabilities(
     *,
     workspace: Path | None = None,
     run_id: str | None = None,
-    executable: str = "grype",
-    timeout: float = 600,
+    executable: str = DEFAULT_GRYPE_EXECUTABLE,
+    timeout: float = DEFAULT_SCAN_TIMEOUT,
     progress: Callable[[str], None] = print,
 ) -> VulnerabilityReport:
     """Analiza las vulnerabilidades del último SBOM de una organización."""
     organization = organization.strip()
 
     if not organization:
-        raise ValueError("La organización no puede estar vacía")
+        raise GrypeErrors.OrganizationRequired
 
     if timeout <= 0:
-        raise ValueError("timeout debe ser mayor que cero")
+        raise GrypeErrors.InvalidTimeout
 
     clones = load_latest_clones(
         organization,
-        workspace=workspace,
+        workspace_path=workspace,
     )
 
     progress(f"Clones: {clones.workspace}")
@@ -200,37 +272,27 @@ def scan_organization_vulnerabilities(
 
     progress(f"SBOM: {sbom_directory}")
 
-    sbom_report = _load_sbom_report(
-        sbom_directory,
-    )
+    sbom_report = _load_sbom_report(sbom_directory)
 
     repositories = sorted(
         sbom_report.repositories,
         key=lambda item: item.full_name,
     )
 
-    vulnerability_directory = _create_vulnerability_directory(
+    execution = _create_execution(
         clones.workspace,
-    )
-
-    report_path = vulnerability_directory / "vulnerability-results.json"
-
-    grype_version = _get_grype_version(
         repositories,
         executable,
+        timeout,
     )
 
     report = _process_repositories(
         organization,
         repositories,
-        vulnerability_directory,
-        grype_version,
-        executable,
-        timeout,
+        execution,
         progress,
     )
 
-    write_report(report, report_path)
-    write_report(report, output)
+    _write_reports(report, execution, output)
 
     return report

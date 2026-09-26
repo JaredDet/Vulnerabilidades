@@ -7,20 +7,35 @@ from typing import Annotated
 import typer
 from dotenv import load_dotenv
 
+from core.exceptions import AppException
+from miner.analysis.analysis_dependencies.constants import (
+    DEFAULT_GRYPE_EXECUTABLE,
+)
+from miner.analysis.analysis_dependencies.constants import (
+    DEFAULT_SCAN_TIMEOUT as DEFAULT_GRYPE_SCAN_TIMEOUT,
+)
 from miner.analysis.analysis_dependencies.pipeline import (
     scan_organization_vulnerabilities,
 )
 
-from .analysis.analysis_code_ql.codeql import CodeQLError
+from .analysis.analysis_code_ql.constants import (
+    DEFAULT_ANALYSIS_TIMEOUT,
+    DEFAULT_CODEQL_EXECUTABLE,
+)
 from .analysis.analysis_code_ql.pipeline import analyze_organization
-from .clone.github_api import GitHubAPIError, get_organization_repositories
-from .clone.pipeline import clone_organization, load_latest_clones
+from .clone.constants import DEFAULT_CLONE_TIMEOUT
+from .clone.github_api import get_organization_repositories
+from .clone.loader import load_latest_clones
+from .clone.pipeline import clone_organization
+from .sbom.constants import (
+    DEFAULT_SCAN_TIMEOUT as DEFAULT_SBOM_SCAN_TIMEOUT,
+)
+from .sbom.constants import (
+    DEFAULT_SYFT_EXECUTABLE,
+)
 from .sbom.pipeline import generate_organization_sbom
 
 load_dotenv()
-
-DEFAULT_CLONE_TIMEOUT = 300
-DEFAULT_ANALYSIS_TIMEOUT = 600
 
 app = typer.Typer(
     add_completion=False,
@@ -35,9 +50,11 @@ def main() -> None:
 
 def _token() -> str:
     token = os.environ.get("GITHUB_TOKEN", "").strip()
+
     if not token:
         typer.echo("Debes definir GITHUB_TOKEN", err=True)
         raise typer.Exit(2)
+
     return token
 
 
@@ -45,7 +62,7 @@ def _token() -> str:
 def analyze(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     output: Annotated[Path, typer.Option("--output")] = Path("results.json"),
-    codeql: Annotated[str, typer.Option("--codeql")] = "codeql",
+    codeql: Annotated[str, typer.Option("--codeql")] = DEFAULT_CODEQL_EXECUTABLE,
     run_id: Annotated[
         str | None,
         typer.Option(
@@ -54,17 +71,17 @@ def analyze(
         ),
     ] = None,
     timeout: Annotated[
-        float, typer.Option("--timeout", min=1)
+        float,
+        typer.Option("--timeout", min=1),
     ] = DEFAULT_ANALYSIS_TIMEOUT,
 ) -> None:
     """Analiza la clonación más reciente de una organización, sin volver a clonar."""
     token = _token()
+
     try:
-        clones = load_latest_clones(
-            organization,
-            run_id=run_id,
-        )
+        clones = load_latest_clones(organization, run_id=run_id)
         typer.echo(f"Clones: {clones.workspace}", err=True)
+
         report = analyze_organization(
             clones,
             output,
@@ -73,14 +90,18 @@ def analyze(
             timeout=timeout,
             progress=lambda text: typer.echo(text, err=True),
         )
-    except (GitHubAPIError, CodeQLError, ValueError) as error:
-        typer.echo(str(error), err=True)
+
+    except AppException as error:
+        typer.echo(error.message, err=True)
         raise typer.Exit(1) from None
+
     except OSError:
         typer.echo(
-            "No se pudo acceder al directorio de trabajo o guardar el JSON", err=True
+            "No se pudo acceder al directorio de trabajo o guardar el JSON",
+            err=True,
         )
         raise typer.Exit(1) from None
+
     typer.echo(
         f"JSON: {output}; repositorios: {report.summary.repositories}; "
         f"hallazgos: {report.summary.findings}",
@@ -92,24 +113,31 @@ def analyze(
 def clone(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
-    timeout: Annotated[float, typer.Option("--timeout", min=1)] = DEFAULT_CLONE_TIMEOUT,
+    timeout: Annotated[
+        float,
+        typer.Option("--timeout", min=1),
+    ] = DEFAULT_CLONE_TIMEOUT,
 ) -> None:
     """Clona los repositorios y muestra sus rutas, sin ejecutar análisis."""
     token = _token()
+
     try:
         result = clone_organization(
             organization,
             token,
-            workspace=workspace,
+            workspace_path=workspace,
             timeout=timeout,
             progress=lambda text: typer.echo(text, err=True),
         )
-    except (GitHubAPIError, ValueError) as error:
-        typer.echo(str(error), err=True)
+
+    except AppException as error:
+        typer.echo(error.message, err=True)
         raise typer.Exit(1) from None
+
     except OSError:
         typer.echo("No se pudo acceder al directorio de trabajo", err=True)
         raise typer.Exit(1) from None
+
     typer.echo(result.model_dump_json(indent=2))
 
 
@@ -117,11 +145,13 @@ def clone(
 def list_repositories(organization: str) -> None:
     """Lista repositorios sin clonarlos ni ejecutar CodeQL."""
     token = _token()
+
     try:
         for repository in get_organization_repositories(organization, token):
             typer.echo(f"{repository.full_name}\t{repository.clone_url}")
-    except (GitHubAPIError, ValueError) as error:
-        typer.echo(str(error), err=True)
+
+    except AppException as error:
+        typer.echo(error.message, err=True)
         raise typer.Exit(1) from None
 
 
@@ -132,24 +162,17 @@ def sbom(
         str | None,
         typer.Option(
             "--run-id",
-            help="ID after scan- or clone- (e.g. xkfbl6pl). Uses the latest clone run if omitted.",
+            help="ID after sbom- (e.g. 7o9x8nb_). Uses the latest SBOM run if omitted.",
         ),
     ] = None,
-    output: Annotated[
-        Path,
-        typer.Option("--output"),
-    ] = Path("sbom-results.json"),
-    syft: Annotated[
-        str,
-        typer.Option("--syft"),
-    ] = "syft",
+    output: Annotated[Path, typer.Option("--output")] = Path("sbom-results.json"),
+    syft: Annotated[str, typer.Option("--syft")] = DEFAULT_SYFT_EXECUTABLE,
     timeout: Annotated[
         float,
         typer.Option("--timeout", min=1),
-    ] = DEFAULT_ANALYSIS_TIMEOUT,
+    ] = DEFAULT_SBOM_SCAN_TIMEOUT,
 ) -> None:
     """Genera los SBOM de la clonación más reciente."""
-
     try:
         report = generate_organization_sbom(
             organization,
@@ -159,9 +182,11 @@ def sbom(
             timeout=timeout,
             progress=lambda text: typer.echo(text, err=True),
         )
-    except (ValueError, RuntimeError) as error:
-        typer.echo(str(error), err=True)
+
+    except AppException as error:
+        typer.echo(error.message, err=True)
         raise typer.Exit(1) from None
+
     except OSError:
         typer.echo(
             "No se pudo acceder al directorio de trabajo o guardar el JSON",
@@ -185,18 +210,14 @@ def vulnerabilities(
             help="ID after sbom- (e.g. 7o9x8nb_). Uses the latest SBOM run if omitted.",
         ),
     ] = None,
-    output: Annotated[
-        Path,
-        typer.Option("--output"),
-    ] = Path("vulnerability-results.json"),
-    grype: Annotated[
-        str,
-        typer.Option("--grype"),
-    ] = "grype",
+    output: Annotated[Path, typer.Option("--output")] = Path(
+        "vulnerability-results.json"
+    ),
+    grype: Annotated[str, typer.Option("--grype")] = DEFAULT_GRYPE_EXECUTABLE,
     timeout: Annotated[
         float,
         typer.Option("--timeout", min=1),
-    ] = DEFAULT_ANALYSIS_TIMEOUT,
+    ] = DEFAULT_GRYPE_SCAN_TIMEOUT,
 ) -> None:
     """Analiza las vulnerabilidades de los SBOM de una organización."""
     try:
@@ -208,9 +229,11 @@ def vulnerabilities(
             timeout=timeout,
             progress=lambda text: typer.echo(text, err=True),
         )
-    except (ValueError, RuntimeError) as error:
-        typer.echo(str(error), err=True)
+
+    except AppException as error:
+        typer.echo(error.message, err=True)
         raise typer.Exit(1) from None
+
     except OSError:
         typer.echo(
             "No se pudo acceder al directorio de trabajo o guardar el JSON",

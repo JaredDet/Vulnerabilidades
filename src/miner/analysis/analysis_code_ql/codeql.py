@@ -1,24 +1,24 @@
 """Interacción con CodeQL CLI."""
 
 import os
-import re
 import shutil
 import subprocess
 from pathlib import Path
 
-DEFAULT_CODEQL_EXECUTABLE = "codeql"
-DEFAULT_DATABASE_TIMEOUT = 600
-DEFAULT_ANALYSIS_TIMEOUT = 600
-
-CODEQL_LANGUAGE_PATTERN = re.compile(r"[a-z][a-z0-9-]*")
-
-SECURITY_SUITE_TEMPLATE = (
-    "codeql/{language}-queries:codeql-suites/{language}-code-scanning.qls"
+from .constants import (
+    CODEQL_ANALYZE_COMMAND,
+    CODEQL_CREATE_COMMAND,
+    CODEQL_DATABASE_COMMAND,
+    CODEQL_DATABASE_FILENAME,
+    CODEQL_LANGUAGE_PATTERN,
+    CODEQL_SARIF_FORMAT,
+    DEFAULT_ANALYSIS_TIMEOUT,
+    DEFAULT_CODEQL_EXECUTABLE,
+    DEFAULT_DATABASE_TIMEOUT,
+    GITHUB_TOKEN_ENVIRONMENT_VARIABLE,
+    SECURITY_SUITE_TEMPLATE,
 )
-
-
-class CodeQLError(RuntimeError):
-    """No se pudo ejecutar CodeQL o interpretar su respuesta."""
+from .errors import CodeQLErrors
 
 
 def create_database(
@@ -29,25 +29,19 @@ def create_database(
     executable: str = DEFAULT_CODEQL_EXECUTABLE,
     timeout: float = DEFAULT_DATABASE_TIMEOUT,
 ) -> Path:
-    """Crea un clúster de bases CodeQL y devuelve su ruta absoluta.
-
-    CodeQL determina automáticamente los lenguajes que puede analizar
-    y crea una base independiente para cada lenguaje detectado.
-    """
+    """Crea un clúster de bases CodeQL y devuelve su ruta absoluta."""
     if timeout <= 0:
-        raise ValueError("timeout debe ser mayor que cero")
+        raise CodeQLErrors.InvalidTimeout
 
     try:
-        source = Path(source_path).resolve()
-        database = Path(database_path).resolve()
+        source = source_path.resolve()
+        database = database_path.resolve()
 
         if not source.is_dir():
-            raise CodeQLError("La carpeta de código fuente no existe")
+            raise CodeQLErrors.SourceNotFound
 
         if database.is_relative_to(source):
-            raise CodeQLError(
-                "La base debe quedar fuera de la carpeta de código fuente"
-            )
+            raise CodeQLErrors.DatabaseInsideSource
 
         if database.exists():
             shutil.rmtree(database)
@@ -56,14 +50,14 @@ def create_database(
 
         environment = {
             **os.environ,
-            "GITHUB_TOKEN": token,
+            GITHUB_TOKEN_ENVIRONMENT_VARIABLE: token,
         }
 
         subprocess.run(
             [
                 executable,
-                "database",
-                "create",
+                CODEQL_DATABASE_COMMAND,
+                CODEQL_CREATE_COMMAND,
                 str(database),
                 "--db-cluster",
                 f"--source-root={source}",
@@ -75,22 +69,13 @@ def create_database(
         )
 
     except FileNotFoundError:
-        raise CodeQLError("No se encontró CodeQL o una ruta necesaria") from None
-
+        raise CodeQLErrors.CodeQLNotAvailable from None
     except subprocess.TimeoutExpired:
-        raise CodeQLError(
-            "Se agotó el tiempo al crear las bases de datos CodeQL"
-        ) from None
-
-    except subprocess.CalledProcessError as error:
-        raise CodeQLError(
-            f"CodeQL no pudo crear las bases de datos (código {error.returncode})"
-        ) from None
-
+        raise CodeQLErrors.DatabaseCreationTimeout from None
+    except subprocess.CalledProcessError:
+        raise CodeQLErrors.DatabaseCreationFailed from None
     except OSError:
-        raise CodeQLError(
-            "No se pudo ejecutar CodeQL o acceder a sus carpetas"
-        ) from None
+        raise CodeQLErrors.CodeQLAccessFailed from None
 
     return database
 
@@ -104,45 +89,39 @@ def analyze_database(
     timeout: float = DEFAULT_ANALYSIS_TIMEOUT,
 ) -> Path:
     """Analiza una base CodeQL con la suite estándar de Code Scanning."""
-
     if timeout <= 0:
-        raise ValueError("timeout debe ser mayor que cero")
+        raise CodeQLErrors.InvalidTimeout
 
     language = language.strip()
 
     if not CODEQL_LANGUAGE_PATTERN.fullmatch(language):
-        raise ValueError("Debes indicar un identificador de lenguaje CodeQL válido")
+        raise CodeQLErrors.InvalidLanguage
 
     try:
-        database = Path(database_path).resolve()
-        output = Path(sarif_path).resolve()
+        database = database_path.resolve()
+        output = sarif_path.resolve()
 
-        if not (database / "codeql-database.yml").is_file():
-            raise CodeQLError(
-                "No se encontró una base de datos CodeQL en la ruta indicada"
-            )
+        if not (database / CODEQL_DATABASE_FILENAME).is_file():
+            raise CodeQLErrors.DatabaseNotFound
 
-        # TODO: verify if the results file name follows the results-scan-XXXXX convention upon creation.
         if output.exists():
-            raise CodeQLError(f"El archivo de resultados ya existe: {output}")
+            raise CodeQLErrors.SarifAlreadyExists
 
         if output.is_relative_to(database):
-            raise CodeQLError("El SARIF debe quedar fuera de la base de datos")
+            raise CodeQLErrors.SarifInsideDatabase
 
         output.parent.mkdir(parents=True, exist_ok=True)
 
-        suite = SECURITY_SUITE_TEMPLATE.format(
-            language=language,
-        )
+        suite = SECURITY_SUITE_TEMPLATE.format(language=language)
 
         subprocess.run(
             [
                 executable,
-                "database",
-                "analyze",
+                CODEQL_DATABASE_COMMAND,
+                CODEQL_ANALYZE_COMMAND,
                 str(database),
                 suite,
-                "--format=sarifv2.1.0",
+                f"--format={CODEQL_SARIF_FORMAT}",
                 f"--output={output}",
             ],
             check=True,
@@ -151,25 +130,15 @@ def analyze_database(
         )
 
         if not output.is_file():
-            raise CodeQLError("CodeQL terminó sin generar el archivo SARIF")
+            raise CodeQLErrors.SarifNotGenerated
 
     except FileNotFoundError:
-        raise CodeQLError("No se encontró CodeQL o una ruta necesaria") from None
-
+        raise CodeQLErrors.CodeQLNotAvailable from None
     except subprocess.TimeoutExpired:
-        raise CodeQLError(
-            "Se agotó el tiempo al ejecutar las consultas CodeQL"
-        ) from None
-
-    except subprocess.CalledProcessError as error:
-        raise CodeQLError(
-            f"El análisis CodeQL falló (código {error.returncode}); "
-            "revisa la base y el paquete de consultas instalado"
-        ) from None
-
+        raise CodeQLErrors.AnalysisTimeout from None
+    except subprocess.CalledProcessError:
+        raise CodeQLErrors.AnalysisFailed from None
     except OSError:
-        raise CodeQLError(
-            "No se pudo ejecutar CodeQL o acceder a sus archivos"
-        ) from None
+        raise CodeQLErrors.CodeQLAccessFailed from None
 
     return output
