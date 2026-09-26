@@ -3,11 +3,10 @@ from unittest.mock import Mock
 
 import pytest
 
-from miner.analysis.analysis_code_ql.codeql import (
-    CodeQLError,
-    analyze_database,
-    create_database,
-)
+from core.exceptions import AppException
+from miner.analysis.analysis_code_ql import codeql
+from miner.analysis.analysis_code_ql.codeql import analyze_database, create_database
+from miner.analysis.analysis_code_ql.errors import CodeQLErrors
 
 
 def test_analyze_database(tmp_path, monkeypatch):
@@ -16,12 +15,13 @@ def test_analyze_database(tmp_path, monkeypatch):
     (database / "codeql-database.yml").touch()
     output = tmp_path / "results" / "result.sarif"
     run = Mock(side_effect=lambda *args, **kwargs: output.write_text('{}'))
-    monkeypatch.setattr("miner.analysis.codeql.subprocess.run", run)
+    monkeypatch.setattr(codeql.subprocess, "run", run)
     assert analyze_database(database, "python", output) == output.resolve()
     assert "codeql/python-queries:codeql-suites/python-code-scanning.qls" in run.call_args.args[0]
     assert "--format=sarifv2.1.0" in run.call_args.args[0]
-    with pytest.raises(CodeQLError, match="ya existe"):
+    with pytest.raises(AppException) as raised:
         analyze_database(database, "python", output)
+    assert raised.value is CodeQLErrors.SarifAlreadyExists
 
 
 @pytest.mark.parametrize("failure", [None, FileNotFoundError(), subprocess.TimeoutExpired("codeql", 1), subprocess.CalledProcessError(2, "codeql")])
@@ -29,9 +29,8 @@ def test_analysis_failure(tmp_path, monkeypatch, failure):
     database = tmp_path / "database"
     database.mkdir()
     (database / "codeql-database.yml").touch()
-    monkeypatch.setattr("miner.analysis.codeql.subprocess.run",
-                        Mock(side_effect=failure))
-    with pytest.raises(CodeQLError):
+    monkeypatch.setattr(codeql.subprocess, "run", Mock(side_effect=failure))
+    with pytest.raises(AppException):
         analyze_database(database, "python", tmp_path / "result.sarif")
 
 
@@ -40,7 +39,7 @@ def test_create_database(tmp_path, monkeypatch):
     source.mkdir()
     destination = tmp_path / "databases" / "python"
     run = Mock()
-    monkeypatch.setattr("miner.analysis.codeql.subprocess.run", run)
+    monkeypatch.setattr(codeql.subprocess, "run", run)
     assert create_database(
         source, destination, token="test-token") == destination.resolve()
     assert f"--source-root={source.resolve()}" in run.call_args.args[0]
@@ -52,12 +51,12 @@ def test_create_database(tmp_path, monkeypatch):
 
 def test_database_paths(tmp_path, monkeypatch):
     run = Mock()
-    monkeypatch.setattr("miner.analysis.codeql.subprocess.run", run)
-    with pytest.raises(CodeQLError):
+    monkeypatch.setattr(codeql.subprocess, "run", run)
+    with pytest.raises(AppException):
         create_database(tmp_path / "missing", tmp_path / "db", token="test-token")
-    with pytest.raises(CodeQLError):
+    with pytest.raises(AppException):
         create_database(tmp_path, tmp_path / "db", token="test-token")
-    with pytest.raises(CodeQLError):
+    with pytest.raises(AppException):
         create_database(tmp_path, tmp_path, token="test-token")
     run.assert_not_called()
 
@@ -66,6 +65,6 @@ def test_database_paths(tmp_path, monkeypatch):
 def test_database_errors(tmp_path, monkeypatch, error):
     source = tmp_path / "source"
     source.mkdir()
-    monkeypatch.setattr("miner.analysis.codeql.subprocess.run", Mock(side_effect=error))
-    with pytest.raises(CodeQLError):
+    monkeypatch.setattr(codeql.subprocess, "run", Mock(side_effect=error))
+    with pytest.raises(AppException):
         create_database(source, tmp_path / "db", token="test-token")

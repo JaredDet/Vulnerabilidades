@@ -3,6 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from core import filesystem
 from miner.sbom.models import SBOMReport, SBOMResult
 from miner.sbom.report import write_report
 
@@ -27,7 +28,7 @@ def test_report_is_sorted_and_preserves_input(tmp_path):
 def test_atomic_failure_preserves_existing_report(tmp_path, monkeypatch):
     output = tmp_path / "out.json"
     output.write_text("existing report")
-    monkeypatch.setattr("miner.sbom.report.os.replace", Mock(side_effect=OSError("disk error")))
+    monkeypatch.setattr(filesystem.os, "replace", Mock(side_effect=OSError("disk error")))
     with pytest.raises(OSError):
         write_report(SBOMReport(organization="org"), output)
     assert output.read_text() == "existing report"

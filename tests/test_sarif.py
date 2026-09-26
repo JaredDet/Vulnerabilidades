@@ -2,7 +2,9 @@ import json
 
 import pytest
 
-from miner.analysis.analysis_code_ql.sarif import SarifError, parse_sarif
+from core.exceptions import AppException
+from miner.analysis.analysis_code_ql.errors import SarifErrors
+from miner.analysis.analysis_code_ql.sarif import parse_sarif
 
 
 def write_sarif(tmp_path, runs):
@@ -48,7 +50,7 @@ def test_empty_results(tmp_path):
     {"invocations": [{"executionSuccessful": False}]},
 ])
 def test_invalid_run(tmp_path, run):
-    with pytest.raises(SarifError):
+    with pytest.raises(AppException):
         parse_sarif(write_sarif(tmp_path, [run]))
 
 
@@ -56,13 +58,14 @@ def test_invalid_run(tmp_path, run):
 def test_invalid_document(tmp_path, contents):
     path = tmp_path / "bad.sarif"
     path.write_text(contents)
-    with pytest.raises(SarifError):
+    with pytest.raises(AppException):
         parse_sarif(path)
 
 
 def test_missing_file(tmp_path):
-    with pytest.raises(SarifError):
+    with pytest.raises(AppException) as raised:
         parse_sarif(tmp_path / "missing.sarif")
+    assert raised.value is SarifErrors.InvalidJson
 
 
 def test_conflicting_rule_reference(tmp_path):
@@ -70,5 +73,6 @@ def test_conflicting_rule_reference(tmp_path):
         "tool": {"driver": {"rules": [{"id": "py/expected"}]}},
         "results": [{"ruleId": "py/other", "ruleIndex": 0, "message": {"text": "Problem"}}],
     }
-    with pytest.raises(SarifError):
+    with pytest.raises(AppException) as raised:
         parse_sarif(write_sarif(tmp_path, [run]))
+    assert raised.value is SarifErrors.RuleMismatch

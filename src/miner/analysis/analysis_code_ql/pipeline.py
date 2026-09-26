@@ -13,7 +13,7 @@ from .constants import (
     DEFAULT_ANALYSIS_TIMEOUT,
     DEFAULT_CODEQL_EXECUTABLE,
 )
-from .errors import CodeQLErrors, SarifErrors
+from .errors import CodeQLErrors
 from .models import LanguageResult, OrganizationResult, RepositoryResult
 from .report import write_report
 from .sarif import parse_sarif
@@ -152,7 +152,7 @@ def _analyze_language(
 
     try:
         findings = parse_sarif(sarif)
-    except SarifErrors as error:
+    except AppException as error:
         return LanguageResult(
             language=language,
             status="sarif_failed",

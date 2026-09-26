@@ -3,6 +3,7 @@
 from collections.abc import Callable
 from pathlib import Path
 
+from core.exceptions import AppException
 from core.execution import workspace
 from core.filesystem import create_temporary_directory, save_data
 
@@ -47,7 +48,7 @@ def _clone_repository(
         return CloneResult(
             repository=repository,
             error=str(error)
-            if isinstance(error, CloneErrors)
+            if isinstance(error, AppException)
             else (f"Error inesperado: {type(error).__name__}"),
         )
 

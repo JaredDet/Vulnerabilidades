@@ -3,7 +3,9 @@ from unittest.mock import Mock
 
 import pytest
 
+from core.exceptions import AppException
 from miner.sbom import syft
+from miner.sbom.errors import SBOMErrors
 
 
 def test_generate_sbom_command(tmp_path, monkeypatch):
@@ -15,8 +17,9 @@ def test_generate_sbom_command(tmp_path, monkeypatch):
     assert syft.generate_sbom(source, output, executable="custom-syft", timeout=42) == output.resolve()
     assert run.call_args.args[0] == ["custom-syft", "scan", str(source.resolve()), f"--output=cyclonedx-json={output.resolve()}"]
     assert run.call_args.kwargs["timeout"] == 42
-    with pytest.raises(syft.SyftError, match="ya existe"):
+    with pytest.raises(AppException) as raised:
         syft.generate_sbom(source, output)
+    assert raised.value is SBOMErrors.SbomAlreadyExists
 
 
 @pytest.mark.parametrize("failure", [None, FileNotFoundError(), subprocess.TimeoutExpired("syft", 1), subprocess.CalledProcessError(2, "syft")])
@@ -24,19 +27,20 @@ def test_generation_failure(tmp_path, monkeypatch, failure):
     source = tmp_path / "source"
     source.mkdir()
     monkeypatch.setattr(syft.subprocess, "run", Mock(side_effect=failure))
-    with pytest.raises(syft.SyftError):
+    with pytest.raises(AppException):
         syft.generate_sbom(source, tmp_path / "sbom.json")
 
 
 def test_paths_and_timeout_are_checked(tmp_path, monkeypatch):
     run = Mock()
     monkeypatch.setattr(syft.subprocess, "run", run)
-    with pytest.raises(syft.SyftError):
+    with pytest.raises(AppException):
         syft.generate_sbom(tmp_path / "missing", tmp_path / "out.json")
-    with pytest.raises(syft.SyftError):
+    with pytest.raises(AppException):
         syft.generate_sbom(tmp_path, tmp_path / "out.json")
-    with pytest.raises(ValueError):
+    with pytest.raises(AppException) as raised:
         syft.generate_sbom(tmp_path, tmp_path / "out.json", timeout=0)
+    assert raised.value is SBOMErrors.InvalidTimeout
     run.assert_not_called()
 
 
@@ -51,11 +55,13 @@ def test_version(monkeypatch):
 @pytest.mark.parametrize("contents", ["invalid", "[]", "null", "{}", '{"version":null}', '{"version":" "}'])
 def test_invalid_version(monkeypatch, contents):
     monkeypatch.setattr(syft.subprocess, "run", Mock(return_value=Mock(stdout=contents)))
-    with pytest.raises(syft.SyftError):
+    with pytest.raises(AppException) as raised:
         syft.get_version()
+    assert raised.value is SBOMErrors.InvalidVersionResponse
 
 
 def test_version_timeout(monkeypatch):
     monkeypatch.setattr(syft.subprocess, "run", Mock(side_effect=subprocess.TimeoutExpired("syft", 30)))
-    with pytest.raises(syft.SyftError):
+    with pytest.raises(AppException) as raised:
         syft.get_version()
+    assert raised.value is SBOMErrors.VersionTimeout

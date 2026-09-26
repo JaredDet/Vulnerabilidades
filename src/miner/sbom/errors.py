@@ -2,6 +2,12 @@ from core.exceptions import AppException, ErrorType
 
 
 class SBOMErrors:
+    OrganizationRequired = AppException(
+        "organization_required",
+        "La organización es obligatoria",
+        ErrorType.VALIDATION,
+    )
+
     InvalidTimeout = AppException(
         "invalid_timeout",
         "El timeout debe ser mayor que cero",
@@ -24,6 +30,54 @@ class SBOMErrors:
         "sbom_inside_source",
         "El SBOM debe quedar fuera de la carpeta del repositorio",
         ErrorType.VALIDATION,
+    )
+
+    CloneFailed = AppException(
+        "clone_failed",
+        "El repositorio no se pudo clonar",
+        ErrorType.UNEXPECTED,
+    )
+
+    GitNotAvailable = AppException(
+        "git_not_available",
+        "No se encontró Git o una ruta necesaria",
+        ErrorType.UNEXPECTED,
+    )
+
+    CommitTimeout = AppException(
+        "commit_timeout",
+        "Se agotó el tiempo al consultar el commit del repositorio",
+        ErrorType.UNEXPECTED,
+    )
+
+    CommitFailed = AppException(
+        "commit_failed",
+        "No se pudo consultar el commit del repositorio",
+        ErrorType.UNEXPECTED,
+    )
+
+    CommitNotFound = AppException(
+        "commit_not_found",
+        "No se encontró un commit en el repositorio",
+        ErrorType.UNEXPECTED,
+    )
+
+    GitAccessFailed = AppException(
+        "git_access_failed",
+        "No se pudo ejecutar Git o acceder a sus archivos",
+        ErrorType.UNEXPECTED,
+    )
+
+    InvalidSbom = AppException(
+        "invalid_sbom",
+        "Syft generó un SBOM inválido",
+        ErrorType.UNEXPECTED,
+    )
+
+    InvalidComponents = AppException(
+        "invalid_components",
+        "El SBOM contiene una lista de componentes inválida",
+        ErrorType.UNEXPECTED,
     )
 
     SyftNotAvailable = AppException(

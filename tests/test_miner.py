@@ -3,12 +3,11 @@ from unittest.mock import Mock
 
 import pytest
 
+from core.exceptions import AppException
 from miner.clone import pipeline as miner
 from miner.analysis.analysis_code_ql import pipeline as analysis
-from miner.analysis.analysis_code_ql.codeql import CodeQLError
-from miner.analysis.analysis_code_ql.sarif import SarifError
-from miner.clone.clone import CloneError
-from miner.clone.github_api import GitHubAPIError
+from miner.analysis.analysis_code_ql.errors import CodeQLErrors, SarifErrors
+from miner.clone.errors import CloneErrors
 from miner.clone.models import Repository
 from miner.analysis.analysis_code_ql.models import Finding
 
@@ -40,7 +39,7 @@ def pipeline(monkeypatch, tmp_path):
     )
     def run():
         clones = miner.clone_organization(
-            "org", "test-token", workspace=tmp_path / "work", progress=lambda _: None,
+            "org", "test-token", workspace_path=tmp_path / "work", progress=lambda _: None,
         )
         return analysis.analyze_organization(
             clones, tmp_path / "results.json", token="test-token", progress=lambda _: None,
@@ -63,17 +62,21 @@ def test_complete_pipeline(pipeline, tmp_path):
 @pytest.mark.parametrize(
     "component,error,status",
     [
-        ("clone_repository", CloneError("clone"), "clone_failed"),
-        ("create_database", CodeQLError("database"), "database_failed"),
-        ("analyze_database", CodeQLError("analysis"), "analysis_failed"),
-        ("parse_sarif", SarifError("sarif"), "analysis_failed"),
+        ("clone_repository", CloneErrors.GitCloneFailed, "clone_failed"),
+        ("create_database", CodeQLErrors.DatabaseCreationFailed, "database_failed"),
+        ("analyze_database", CodeQLErrors.AnalysisFailed, "analysis_failed"),
+        ("parse_sarif", SarifErrors.InvalidDocument, "sarif_failed"),
     ],
 )
 def test_continue_after_failure(pipeline, component, error, status):
     function = getattr(miner if component == "clone_repository" else analysis, component)
     function.side_effect = [error, function.return_value]
     result = pipeline()
-    assert [repo.status for repo in result.repositories] == [status, "analyzed"]
+    if component == "parse_sarif":
+        assert [repo.status for repo in result.repositories] == ["analysis_failed", "analyzed"]
+        assert result.repositories[0].languages[0].status == status
+    else:
+        assert [repo.status for repo in result.repositories] == [status, "analyzed"]
     assert result.summary.failed == 1
 
 
@@ -82,7 +85,7 @@ def test_partial_languages(pipeline):
     (database / "javascript").mkdir()
     (database / "javascript" / "codeql-database.yml").touch()
     analysis.analyze_database.side_effect = [
-        CodeQLError("bad"), analysis.analyze_database.return_value,
+        CodeQLErrors.AnalysisFailed, analysis.analyze_database.return_value,
     ] * 2
     result = pipeline()
     assert result.summary.partial == 2
@@ -108,9 +111,10 @@ def test_empty_organization(pipeline, tmp_path):
 def test_failed_list_does_not_replace_report(pipeline, tmp_path):
     output = tmp_path / "results.json"
     output.write_text("existing report")
-    miner.get_organization_repositories.side_effect = GitHubAPIError("failed page")
-    with pytest.raises(GitHubAPIError):
+    miner.get_organization_repositories.side_effect = CloneErrors.GitHubRequestFailed
+    with pytest.raises(AppException) as raised:
         pipeline()
+    assert raised.value is CloneErrors.GitHubRequestFailed
     assert output.read_text() == "existing report"
 
 
@@ -139,7 +143,7 @@ def test_scan_parses_sarif_and_writes_language_results(pipeline, monkeypatch):
 
 
 def test_sarif_failure_preserves_language_status(pipeline):
-    analysis.parse_sarif.side_effect = SarifError("invalid SARIF")
+    analysis.parse_sarif.side_effect = SarifErrors.InvalidDocument
     result = pipeline()
     assert result.summary.failed == 2
     assert result.repositories[0].languages[0].status == "sarif_failed"
@@ -156,7 +160,7 @@ def test_unexpected_failure_continues_to_next_repository(pipeline):
 
 def test_clones_can_be_reused_without_cloning_again(pipeline, tmp_path):
     clones = miner.clone_organization(
-        "org", "test-token", workspace=tmp_path / "work", progress=lambda _: None,
+        "org", "test-token", workspace_path=tmp_path / "work", progress=lambda _: None,
     )
     assert clones.cloned == 2
     assert clones.failed == 0
@@ -178,14 +182,14 @@ def test_clones_can_be_reused_without_cloning_again(pipeline, tmp_path):
 
 
 def test_clone_failure_is_available_without_analysis(pipeline, tmp_path):
-    miner.clone_repository.side_effect = [CloneError("clone failed"), tmp_path]
+    miner.clone_repository.side_effect = [CloneErrors.GitCloneFailed, tmp_path]
     clones = miner.clone_organization(
-        "org", "test-token", workspace=tmp_path / "work", progress=lambda _: None,
+        "org", "test-token", workspace_path=tmp_path / "work", progress=lambda _: None,
     )
     assert clones.cloned == 1
     assert clones.failed == 1
     assert clones.repositories[0].repository.full_name == "org/a"
     assert clones.repositories[0].source is None
-    assert clones.repositories[0].error == "clone failed"
+    assert clones.repositories[0].error == CloneErrors.GitCloneFailed.message
     assert clones.repositories[1].source == tmp_path
     analysis.create_database.assert_not_called()

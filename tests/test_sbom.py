@@ -6,11 +6,12 @@ from unittest.mock import Mock
 import pytest
 from typer.testing import CliRunner
 
+from core.exceptions import AppException
 from miner import cli
 from miner.clone.models import CloneResult, OrganizationCloneResult, Repository
+from miner.sbom.errors import SBOMErrors
 from miner.sbom import pipeline
 from miner.sbom.models import SBOMReport
-from miner.sbom.syft import SyftError
 
 
 def save_clones(root, names=("b", "a"), timestamp=100):
@@ -62,8 +63,7 @@ def test_latest_clone_and_repeat_preserve_previous_artifacts(tmp_path, dependenc
 
 
 def test_legacy_scan_and_explicit_id(tmp_path, dependencies):
-    source = tmp_path / "scan-old" / "repositories" / "org" / "legacy"
-    (source / ".git").mkdir(parents=True)
+    save_clones(tmp_path / "clone-old", names=("legacy",))
     save_clones(tmp_path / "clone-new")
     report = pipeline.generate_organization_sbom("org", tmp_path / "out.json", workspace=tmp_path, run_id="old")
     assert [item.full_name for item in report.repositories] == ["org/legacy"]
@@ -85,7 +85,7 @@ def test_invalid_sbom_does_not_stop_other_repositories(tmp_path, dependencies, c
     generator.side_effect = generate
     report = pipeline.generate_organization_sbom("org", tmp_path / "out.json", workspace=tmp_path)
     assert [item.status for item in report.repositories] == ["failed", "generated"]
-    assert report.repositories[0].commit == "abc123"
+    assert report.repositories[0].commit == "unknown"
 
 
 def test_empty_report_is_written_without_syft(tmp_path, dependencies):
@@ -106,7 +106,7 @@ def test_failed_clone_remains_in_report(tmp_path, dependencies):
     (clones.workspace / "clones.json").write_text(clones.model_dump_json())
     report = pipeline.generate_organization_sbom("org", tmp_path / "out.json", workspace=tmp_path)
     assert [item.status for item in report.repositories] == ["generated", "failed"]
-    assert report.repositories[1].error == "clone failed"
+    assert report.repositories[1].error == SBOMErrors.CloneFailed.message
     assert dependencies[2].call_count == 1
 
 
@@ -114,9 +114,10 @@ def test_syft_unavailable_preserves_report(tmp_path, dependencies):
     save_clones(tmp_path / "clone-one")
     output = tmp_path / "out.json"
     output.write_text("existing report")
-    dependencies[0].side_effect = SyftError("missing Syft")
-    with pytest.raises(SyftError):
+    dependencies[0].side_effect = SBOMErrors.SyftNotAvailable
+    with pytest.raises(AppException) as raised:
         pipeline.generate_organization_sbom("org", output, workspace=tmp_path)
+    assert raised.value is SBOMErrors.SyftNotAvailable
     assert output.read_text() == "existing report"
 
 

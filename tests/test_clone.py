@@ -3,8 +3,9 @@ from unittest.mock import Mock
 
 import pytest
 
-from miner.clone import github_api as api
-from miner.clone.clone import CloneError, clone_repository
+from core.exceptions import AppException
+from miner.clone.clone import clone_repository
+from miner.clone.errors import CloneErrors
 from miner.clone.models import Repository
 
 
@@ -20,20 +21,22 @@ def test_clone_local(tmp_path):
          "user.email=test@example.invalid", "commit", "-m", "test"],
         check=True, capture_output=True,
     )
-    repo = api.Repository(full_name="org/a", clone_url=source.as_uri())
+    repo = Repository(full_name="org/a", clone_url=source.as_uri())
     target = clone_repository(repo, tmp_path / "clones")
     assert (target / "example.py").read_text() == "print('hello')\n"
-    with pytest.raises(CloneError):
+    with pytest.raises(AppException) as raised:
         clone_repository(repo, tmp_path / "clones")
+    assert raised.value is CloneErrors.DestinationAlreadyExists
 
 
 def test_clone_timeout(tmp_path, monkeypatch):
     monkeypatch.setattr("miner.clone.clone.subprocess.run", Mock(
         side_effect=subprocess.TimeoutExpired("git", 1)))
-    repo = api.Repository(
+    repo = Repository(
         full_name="org/a", clone_url="https://github.com/org/a.git")
-    with pytest.raises(CloneError):
+    with pytest.raises(AppException) as raised:
         clone_repository(repo, tmp_path)
+    assert raised.value is CloneErrors.GitCloneTimeout
 
 
 def test_git_auth_not_in_arguments(tmp_path, monkeypatch):

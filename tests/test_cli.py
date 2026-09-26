@@ -3,9 +3,10 @@ from unittest.mock import Mock
 
 from typer.testing import CliRunner
 
+from core.exceptions import AppException, ErrorType
 from miner import cli
-from miner.clone import github_api as api
 from miner.analysis.analysis_code_ql.models import OrganizationResult
+from miner.clone.errors import CloneErrors
 from miner.clone.models import CloneResult, OrganizationCloneResult, Repository
 
 
@@ -24,11 +25,45 @@ def test_cli_environment(monkeypatch):
 def test_cli_api_error(monkeypatch):
     monkeypatch.setenv("GITHUB_TOKEN", "fake-token")
     monkeypatch.setattr(cli, "get_organization_repositories", Mock(
-        side_effect=api.GitHubAPIError("API unavailable")))
+        side_effect=CloneErrors.GitHubRequestFailed))
     result = CliRunner().invoke(cli.app, ["list", "org"])
     assert result.exit_code == 1
-    assert "API unavailable" in result.output
+    assert CloneErrors.GitHubRequestFailed.message in result.output
     assert "fake-token" not in result.output
+
+
+def test_cli_validation_error_uses_central_handler(monkeypatch):
+    monkeypatch.setenv("GITHUB_TOKEN", "fake-token")
+    monkeypatch.setattr(
+        cli,
+        "get_organization_repositories",
+        Mock(
+            side_effect=AppException(
+                "organization_required",
+                "La organización es obligatoria",
+                ErrorType.VALIDATION,
+            )
+        ),
+    )
+
+    result = CliRunner().invoke(cli.app, ["list", "org"])
+
+    assert result.exit_code == 2
+    assert "La organización es obligatoria" in result.output
+
+
+def test_cli_os_error_uses_central_handler(monkeypatch):
+    monkeypatch.setenv("GITHUB_TOKEN", "fake-token")
+    monkeypatch.setattr(
+        cli,
+        "get_organization_repositories",
+        Mock(side_effect=OSError("disk error")),
+    )
+
+    result = CliRunner().invoke(cli.app, ["list", "org"])
+
+    assert result.exit_code == 1
+    assert "No se pudo acceder al directorio" in result.output
 
 
 def test_analyze_cli_never_clones(monkeypatch, tmp_path):
@@ -79,19 +114,23 @@ def test_clone_cli_does_not_analyze(monkeypatch, tmp_path):
     assert data["repositories"][0]["source"] == str(clones.repositories[0].source)
     assert "test-token" not in result.output
     assert clone.call_args.args == ("org", "test-token")
-    assert clone.call_args.kwargs["workspace"] == tmp_path
+    assert clone.call_args.kwargs["workspace_path"] == tmp_path
     assert clone.call_args.kwargs["timeout"] == 42
     analyze.assert_not_called()
 
 
 def test_clone_list_failure_stops_processing(monkeypatch):
     monkeypatch.setenv("GITHUB_TOKEN", "test-token")
-    monkeypatch.setattr(cli, "clone_organization", Mock(side_effect=api.GitHubAPIError("failed page")))
+    monkeypatch.setattr(
+        cli,
+        "clone_organization",
+        Mock(side_effect=CloneErrors.GitHubRequestFailed),
+    )
     analyze = Mock()
     monkeypatch.setattr(cli, "analyze_organization", analyze)
     result = CliRunner().invoke(cli.app, ["clone", "-o", "org"])
     assert result.exit_code == 1
-    assert "failed page" in result.output
+    assert CloneErrors.GitHubRequestFailed.message in result.output
     analyze.assert_not_called()
 
 
@@ -114,6 +153,6 @@ def test_analyze_without_clones_does_not_clone(monkeypatch, tmp_path):
         "analyze", "-o", "org",
     ])
     assert result.exit_code == 1
-    assert "miner clone --organization org" in result.output
+    assert "miner clone" in result.output
     clone.assert_not_called()
     analyze.assert_not_called()

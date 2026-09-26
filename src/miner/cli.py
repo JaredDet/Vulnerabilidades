@@ -1,12 +1,14 @@
 """Interfaz de línea de comandos del miner."""
 
 import os
+from functools import wraps
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Callable, ParamSpec, TypeVar
 
 import typer
 from dotenv import load_dotenv
 
+from core.exception_handler import ExitCode, handle_exception
 from core.exceptions import AppException
 from miner.analysis.analysis_dependencies.constants import (
     DEFAULT_GRYPE_EXECUTABLE,
@@ -42,6 +44,31 @@ app = typer.Typer(
     pretty_exceptions_enable=False,
 )
 
+P = ParamSpec("P")
+R = TypeVar("R")
+
+
+def command(
+    name: str | None = None,
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
+    """Registra un comando con el tratamiento común de errores de aplicación."""
+
+    def register(callback: Callable[P, R]) -> Callable[P, R]:
+        @wraps(callback)
+        def wrapped(*args: P.args, **kwargs: P.kwargs) -> R:
+            try:
+                return callback(*args, **kwargs)
+            except (AppException, OSError) as error:
+                exit_code = handle_exception(
+                    error,
+                    write=lambda message: typer.echo(message, err=True),
+                )
+                raise typer.Exit(exit_code.value) from None
+
+        return app.command(name=name)(wrapped)
+
+    return register
+
 
 @app.callback()
 def main() -> None:
@@ -58,7 +85,7 @@ def _token() -> str:
     return token
 
 
-@app.command()
+@command()
 def analyze(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     output: Annotated[Path, typer.Option("--output")] = Path("results.json"),
@@ -78,29 +105,17 @@ def analyze(
     """Analiza la clonación más reciente de una organización, sin volver a clonar."""
     token = _token()
 
-    try:
-        clones = load_latest_clones(organization, run_id=run_id)
-        typer.echo(f"Clones: {clones.workspace}", err=True)
+    clones = load_latest_clones(organization, run_id=run_id)
+    typer.echo(f"Clones: {clones.workspace}", err=True)
 
-        report = analyze_organization(
-            clones,
-            output,
-            token=token,
-            executable=codeql,
-            timeout=timeout,
-            progress=lambda text: typer.echo(text, err=True),
-        )
-
-    except AppException as error:
-        typer.echo(error.message, err=True)
-        raise typer.Exit(1) from None
-
-    except OSError:
-        typer.echo(
-            "No se pudo acceder al directorio de trabajo o guardar el JSON",
-            err=True,
-        )
-        raise typer.Exit(1) from None
+    report = analyze_organization(
+        clones,
+        output,
+        token=token,
+        executable=codeql,
+        timeout=timeout,
+        progress=lambda text: typer.echo(text, err=True),
+    )
 
     typer.echo(
         f"JSON: {output}; repositorios: {report.summary.repositories}; "
@@ -109,7 +124,7 @@ def analyze(
     )
 
 
-@app.command()
+@command()
 def clone(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
@@ -121,41 +136,27 @@ def clone(
     """Clona los repositorios y muestra sus rutas, sin ejecutar análisis."""
     token = _token()
 
-    try:
-        result = clone_organization(
-            organization,
-            token,
-            workspace_path=workspace,
-            timeout=timeout,
-            progress=lambda text: typer.echo(text, err=True),
-        )
-
-    except AppException as error:
-        typer.echo(error.message, err=True)
-        raise typer.Exit(1) from None
-
-    except OSError:
-        typer.echo("No se pudo acceder al directorio de trabajo", err=True)
-        raise typer.Exit(1) from None
+    result = clone_organization(
+        organization,
+        token,
+        workspace_path=workspace,
+        timeout=timeout,
+        progress=lambda text: typer.echo(text, err=True),
+    )
 
     typer.echo(result.model_dump_json(indent=2))
 
 
-@app.command(name="list")
+@command(name="list")
 def list_repositories(organization: str) -> None:
     """Lista repositorios sin clonarlos ni ejecutar CodeQL."""
     token = _token()
 
-    try:
-        for repository in get_organization_repositories(organization, token):
-            typer.echo(f"{repository.full_name}\t{repository.clone_url}")
-
-    except AppException as error:
-        typer.echo(error.message, err=True)
-        raise typer.Exit(1) from None
+    for repository in get_organization_repositories(organization, token):
+        typer.echo(f"{repository.full_name}\t{repository.clone_url}")
 
 
-@app.command()
+@command()
 def sbom(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     run_id: Annotated[
@@ -173,26 +174,14 @@ def sbom(
     ] = DEFAULT_SBOM_SCAN_TIMEOUT,
 ) -> None:
     """Genera los SBOM de la clonación más reciente."""
-    try:
-        report = generate_organization_sbom(
-            organization,
-            output,
-            run_id=run_id,
-            executable=syft,
-            timeout=timeout,
-            progress=lambda text: typer.echo(text, err=True),
-        )
-
-    except AppException as error:
-        typer.echo(error.message, err=True)
-        raise typer.Exit(1) from None
-
-    except OSError:
-        typer.echo(
-            "No se pudo acceder al directorio de trabajo o guardar el JSON",
-            err=True,
-        )
-        raise typer.Exit(1) from None
+    report = generate_organization_sbom(
+        organization,
+        output,
+        run_id=run_id,
+        executable=syft,
+        timeout=timeout,
+        progress=lambda text: typer.echo(text, err=True),
+    )
 
     typer.echo(
         f"JSON: {output}; repositorios: {len(report.repositories)}",
@@ -200,7 +189,7 @@ def sbom(
     )
 
 
-@app.command()
+@command()
 def vulnerabilities(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     run_id: Annotated[
@@ -220,26 +209,14 @@ def vulnerabilities(
     ] = DEFAULT_GRYPE_SCAN_TIMEOUT,
 ) -> None:
     """Analiza las vulnerabilidades de los SBOM de una organización."""
-    try:
-        report = scan_organization_vulnerabilities(
-            organization,
-            output,
-            run_id=run_id,
-            executable=grype,
-            timeout=timeout,
-            progress=lambda text: typer.echo(text, err=True),
-        )
-
-    except AppException as error:
-        typer.echo(error.message, err=True)
-        raise typer.Exit(1) from None
-
-    except OSError:
-        typer.echo(
-            "No se pudo acceder al directorio de trabajo o guardar el JSON",
-            err=True,
-        )
-        raise typer.Exit(1) from None
+    report = scan_organization_vulnerabilities(
+        organization,
+        output,
+        run_id=run_id,
+        executable=grype,
+        timeout=timeout,
+        progress=lambda text: typer.echo(text, err=True),
+    )
 
     typer.echo(
         f"JSON: {output}; repositorios: {len(report.repositories)}",

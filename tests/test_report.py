@@ -2,6 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from core import filesystem
 from miner.analysis.analysis_code_ql.report import write_report
 from miner.analysis.analysis_code_ql.models import Finding, LanguageResult, OrganizationResult, RepositoryResult
 
@@ -60,7 +61,9 @@ def test_atomic_write_failure_preserves_report(tmp_path, monkeypatch):
     output = tmp_path / "out.json"
     output.write_text("existing report")
     monkeypatch.setattr(
-        "miner.analysis.report.os.replace", Mock(side_effect=OSError("disk error"))
+        filesystem.os,
+        "replace",
+        Mock(side_effect=OSError("disk error")),
     )
     with pytest.raises(OSError):
         write_report(OrganizationResult(organization="org", repositories=[]), output)
