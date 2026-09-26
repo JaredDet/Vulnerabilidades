@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  SYFT_IMAGE: anchore/syft:v1.52.0
+  GRYPE_IMAGE: anchore/grype:v0.119.0
+  CODEQL_IMAGE: mcr.microsoft.com/cstsectools/codeql-container
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: uv sync --locked
+      - run: uv run pytest -q
+
+  security-tools:
+    name: Container security tools
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create artifact directories
+        run: mkdir -p artifacts/sbom artifacts/grype artifacts/codeql
+
+      - name: Generate CycloneDX SBOM with Syft
+        run: >-
+          docker run --rm
+          -v "$GITHUB_WORKSPACE:/workspace:ro"
+          -v "$GITHUB_WORKSPACE/artifacts/sbom:/output"
+          "$SYFT_IMAGE"
+          scan dir:/workspace
+          --output cyclonedx-json=/output/sbom.json
+
+      - name: Scan the SBOM with Grype
+        run: >-
+          docker run --rm
+          -v "$GITHUB_WORKSPACE/artifacts/sbom:/sbom:ro"
+          -v "$GITHUB_WORKSPACE/artifacts/grype:/output"
+          "$GRYPE_IMAGE"
+          sbom:/sbom/sbom.json
+          --output json
+          --file /output/vulnerabilities.json
+
+      - name: Create a CodeQL database
+        run: >-
+          docker run --rm
+          -v "$GITHUB_WORKSPACE:/opt/src:ro"
+          -v "$GITHUB_WORKSPACE/artifacts/codeql:/opt/results"
+          -e "CODEQL_CLI_ARGS=database create --language=python /opt/results/database --source-root=/opt/src"
+          "$CODEQL_IMAGE"
+
+      - name: Analyze with CodeQL
+        run: >-
+          docker run --rm
+          -v "$GITHUB_WORKSPACE:/opt/src:ro"
+          -v "$GITHUB_WORKSPACE/artifacts/codeql:/opt/results"
+          -e "CODEQL_CLI_ARGS=database analyze /opt/results/database python-security-and-quality.qls --format=sarifv2.1.0 --output=/opt/results/results.sarif"
+          "$CODEQL_IMAGE"
+
+      - name: Upload scanner reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: artifacts/
+          if-no-files-found: warn

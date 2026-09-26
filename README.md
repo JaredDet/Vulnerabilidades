@@ -134,6 +134,17 @@ organización vacía también genera un JSON.
 
 ## Desarrollo
 
+Cada pull request y cada push a `main` ejecuta las pruebas con Python 3.11 y
+analiza el propio código con CodeQL, Syft y Grype en contenedores Docker. Los
+reportes quedan disponibles como el artefacto `security-reports` de la ejecución
+de GitHub Actions. Syft y Grype usan imágenes versionadas; la imagen de CodeQL
+se configura en `CODEQL_IMAGE` porque el contenedor disponible está en vista
+previa y puede cambiar.
+
+Esto no cambia la ejecución local del programa: `--codeql`, `--syft` y
+`--grype` siguen aceptando rutas a los ejecutables instalados en el PC, y por
+defecto se buscan `codeql`, `syft` y `grype` en `PATH`.
+
 ```text
 src/miner/
     cli.py        # Comandos y composición de los flujos
