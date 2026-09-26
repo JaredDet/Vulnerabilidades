@@ -4,9 +4,9 @@ from unittest.mock import Mock
 import pytest
 
 from core.exceptions import AppException
-from miner.analysis.analysis_code_ql import codeql
-from miner.analysis.analysis_code_ql.codeql import analyze_database, create_database
-from miner.analysis.analysis_code_ql.errors import CodeQLErrors
+from miner.codeql import codeql
+from miner.codeql.codeql import analyze_database, create_database
+from miner.codeql.errors import CodeQLErrors
 
 
 def test_analyze_database(tmp_path, monkeypatch):

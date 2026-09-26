@@ -1,6 +1,6 @@
 # Miner
 
-Herramienta para listar y clonar repositorios de una organización de GitHub,
+Herramienta para clonar repositorios de una organización de GitHub,
 analizarlos con CodeQL y generar inventarios SBOM con Syft. Los resultados se guardan en JSON.
 
 ## Preparación
@@ -22,48 +22,67 @@ puedes definir la variable en el entorno. `.env` está excluido de Git.
 ## Uso
 
 ```powershell
-# Listar repositorios
-uv run miner list pallets
-
-# Solo clonar, sin ejecutar CodeQL
-uv run miner clone --organization pallets
+# Consultar la organización y clonar repositorios
+uv run miner clone-repositories --organization pallets
 
 # Analizar la clonación más reciente, sin volver a clonar
-uv run miner analyze --organization pallets --output results.json
+uv run miner analyze-code --organization pallets --output results.json
 
-# Elegir una ejecución concreta (también acepta las carpetas scan antiguas)
-uv run miner analyze --organization pallets --run-id xkfbl6pl
+# Elegir una ejecución concreta de clones
+uv run miner analyze-code --organization pallets --run-id xkfbl6pl
+
+# Buscar vulnerabilidades en las dependencias
+uv run miner scan-dependency-vulnerabilities --organization pallets
+uv run miner scan-dependency-vulnerabilities --organization pallets --run-id 7o9x8nb_
 ```
 
-`clone` muestra un JSON con las rutas locales, errores y conteos en stdout.
-`analyze` busca la clonación más reciente de la organización y analiza sus
-repositorios locales. Si no hay clones, indica que debes ejecutar `clone` primero.
-El progreso de ambos comandos va a stderr. `analyze` reemplaza al comando `scan`.
+`clone-repositories` consulta la organización y muestra un JSON con las rutas
+locales, errores y conteos en stdout. `analyze-code` busca la clonación
+más reciente de la organización y analiza sus
+repositorios locales. Si no hay clones, indica que debes ejecutar
+`clone-repositories` primero.
+El progreso de ambos comandos va a stderr.
 
 | Opción | Comando | Uso |
 | --- | --- | --- |
-| `--workspace RUTA` | `clone` | Cambiar el directorio donde guardar las ejecuciones. |
-| `--run-id ID` | `analyze`, `sbom` | Elegir una ejecución por su identificador, sin `scan-`, `clone-` ni la ruta completa. |
-| `--timeout SEGUNDOS` | `clone` | Límite por clonación; por defecto, 300. |
-| `--timeout SEGUNDOS` | `analyze` | Límite por creación de base y análisis; por defecto, 600. |
-| `--output ARCHIVO` | `analyze` | Reporte JSON; por defecto, `results.json`. |
-| `--codeql RUTA` | `analyze` | Ejecutable de CodeQL; por defecto, `codeql`. |
+| `--workspace RUTA` | `clone-repositories` | Cambiar el directorio donde guardar las ejecuciones. |
+| `--run-id ID` | `analyze-code`, `generate-sbom` | Elegir una ejecución de clones por su identificador, sin `clone-` ni la ruta completa. |
+| `--run-id ID` | `scan-dependency-vulnerabilities` | Elegir una ejecución SBOM por su identificador, sin `sbom-` ni la ruta completa. |
+| `--timeout SEGUNDOS` | `clone-repositories` | Límite por clonación; por defecto, 300. |
+| `--timeout SEGUNDOS` | `analyze-code` | Límite por creación de base y análisis; por defecto, 600. |
+| `--output ARCHIVO` | `analyze-code` | Reporte JSON; por defecto, `results.json`. |
+| `--codeql RUTA` | `analyze-code` | Ejecutable de CodeQL; por defecto, `codeql`. |
+
+Los códigos de salida permiten distinguir errores globales del comando:
+
+| Código | Significado |
+| --- | --- |
+| `0` | Comando completado. |
+| `1` | Error inesperado. |
+| `2` | Uso o datos de entrada no válidos, incluidos los errores de opciones de Typer. |
+| `3` | Conflicto, por ejemplo, un archivo de salida que ya existe. |
+| `4` | Recurso solicitado no encontrado. |
+| `5` | Autenticación no autorizada. |
+| `6` | Acceso prohibido. |
+| `7` | Error de un servicio externo. |
+| `8` | Error de acceso al sistema de archivos. |
+
+Los errores de repositorios individuales se incluyen en el reporte y no cambian
+el código de salida si el comando pudo completar el resto del trabajo.
 
 ```powershell
-uv run miner analyze --organization pallets --codeql "C:\Program Files (x86)\codeql\codeql.exe"
+uv run miner analyze-code --organization pallets --codeql "C:\Program Files (x86)\codeql\codeql.exe"
 uv run miner --help
 ```
 
 Cada ejecución guarda sus clones en
 `organizations/<organización>/work/clone-<id>/repositories/`.
 Al terminar, guarda las rutas y los fallos en `clones.json` dentro de esa ejecución.
-Sin `--run-id`, `analyze` busca en `organizations/<organización>/work/`.
-Por ejemplo, `--run-id xkfbl6pl` selecciona `scan-xkfbl6pl` dentro de esa carpeta.
-La búsqueda de `analyze` usa este directorio estándar; los clones guardados con
+Sin `--run-id`, `analyze-code` busca en `organizations/<organización>/work/`.
+Por ejemplo, `--run-id xkfbl6pl` selecciona `clone-xkfbl6pl` dentro de esa carpeta.
+La búsqueda de `analyze-code` usa este directorio estándar; los clones guardados con
 un `--workspace` personalizado pueden procesarse mediante la API de Python.
-Las carpetas antiguas `scan-*` se leen directamente desde sus repositorios Git;
-no permiten recuperar los fallos de clonación que no dejaron un repositorio.
-El análisis crea un directorio `analysis-<id>/` dentro de esa misma ejecución
+El análisis crea un directorio `codeql-<id>/` dentro de esa misma ejecución
 para las bases CodeQL y los archivos SARIF.
 
 Para generar SBOM necesitas Syft instalado aparte del entorno Python. En Windows:
@@ -75,10 +94,10 @@ winget install --id Anchore.Syft --exact
 Abre una terminal nueva y comprueba `syft version`. Luego ejecuta:
 
 ```powershell
-uv run miner sbom --organization pallets
-uv run miner sbom --organization pallets --run-id xkfbl6pl --output sbom-results.json
+uv run miner generate-sbom --organization pallets
+uv run miner generate-sbom --organization pallets --run-id xkfbl6pl --output sbom-results.json
 # Si Syft no está en PATH
-uv run miner sbom --organization pallets --syft "C:\tools\syft\syft.exe"
+uv run miner generate-sbom --organization pallets --syft "C:\tools\syft\syft.exe"
 ```
 
 SBOM reutiliza los clones locales sin requerir token ni volver a clonar.
@@ -86,6 +105,14 @@ Acepta `--syft RUTA` y `--timeout SEGUNDOS` (600 por defecto).
 Cada ejecución guarda archivos CycloneDX JSON en una carpeta nueva `sbom-<id>/`
 dentro de la clonación, y un reporte con commit, versión de Syft, fecha,
 cantidad de componentes y errores. Si no hay repositorios, escribe un reporte vacío.
+
+El análisis de vulnerabilidades con Grype examina las dependencias identificadas
+en esos SBOM. Su `--run-id` selecciona la ejecución SBOM (sin el prefijo `sbom-`):
+
+```powershell
+uv run miner scan-dependency-vulnerabilities --organization pallets
+uv run miner scan-dependency-vulnerabilities --organization pallets --run-id 7o9x8nb_
+```
 
 ## Resultados
 
@@ -111,16 +138,17 @@ organización vacía también genera un JSON.
 src/miner/
     cli.py        # Comandos y composición de los flujos
     clone/        # GitHub, clonación y modelos de clones
-    analysis/     # CodeQL, SARIF, modelos y reporte
+    codeql/       # CodeQL, SARIF, modelos y reporte
     sbom/         # Syft, CycloneDX y reporte
+    dependencies/ # Grype y vulnerabilidades de dependencias
 tests/
 docs/             # Diagramas PlantUML de los flujos
 ```
 
 `clone.pipeline.clone_organization` devuelve las rutas y los fallos de clonación.
-`analysis.pipeline.analyze_organization` recibe ese resultado sin volver a
+`codeql.pipeline.analyze_organization` recibe ese resultado sin volver a
 consultar GitHub ni clonar. Esta separación permite reutilizar los clones desde
-Python. SBOM usa el mismo selector de clones que el comando `analyze`.
+Python. SBOM usa el mismo selector de clones que `analyze-code`.
 
 ```powershell
 uv run pytest -q
@@ -133,8 +161,9 @@ repositorio temporal local. No requieren un token válido, CodeQL ni Syft instal
 SBOM tiene pruebas de selección de clones, `--run-id`, ejecuciones repetidas,
 errores, documentos inválidos, reportes vacíos, escritura atómica y CLI.
 
-Los diagramas de [list](docs/list.puml), [clone](docs/clone.puml),
-[analyze](docs/analyze.puml) y [sbom](docs/sbom.puml) están en [docs/](docs/README.md).
+Los diagramas de [clonación](docs/clone.puml), [análisis](docs/analyze.puml),
+[SBOM](docs/sbom.puml) y [vulnerabilidades de dependencias](docs/vulnerabilities.puml)
+están en [docs/](docs/README.md).
 
 Los clones, bases, SARIF, entornos locales, `results.json` y `sbom-results.json`
 están excluidos de Git.

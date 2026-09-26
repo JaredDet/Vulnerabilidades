@@ -63,7 +63,7 @@ def scan_vulnerabilities(
     output = Path(output_path).resolve()
 
     if not sbom.is_file():
-        raise GrypeErrors.SbomNotFound
+        raise GrypeErrors.SBOMFileNotFound
 
     if output.exists():
         raise GrypeErrors.ResultAlreadyExists

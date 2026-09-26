@@ -1,4 +1,4 @@
-from miner.analysis.analysis_code_ql.pipeline import _language_databases
+from miner.codeql.pipeline import _language_databases
 
 
 def test_language_databases_sorted_and_filtered(tmp_path):

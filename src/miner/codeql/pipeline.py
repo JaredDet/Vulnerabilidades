@@ -6,7 +6,7 @@ from pathlib import Path
 from core.exceptions import AppException
 from core.filesystem import create_temporary_directory
 
-from ...clone.models import OrganizationCloneResult, Repository
+from ..clone.models import OrganizationCloneResult, Repository
 from .codeql import analyze_database, create_database
 from .constants import (
     CODEQL_DATABASE_FILENAME,
@@ -17,14 +17,6 @@ from .errors import CodeQLErrors
 from .models import LanguageResult, OrganizationResult, RepositoryResult
 from .report import write_report
 from .sarif import parse_sarif
-
-
-def _create_analysis_directory(workspace: Path) -> Path:
-    """Crea el directorio para una ejecución de análisis."""
-    return create_temporary_directory(
-        workspace / "analysis_results",
-        "analysis-",
-    )
 
 
 def _process_repositories(
@@ -91,7 +83,10 @@ def analyze_organization(
     if timeout <= 0:
         raise CodeQLErrors.InvalidTimeout
 
-    analysis_directory = _create_analysis_directory(clones.workspace)
+    analysis_directory = create_temporary_directory(
+        clones.workspace / "analysis_results",
+        "codeql-",
+    )
     report_path = analysis_directory / "codeql-results.json"
 
     report = _process_repositories(

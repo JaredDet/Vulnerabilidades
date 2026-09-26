@@ -3,8 +3,8 @@ from unittest.mock import Mock
 import pytest
 
 from core import filesystem
-from miner.analysis.analysis_code_ql.report import write_report
-from miner.analysis.analysis_code_ql.models import Finding, LanguageResult, OrganizationResult, RepositoryResult
+from miner.codeql.report import write_report
+from miner.codeql.models import Finding, LanguageResult, OrganizationResult, RepositoryResult
 
 
 def test_findings_sorted_by_file_line_and_rule(tmp_path):

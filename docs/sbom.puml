@@ -1,6 +1,6 @@
 @startuml
 actor Usuario
-Usuario -> Miner: sbom
+Usuario -> Miner: generate-sbom
 Miner -> Syft: Generar SBOM
 Syft --> Miner: SBOM
 @enduml

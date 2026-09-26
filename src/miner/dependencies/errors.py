@@ -14,31 +14,31 @@ class GrypeErrors:
         ErrorType.VALIDATION,
     )
 
-    SbomDirectoryNotFound = AppException(
+    SBOMDirectoryNotFound = AppException(
         "sbom_directory_not_found",
         "No existe el directorio de SBOMs",
         ErrorType.NOT_FOUND,
     )
 
-    SbomRunNotFound = AppException(
+    SBOMRunNotFound = AppException(
         "sbom_run_not_found",
         "No se encontró la ejecución de SBOM indicada",
         ErrorType.NOT_FOUND,
     )
 
-    SbomNotFound = AppException(
+    SBOMFileNotFound = AppException(
         "sbom_not_found",
-        "El archivo SBOM no existe",
+        "No existe el archivo SBOM generado",
         ErrorType.NOT_FOUND,
     )
 
-    InvalidSbomReport = AppException(
+    InvalidSBOMReport = AppException(
         "invalid_sbom_report",
         "No se pudo leer el reporte de SBOM",
         ErrorType.UNEXPECTED,
     )
 
-    SbomGenerationFailed = AppException(
+    SBOMGenerationFailed = AppException(
         "sbom_generation_failed",
         "El SBOM no pudo generarse",
         ErrorType.UNEXPECTED,

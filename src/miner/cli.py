@@ -10,23 +10,22 @@ from dotenv import load_dotenv
 
 from core.exception_handler import ExitCode, handle_exception
 from core.exceptions import AppException
-from miner.analysis.analysis_dependencies.constants import (
+from miner.dependencies.constants import (
     DEFAULT_GRYPE_EXECUTABLE,
 )
-from miner.analysis.analysis_dependencies.constants import (
+from miner.dependencies.constants import (
     DEFAULT_SCAN_TIMEOUT as DEFAULT_GRYPE_SCAN_TIMEOUT,
 )
-from miner.analysis.analysis_dependencies.pipeline import (
+from miner.dependencies.pipeline import (
     scan_organization_vulnerabilities,
 )
 
-from .analysis.analysis_code_ql.constants import (
+from .codeql.constants import (
     DEFAULT_ANALYSIS_TIMEOUT,
     DEFAULT_CODEQL_EXECUTABLE,
 )
-from .analysis.analysis_code_ql.pipeline import analyze_organization
+from .codeql.pipeline import analyze_organization
 from .clone.constants import DEFAULT_CLONE_TIMEOUT
-from .clone.github_api import get_organization_repositories
 from .clone.loader import load_latest_clones
 from .clone.pipeline import clone_organization
 from .sbom.constants import (
@@ -72,7 +71,7 @@ def command(
 
 @app.callback()
 def main() -> None:
-    """Clona y analiza repositorios de una organización."""
+    """Clona, analiza y examina dependencias de repositorios."""
 
 
 def _token() -> str:
@@ -85,7 +84,7 @@ def _token() -> str:
     return token
 
 
-@command()
+@command(name="analyze-code")
 def analyze(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     output: Annotated[Path, typer.Option("--output")] = Path("results.json"),
@@ -94,7 +93,7 @@ def analyze(
         str | None,
         typer.Option(
             "--run-id",
-            help="ID after scan- or clone- (e.g. xkfbl6pl). Uses the latest clone run if omitted.",
+            help="Clone-run ID (e.g. xkfbl6pl). Uses the latest clone run if omitted.",
         ),
     ] = None,
     timeout: Annotated[
@@ -124,7 +123,7 @@ def analyze(
     )
 
 
-@command()
+@command(name="clone-repositories")
 def clone(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
@@ -147,23 +146,14 @@ def clone(
     typer.echo(result.model_dump_json(indent=2))
 
 
-@command(name="list")
-def list_repositories(organization: str) -> None:
-    """Lista repositorios sin clonarlos ni ejecutar CodeQL."""
-    token = _token()
-
-    for repository in get_organization_repositories(organization, token):
-        typer.echo(f"{repository.full_name}\t{repository.clone_url}")
-
-
-@command()
+@command(name="generate-sbom")
 def sbom(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     run_id: Annotated[
         str | None,
         typer.Option(
             "--run-id",
-            help="ID after sbom- (e.g. 7o9x8nb_). Uses the latest SBOM run if omitted.",
+            help="Clone-run ID (e.g. xkfbl6pl). Uses the latest clone run if omitted.",
         ),
     ] = None,
     output: Annotated[Path, typer.Option("--output")] = Path("sbom-results.json"),
@@ -189,7 +179,7 @@ def sbom(
     )
 
 
-@command()
+@command(name="scan-dependency-vulnerabilities")
 def vulnerabilities(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     run_id: Annotated[
@@ -208,7 +198,7 @@ def vulnerabilities(
         typer.Option("--timeout", min=1),
     ] = DEFAULT_GRYPE_SCAN_TIMEOUT,
 ) -> None:
-    """Analiza las vulnerabilidades de los SBOM de una organización."""
+    """Busca vulnerabilidades en las dependencias de los repositorios."""
     report = scan_organization_vulnerabilities(
         organization,
         output,

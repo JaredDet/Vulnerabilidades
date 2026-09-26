@@ -1,6 +1,6 @@
 @startuml
 actor Usuario
-Usuario -> Miner: analyze
+Usuario -> Miner: analyze-code
 Miner -> CodeQL: Analizar repositorios
 CodeQL --> Miner: Resultados
 @enduml

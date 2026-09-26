@@ -106,7 +106,7 @@ class CloneErrors:
 
     CloneNotFound = AppException(
         "clone_not_found",
-        "No hay clones disponibles. Ejecuta primero `miner clone`.",
+        "No hay clones disponibles. Ejecuta primero `miner clone-repositories`.",
         ErrorType.NOT_FOUND,
     )
 

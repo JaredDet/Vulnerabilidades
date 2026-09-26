@@ -5,11 +5,11 @@ import pytest
 
 from core.exceptions import AppException
 from miner.clone import pipeline as miner
-from miner.analysis.analysis_code_ql import pipeline as analysis
-from miner.analysis.analysis_code_ql.errors import CodeQLErrors, SarifErrors
+from miner.codeql import pipeline as analysis
+from miner.codeql.errors import CodeQLErrors, SarifErrors
 from miner.clone.errors import CloneErrors
 from miner.clone.models import Repository
-from miner.analysis.analysis_code_ql.models import Finding
+from miner.codeql.models import Finding
 
 
 @pytest.fixture
@@ -119,7 +119,7 @@ def test_failed_list_does_not_replace_report(pipeline, tmp_path):
 
 
 def test_scan_parses_sarif_and_writes_language_results(pipeline, monkeypatch):
-    from miner.analysis.analysis_code_ql.sarif import parse_sarif
+    from miner.codeql.sarif import parse_sarif
 
     monkeypatch.setattr(analysis, "parse_sarif", parse_sarif)
 

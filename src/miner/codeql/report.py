@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from core.filesystem import save_data_atomic
+from core.reporting import write_json_report
 
 from .models import OrganizationResult
 
@@ -18,28 +18,16 @@ def _order_findings(findings: list) -> None:
     )
 
 
-def _order_result(result: OrganizationResult) -> OrganizationResult:
-    ordered = OrganizationResult.model_validate_json(result.model_dump_json())
+def _order_result(result: OrganizationResult) -> None:
+    result.repositories.sort(key=lambda repository: repository.name)
 
-    ordered.repositories.sort(key=lambda repository: repository.name)
-
-    for repository in ordered.repositories:
+    for repository in result.repositories:
         repository.languages.sort(key=lambda language: language.language)
 
         for language in repository.languages:
             _order_findings(language.findings)
 
-    return ordered
-
 
 def write_report(result: OrganizationResult, output: Path) -> Path:
     """Escribe el resultado validado de forma atómica."""
-    ordered = _order_result(result)
-    output = output.resolve()
-
-    save_data_atomic(
-        output,
-        ordered.model_dump_json(indent=2) + "\n",
-    )
-
-    return output
+    return write_json_report(result, output, order=_order_result)

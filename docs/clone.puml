@@ -1,6 +1,6 @@
 @startuml
 actor Usuario
-Usuario -> Miner: clone
+Usuario -> Miner: clone-repositories
 Miner -> GitHub: Obtener repositorios
 GitHub --> Miner: Repositorios
 Miner -> Git: Clonar repositorios

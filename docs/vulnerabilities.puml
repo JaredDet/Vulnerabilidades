@@ -1,0 +1,9 @@
+@startuml
+actor Usuario
+Usuario -> Miner: scan-dependency-vulnerabilities
+Miner -> SBOM: Seleccionar SBOM de los repositorios
+SBOM --> Miner: Artefactos CycloneDX
+Miner -> Grype: Analizar dependencias
+Grype --> Miner: Vulnerabilidades
+Miner -> Miner: Guardar reporte por organización
+@enduml

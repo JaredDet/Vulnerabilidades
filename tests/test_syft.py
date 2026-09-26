@@ -19,7 +19,7 @@ def test_generate_sbom_command(tmp_path, monkeypatch):
     assert run.call_args.kwargs["timeout"] == 42
     with pytest.raises(AppException) as raised:
         syft.generate_sbom(source, output)
-    assert raised.value is SBOMErrors.SbomAlreadyExists
+    assert raised.value is SBOMErrors.SBOMAlreadyExists
 
 
 @pytest.mark.parametrize("failure", [None, FileNotFoundError(), subprocess.TimeoutExpired("syft", 1), subprocess.CalledProcessError(2, "syft")])

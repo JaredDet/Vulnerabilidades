@@ -32,7 +32,7 @@ def save_clones(root, organization="org", *, timestamp=100):
 def test_latest_clones_uses_completion_date_not_analysis_date(tmp_path):
     old = save_clones(tmp_path / "clone-z", timestamp=100)
     latest = save_clones(tmp_path / "clone-a", timestamp=200)
-    (old.workspace / "analysis-new").mkdir()
+    (old.workspace / "codeql-new").mkdir()
     (tmp_path / "clone-incomplete").mkdir()
     assert loader.load_latest_clones("org", workspace_path=tmp_path) == latest
 

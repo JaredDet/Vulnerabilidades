@@ -128,7 +128,7 @@ def test_cli_sbom_uses_clones_without_token_or_cloning(tmp_path, monkeypatch, de
     clone = Mock(side_effect=AssertionError("must not clone"))
     monkeypatch.setattr(cli, "clone_organization", clone)
     result = CliRunner().invoke(cli.app, [
-        "sbom", "-o", "org", "--run-id", "one", "--syft", "custom-syft", "--timeout", "42",
+        "generate-sbom", "-o", "org", "--run-id", "one", "--syft", "custom-syft", "--timeout", "42",
     ])
     assert result.exit_code == 0, result.output
     assert (tmp_path / "sbom-results.json").is_file()
@@ -139,6 +139,6 @@ def test_cli_sbom_uses_clones_without_token_or_cloning(tmp_path, monkeypatch, de
 
 def test_cli_missing_clones_returns_error(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    result = CliRunner().invoke(cli.app, ["sbom", "-o", "org"])
-    assert result.exit_code == 1
+    result = CliRunner().invoke(cli.app, ["generate-sbom", "-o", "org"])
+    assert result.exit_code == 4
     assert not (tmp_path / "sbom-results.json").exists()

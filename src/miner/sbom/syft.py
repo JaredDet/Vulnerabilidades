@@ -69,10 +69,10 @@ def generate_sbom(
         raise SBOMErrors.SourceNotFound
 
     if output.exists():
-        raise SBOMErrors.SbomAlreadyExists
+        raise SBOMErrors.SBOMAlreadyExists
 
     if output.is_relative_to(source):
-        raise SBOMErrors.SbomInsideSource
+        raise SBOMErrors.SBOMInsideSource
 
     try:
         output.parent.mkdir(parents=True, exist_ok=True)
@@ -99,6 +99,6 @@ def generate_sbom(
         raise SBOMErrors.SyftAccessFailed from None
 
     if not output.is_file():
-        raise SBOMErrors.SbomNotGenerated
+        raise SBOMErrors.SBOMNotGenerated
 
     return output

@@ -4,8 +4,8 @@ from unittest.mock import Mock
 import pytest
 
 from core.exceptions import AppException
-from miner.analysis.analysis_dependencies import grype
-from miner.analysis.analysis_dependencies.errors import GrypeErrors
+from miner.dependencies import grype
+from miner.dependencies.errors import GrypeErrors
 
 
 def test_get_version_uses_selected_executable(monkeypatch):
@@ -109,7 +109,7 @@ def test_scan_vulnerabilities_validates_inputs_before_running(tmp_path, monkeypa
 
     with pytest.raises(AppException) as missing:
         grype.scan_vulnerabilities(tmp_path / "missing.json", tmp_path / "out.json")
-    assert missing.value is GrypeErrors.SbomNotFound
+    assert missing.value is GrypeErrors.SBOMFileNotFound
 
     sbom = tmp_path / "sbom.json"
     sbom.write_text("{}", encoding="utf-8")

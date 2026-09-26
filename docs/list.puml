@@ -1,7 +1,0 @@
-@startuml
-actor Usuario
-Usuario -> Miner: list
-Miner -> GitHub: Obtener repositorios
-GitHub --> Miner: Repositorios
-Miner --> Usuario: Lista de repositorios
-@enduml

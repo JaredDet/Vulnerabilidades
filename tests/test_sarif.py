@@ -3,8 +3,8 @@ import json
 import pytest
 
 from core.exceptions import AppException
-from miner.analysis.analysis_code_ql.errors import SarifErrors
-from miner.analysis.analysis_code_ql.sarif import parse_sarif
+from miner.codeql.errors import SarifErrors
+from miner.codeql.sarif import parse_sarif
 
 
 def write_sarif(tmp_path, runs):

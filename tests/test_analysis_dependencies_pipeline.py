@@ -6,12 +6,12 @@ from unittest.mock import Mock
 import pytest
 
 from core.exceptions import AppException
-from miner.analysis.analysis_dependencies import pipeline
-from miner.analysis.analysis_dependencies.constants import (
+from miner.dependencies import pipeline
+from miner.dependencies.constants import (
     VULNERABILITY_REPORT_FILENAME,
 )
-from miner.analysis.analysis_dependencies.errors import GrypeErrors
-from miner.analysis.analysis_dependencies.models import VulnerabilityReport
+from miner.dependencies.errors import GrypeErrors
+from miner.dependencies.models import VulnerabilityReport
 from miner.clone.models import OrganizationCloneResult
 from miner.sbom.constants import SBOM_DIRECTORY, SBOM_REPORT_FILENAME, SBOM_RUN_PREFIX
 from miner.sbom.models import SBOMReport, SBOMResult
@@ -190,10 +190,10 @@ def test_scan_organization_validates_before_loading(
 def test_find_sbom_run_reports_missing_directory_and_run(tmp_path):
     with pytest.raises(AppException) as missing_directory:
         pipeline._find_sbom_directory(tmp_path, None)
-    assert missing_directory.value is GrypeErrors.SbomDirectoryNotFound
+    assert missing_directory.value is GrypeErrors.SBOMDirectoryNotFound
 
     sbom_root = tmp_path / SBOM_DIRECTORY
     sbom_root.mkdir()
     with pytest.raises(AppException) as missing_run:
         pipeline._find_sbom_directory(tmp_path, "missing")
-    assert missing_run.value is GrypeErrors.SbomRunNotFound
+    assert missing_run.value is GrypeErrors.SBOMRunNotFound

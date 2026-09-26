@@ -64,27 +64,19 @@ def _count_components(sbom_path: Path) -> int:
     try:
         data = json.loads(sbom_path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        raise SBOMErrors.InvalidSbom from None
+        raise SBOMErrors.InvalidSBOM from None
 
     if not isinstance(data, dict) or data.get("bomFormat") != "CycloneDX":
-        raise SBOMErrors.InvalidSbom
+        raise SBOMErrors.InvalidSBOM
 
     components = data.get("components", [])
 
     if not isinstance(components, list) or any(
         not isinstance(item, dict) for item in components
     ):
-        raise SBOMErrors.InvalidComponents
+        raise SBOMErrors.InvalidSBOMComponents
 
     return len(components)
-
-
-def _create_sbom_directory(workspace: Path) -> Path:
-    """Crea el directorio para una ejecución de SBOM."""
-    return create_temporary_directory(
-        workspace / SBOM_DIRECTORY,
-        SBOM_RUN_PREFIX,
-    )
 
 
 def _has_cloned_repositories(repositories: list[CloneResult]) -> bool:
@@ -108,7 +100,10 @@ def _create_execution(
     timeout: float,
 ) -> SBOMExecution:
     return SBOMExecution(
-        output_directory=_create_sbom_directory(workspace),
+        output_directory=create_temporary_directory(
+            workspace / SBOM_DIRECTORY,
+            SBOM_RUN_PREFIX,
+        ),
         syft_version=_get_syft_version(repositories, executable),
         executable=executable,
         timeout=timeout,

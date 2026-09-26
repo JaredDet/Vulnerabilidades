@@ -20,13 +20,13 @@ class SBOMErrors:
         ErrorType.NOT_FOUND,
     )
 
-    SbomAlreadyExists = AppException(
+    SBOMAlreadyExists = AppException(
         "sbom_already_exists",
         "El archivo SBOM ya existe",
         ErrorType.CONFLICT,
     )
 
-    SbomInsideSource = AppException(
+    SBOMInsideSource = AppException(
         "sbom_inside_source",
         "El SBOM debe quedar fuera de la carpeta del repositorio",
         ErrorType.VALIDATION,
@@ -68,13 +68,13 @@ class SBOMErrors:
         ErrorType.UNEXPECTED,
     )
 
-    InvalidSbom = AppException(
+    InvalidSBOM = AppException(
         "invalid_sbom",
-        "Syft generó un SBOM inválido",
+        "Syft generó un documento SBOM inválido",
         ErrorType.UNEXPECTED,
     )
 
-    InvalidComponents = AppException(
+    InvalidSBOMComponents = AppException(
         "invalid_components",
         "El SBOM contiene una lista de componentes inválida",
         ErrorType.UNEXPECTED,
@@ -116,7 +116,7 @@ class SBOMErrors:
         ErrorType.UNEXPECTED,
     )
 
-    SbomNotGenerated = AppException(
+    SBOMNotGenerated = AppException(
         "sbom_not_generated",
         "Syft terminó sin generar el archivo SBOM",
         ErrorType.UNEXPECTED,
