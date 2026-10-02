@@ -26,6 +26,13 @@ def test_pagination(monkeypatch):
         api._build_headers("fake-token"))
 
 
+def test_repository_query_requests_only_public_repositories():
+    session = Mock()
+    session.get.return_value.json.return_value = []
+    assert api._get_repository_page(session, "org", 1, 10) == []
+    assert session.get.call_args.kwargs["params"]["type"] == "public"
+
+
 def test_failed_page_propagates(monkeypatch):
     monkeypatch.setattr(api, "PAGE_SIZE", 1)
     repo = api.Repository(

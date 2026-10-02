@@ -86,7 +86,7 @@ def _get_repository_page(
         {
             "per_page": page_size,
             "page": page,
-            "type": "all",
+            "type": "public",
         },
     )
 
