@@ -1,4 +1,5 @@
 import os
+import json
 from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import Mock
@@ -63,7 +64,7 @@ def setup_scan(tmp_path, monkeypatch):
 
     def create_result(_sbom, output, **_kwargs):
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text("{}", encoding="utf-8")
+        output.write_text('{"matches": []}', encoding="utf-8")
         return output
 
     scan.side_effect = create_result
@@ -94,7 +95,7 @@ def test_scan_organization_orders_results_and_writes_reports(tmp_path, setup_sca
     assert [item.full_name for item in report.repositories] == ["org/a", "org/z"]
     assert all(item.status == "analyzed" for item in report.repositories)
     assert all(item.grype_version == "0.80.0" for item in report.repositories)
-    assert VulnerabilityReport.model_validate_json(output.read_text()) == report
+    assert VulnerabilityReport.model_validate_json(output.read_text(encoding="utf-8")) == report
     assert (Path(report.repositories[0].report_path).parent / VULNERABILITY_REPORT_FILENAME).is_file()
     load.assert_called_once_with("org", workspace_path=tmp_path)
     version.assert_called_once_with("custom-grype")
@@ -136,7 +137,12 @@ def test_scan_organization_continues_after_repository_failure(tmp_path, setup_sc
         f"{SBOM_RUN_PREFIX}run",
         [_sbom_result(workspace, "a"), _sbom_result(workspace, "b")],
     )
-    scan.side_effect = [GrypeErrors.ScanFailed, lambda _sbom, output, **_kwargs: output]
+    create_result = scan.side_effect
+    def fail_first(sbom, output, **kwargs):
+        if sbom.name == "a.json":
+            raise GrypeErrors.ScanFailed
+        return create_result(sbom, output, **kwargs)
+    scan.side_effect = fail_first
 
     report = pipeline.scan_organization_vulnerabilities(
         "org", tmp_path / "summary.json", progress=lambda _message: None
@@ -144,6 +150,30 @@ def test_scan_organization_continues_after_repository_failure(tmp_path, setup_sc
 
     assert [item.status for item in report.repositories] == ["failed", "analyzed"]
     assert report.repositories[0].error == GrypeErrors.ScanFailed.message
+
+
+@pytest.mark.parametrize("invalid", [False, True])
+def test_scan_integrates_findings_or_records_invalid_json(tmp_path, setup_scan, invalid):
+    workspace, _load, _version, scan = setup_scan
+    _write_sbom_report(workspace, f"{SBOM_RUN_PREFIX}run", [_sbom_result(workspace, "a")])
+    def create_result(_sbom, output, **_kwargs):
+        output.write_text("invalid" if invalid else json.dumps({"matches": [{
+            "vulnerability": {"id": "CVE-2026-1234", "severity": "High"},
+            "artifact": {"name": "demo", "version": "1.0", "locations": []},
+        }]}), encoding="utf-8")
+    scan.side_effect = create_result
+    output = tmp_path / "summary.json"
+    report = pipeline.scan_organization_vulnerabilities("org", output, progress=lambda _: None)
+    result = report.repositories[0]
+    assert result.full_name == "org/a"
+    assert result.commit == "abc123"
+    assert result.status == ("failed" if invalid else "analyzed")
+    assert result.vulnerability_count == (0 if invalid else 1)
+    if invalid:
+        assert result.error == GrypeErrors.InvalidResults.message
+    else:
+        assert result.findings[0].vulnerability_id == "CVE-2026-1234"
+    assert VulnerabilityReport.model_validate_json(output.read_text(encoding="utf-8")) == report
 
 
 def test_scan_organization_skips_version_when_no_generated_sboms(tmp_path, setup_scan):

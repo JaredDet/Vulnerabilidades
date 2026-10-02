@@ -23,7 +23,13 @@ from .constants import (
 )
 from .errors import GrypeErrors
 from .grype import get_version, scan_vulnerabilities
-from .models import GrypeExecution, VulnerabilityReport, VulnerabilityResult
+from .models import (
+    GrypeExecution,
+    VulnerabilityFinding,
+    VulnerabilityReport,
+    VulnerabilityResult,
+)
+from .parser import parse_grype
 from .report import write_report
 
 
@@ -106,6 +112,7 @@ def _create_analyzed_result(
     execution: GrypeExecution,
     output: Path,
     analysis_date: datetime,
+    findings: list[VulnerabilityFinding],
 ) -> VulnerabilityResult:
     return VulnerabilityResult(
         full_name=sbom.full_name,
@@ -113,7 +120,8 @@ def _create_analyzed_result(
         analysis_date=analysis_date,
         grype_version=execution.grype_version,
         status="analyzed",
-        vulnerability_count=0,
+        vulnerability_count=len(findings),
+        findings=findings,
         report_path=str(output),
     )
 
@@ -153,6 +161,7 @@ def _process_sbom(
             executable=execution.executable,
             timeout=execution.timeout,
         )
+        findings = parse_grype(output)
 
     except AppException as error:
         return _create_failed_result(
@@ -168,6 +177,7 @@ def _process_sbom(
         execution,
         output,
         analysis_date,
+        findings,
     )
 
 

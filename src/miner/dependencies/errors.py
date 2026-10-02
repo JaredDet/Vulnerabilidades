@@ -2,6 +2,12 @@ from core.exceptions import AppException, ErrorType
 
 
 class GrypeErrors:
+    InvalidResults = AppException(
+        "invalid_grype_results",
+        "No se pudo leer un reporte JSON válido de Grype",
+        ErrorType.UNEXPECTED,
+    )
+
     InvalidTimeout = AppException(
         "invalid_timeout",
         "El timeout debe ser mayor que cero",

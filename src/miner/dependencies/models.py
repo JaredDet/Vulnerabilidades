@@ -18,6 +18,20 @@ class GrypeExecution:
     timeout: float
 
 
+class VulnerabilityFinding(BaseModel):
+    """Coincidencia de Grype; el repositorio y commit pertenecen al resultado padre."""
+
+    model_config = ConfigDict(frozen=True, strict=True)
+
+    vulnerability_id: str = Field(min_length=1)
+    description: str | None = None
+    severity: str | None = None
+    package: str = Field(min_length=1)
+    version: str
+    package_type: str | None = None
+    locations: list[str] = Field(default_factory=list)
+
+
 class VulnerabilityResult(BaseModel):
     """Resultado del análisis de vulnerabilidades de un repositorio."""
 
@@ -33,6 +47,7 @@ class VulnerabilityResult(BaseModel):
     grype_version: str = Field(min_length=1)
     status: VulnerabilityStatus
     vulnerability_count: int = Field(ge=0)
+    findings: list[VulnerabilityFinding] = Field(default_factory=list)
     report_path: str = Field(min_length=1)
     error: str | None = None
 
