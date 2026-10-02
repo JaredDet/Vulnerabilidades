@@ -126,6 +126,7 @@ def test_clone_cli_does_not_analyze(monkeypatch, tmp_path):
     monkeypatch.setattr(cli, "analyze_organization", analyze)
     result = CliRunner().invoke(cli.app, [
         "clone-repositories", "-o", "org", "--workspace", str(tmp_path), "--timeout", "42",
+        "--page-size", "7",
     ])
     assert result.exit_code == 0
     data = json.loads(result.stdout)
@@ -135,6 +136,7 @@ def test_clone_cli_does_not_analyze(monkeypatch, tmp_path):
     assert clone.call_args.args == ("org", "test-token")
     assert clone.call_args.kwargs["workspace_path"] == tmp_path
     assert clone.call_args.kwargs["timeout"] == 42
+    assert clone.call_args.kwargs["page_size"] == 7
     analyze.assert_not_called()
 
 

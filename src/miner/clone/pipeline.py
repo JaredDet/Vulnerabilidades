@@ -14,14 +14,16 @@ from .constants import (
     CLONE_RUN_PREFIX,
 )
 from .errors import CloneErrors
-from .github_api import get_organization_repositories
+from .github_api import PAGE_SIZE, get_organization_repositories
 from .models import CloneExecution, CloneResult, OrganizationCloneResult, Repository
 
 
-def _get_repositories(organization: str, token: str) -> list[Repository]:
+def _get_repositories(
+    organization: str, token: str, page_size: int
+) -> list[Repository]:
     """Obtiene los repositorios de una organización ordenados por nombre."""
     return sorted(
-        get_organization_repositories(organization, token),
+        get_organization_repositories(organization, token, page_size=page_size),
         key=lambda repository: repository.full_name,
     )
 
@@ -89,6 +91,7 @@ def clone_organization(
     *,
     workspace_path: Path | None = None,
     timeout: float = DEFAULT_CLONE_TIMEOUT,
+    page_size: int = PAGE_SIZE,
     progress: Callable[[str], None] = print,
 ) -> OrganizationCloneResult:
     """Lista y clona los repositorios de una organización."""
@@ -104,7 +107,7 @@ def clone_organization(
         raise CloneErrors.InvalidTimeout
 
     workspace_path = workspace(organization, workspace_path)
-    repositories = _get_repositories(organization, token)
+    repositories = _get_repositories(organization, token, page_size)
     root = _create_clone_run(workspace_path)
 
     execution = CloneExecution(

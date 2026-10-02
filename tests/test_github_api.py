@@ -12,16 +12,16 @@ def test_pagination(monkeypatch):
     session = Mock()
     session.__enter__ = Mock(return_value=session)
     session.__exit__ = Mock(return_value=False)
-    monkeypatch.setattr(api, "PAGE_SIZE", 1)
     pages = [
         [{"full_name": "org/a", "clone_url": "https://github.com/org/a.git"}], []]
     session.get.side_effect = [
         Mock(json=Mock(return_value=page)) for page in pages]
     monkeypatch.setattr(api.requests, "Session", lambda: session)
-    result = api.get_organization_repositories("org", "fake-token")
+    result = api.get_organization_repositories("org", "fake-token", page_size=1)
     assert result[0].full_name == "org/a"
     assert [call.kwargs["params"]["page"]
             for call in session.get.call_args_list] == [1, 2]
+    assert all(call.kwargs["params"]["per_page"] == 1 for call in session.get.call_args_list)
     session.headers.update.assert_called_once_with(
         api._build_headers("fake-token"))
 
@@ -34,13 +34,12 @@ def test_repository_query_requests_only_public_repositories():
 
 
 def test_failed_page_propagates(monkeypatch):
-    monkeypatch.setattr(api, "PAGE_SIZE", 1)
     repo = api.Repository(
         full_name="org/a", clone_url="https://github.com/org/a.git")
     page = Mock(side_effect=[[repo], CloneErrors.GitHubTimeout])
     monkeypatch.setattr(api, "_get_repository_page", page)
     with pytest.raises(AppException) as raised:
-        api.get_organization_repositories("org", "fake")
+        api.get_organization_repositories("org", "fake", page_size=1)
     assert raised.value is CloneErrors.GitHubTimeout
 
 

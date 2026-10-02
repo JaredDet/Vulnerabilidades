@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 
 from core.exception_handler import ExitCode, handle_exception
 from core.exceptions import AppException
+from miner.clone.github_api import PAGE_SIZE
 from miner.dependencies.constants import (
     DEFAULT_GRYPE_EXECUTABLE,
 )
@@ -20,15 +21,15 @@ from miner.dependencies.pipeline import (
     scan_organization_vulnerabilities,
 )
 
+from .clone.constants import DEFAULT_CLONE_TIMEOUT
+from .clone.loader import load_latest_clones
+from .clone.pipeline import clone_organization
 from .codeql.constants import (
     DEFAULT_ANALYSIS_TIMEOUT,
     DEFAULT_CODEQL_EXECUTABLE,
 )
 from .codeql.pipeline import analyze_organization
 from .dataset import generate_dataset
-from .clone.constants import DEFAULT_CLONE_TIMEOUT
-from .clone.loader import load_latest_clones
-from .clone.pipeline import clone_organization
 from .sbom.constants import (
     DEFAULT_SCAN_TIMEOUT as DEFAULT_SBOM_SCAN_TIMEOUT,
 )
@@ -132,6 +133,16 @@ def clone(
         float,
         typer.Option("--timeout", min=1),
     ] = DEFAULT_CLONE_TIMEOUT,
+    page_size: Annotated[
+        int,
+        typer.Option(
+            "--page-size",
+            "-p",
+            min=1,
+            max=PAGE_SIZE,  # GitHub no permite pedir más de 100 por página
+            help="Tamaño de página para las consultas de repositorios a la API de GitHub.",
+        ),
+    ] = PAGE_SIZE,
 ) -> None:
     """Clona los repositorios y muestra sus rutas, sin ejecutar análisis."""
     token = _token()
@@ -141,6 +152,7 @@ def clone(
         token,
         workspace_path=workspace,
         timeout=timeout,
+        page_size=page_size,
         progress=lambda text: typer.echo(text, err=True),
     )
 

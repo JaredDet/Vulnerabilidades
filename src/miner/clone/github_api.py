@@ -99,6 +99,7 @@ def _get_repository_page(
 def _get_all_repository_pages(
     client: requests.Session,
     organization: str,
+    page_size: int,
 ) -> list[Repository]:
     """Obtiene todos los repositorios de una organización."""
     repositories: list[Repository] = []
@@ -109,12 +110,12 @@ def _get_all_repository_pages(
             client,
             organization,
             page,
-            PAGE_SIZE,
+            page_size,
         )
 
         repositories.extend(page_repositories)
 
-        if len(page_repositories) < PAGE_SIZE:
+        if len(page_repositories) < page_size:
             break
 
         page += 1
@@ -125,6 +126,7 @@ def _get_all_repository_pages(
 def get_organization_repositories(
     organization: str,
     token: str,
+    page_size: int = PAGE_SIZE,
 ) -> list[Repository]:
     """Devuelve los repositorios accesibles de una organización."""
     organization = organization.strip()
@@ -138,4 +140,4 @@ def get_organization_repositories(
 
     with requests.Session() as client:
         client.headers.update(_build_headers(token))
-        return _get_all_repository_pages(client, organization)
+        return _get_all_repository_pages(client, organization, page_size)
