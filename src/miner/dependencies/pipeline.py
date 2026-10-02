@@ -249,6 +249,7 @@ def scan_organization_vulnerabilities(
     output: Path,
     *,
     workspace: Path | None = None,
+    clone_run_id: str | None = None,
     run_id: str | None = None,
     executable: str = DEFAULT_GRYPE_EXECUTABLE,
     timeout: float = DEFAULT_SCAN_TIMEOUT,
@@ -263,10 +264,10 @@ def scan_organization_vulnerabilities(
     if timeout <= 0:
         raise GrypeErrors.InvalidTimeout
 
-    clones = load_latest_clones(
-        organization,
-        workspace_path=workspace,
-    )
+    clone_options = {"workspace_path": workspace}
+    if clone_run_id is not None:
+        clone_options["run_id"] = clone_run_id
+    clones = load_latest_clones(organization, **clone_options)
 
     progress(f"Clones: {clones.workspace}")
 

@@ -25,6 +25,7 @@ from .codeql.constants import (
     DEFAULT_CODEQL_EXECUTABLE,
 )
 from .codeql.pipeline import analyze_organization
+from .dataset import generate_dataset
 from .clone.constants import DEFAULT_CLONE_TIMEOUT
 from .clone.loader import load_latest_clones
 from .clone.pipeline import clone_organization
@@ -212,6 +213,54 @@ def vulnerabilities(
         f"JSON: {output}; repositorios: {len(report.repositories)}",
         err=True,
     )
+
+
+@command(name="generate-dataset")
+def dataset(
+    organization: Annotated[str, typer.Option("--organization", "-o")],
+    run_id: Annotated[str | None, typer.Option("--run-id")] = None,
+    workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
+) -> None:
+    """Integra CodeQL y Grype en dataset.json junto a clones.json."""
+    clones = load_latest_clones(organization, run_id=run_id, workspace_path=workspace)
+    typer.echo(f"Dataset: {generate_dataset(clones)}")
+
+
+@command(name="run")
+def run(
+    organization: Annotated[str, typer.Option("--organization", "-o")],
+    workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
+    codeql: Annotated[str, typer.Option("--codeql")] = DEFAULT_CODEQL_EXECUTABLE,
+    syft: Annotated[str, typer.Option("--syft")] = DEFAULT_SYFT_EXECUTABLE,
+    grype: Annotated[str, typer.Option("--grype")] = DEFAULT_GRYPE_EXECUTABLE,
+    timeout: Annotated[float, typer.Option("--timeout", min=1)] = 600,
+) -> None:
+    """Clona, analiza código, genera SBOM, analiza dependencias e integra el dataset."""
+    token = _token()
+    progress = lambda message: typer.echo(message, err=True)
+    clones = clone_organization(
+        organization, token, workspace_path=workspace, timeout=timeout, progress=progress,
+    )
+    root = clones.workspace.resolve()
+    clone_id = root.name.removeprefix("clone-")
+    analyze_organization(
+        clones, root / "codeql-results.json", token=token,
+        executable=codeql, timeout=timeout, progress=progress,
+    )
+    sbom_report = generate_organization_sbom(
+        clones.organization, root / "sbom-results.json", workspace=root.parent,
+        run_id=clone_id, executable=syft, timeout=timeout, progress=progress,
+    )
+    sbom_id = (
+        Path(sbom_report.repositories[0].sbom_path).parent.name.removeprefix("sbom-")
+        if sbom_report.repositories else None
+    )
+    scan_organization_vulnerabilities(
+        clones.organization, root / "vulnerability-results.json", workspace=root.parent,
+        clone_run_id=clone_id, run_id=sbom_id, executable=grype,
+        timeout=timeout, progress=progress,
+    )
+    typer.echo(f"Dataset: {generate_dataset(clones)}")
 
 
 if __name__ == "__main__":

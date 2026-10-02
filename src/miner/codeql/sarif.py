@@ -7,6 +7,7 @@ from urllib.parse import unquote
 from .constants import SARIF_ENCODING, SARIF_VERSION
 from .errors import SarifErrors
 from .models import Finding
+from ..scores import VulnerabilityScore
 
 
 def _load_sarif(path: Path) -> dict:
@@ -99,9 +100,19 @@ def _parse_finding(result: dict, run: dict) -> Finding:
 
     file, start_line, start_column = _get_location(result, run)
     message = result["message"]
+    score = rule.get("properties", {}).get("security-severity")
+    scores = []
+    if score is not None:
+        if isinstance(score, bool):
+            raise ValueError("Puntaje inválido")
+        scores = [VulnerabilityScore(
+            value=float(score), system="security-severity", source="codeql",
+            vulnerability_id=rule_id,
+        )]
 
     return Finding(
         rule_id=rule_id,
+        scores=scores,
         message=message.get("text", message.get("markdown")),
         severity=result.get(
             "level",

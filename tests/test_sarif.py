@@ -23,7 +23,7 @@ def test_rule_location_and_severity(tmp_path):
     }
     finding, = parse_sarif(write_sarif(tmp_path, [run]))
     assert finding.model_dump() == {
-        "rule_id": "py/test", "message": "Problem", "severity": "warning",
+        "rule_id": "py/test", "message": "Problem", "severity": "warning", "scores": [],
         "file": "src/my file.py", "start_line": 4, "start_column": 2,
     }
     run["results"][0]["level"] = "error"
@@ -41,6 +41,23 @@ def test_multiple_runs_and_missing_location(tmp_path):
 
 def test_empty_results(tmp_path):
     assert parse_sarif(write_sarif(tmp_path, [{"results": []}])) == []
+
+
+@pytest.mark.parametrize("score", ["8.1", 8.1])
+def test_security_severity_is_preserved(tmp_path, score):
+    run = {"tool": {"driver": {"rules": [{"id": "py/test", "properties": {"security-severity": score}}]}},
+           "results": [{"ruleId": "py/test", "message": {"text": "Example"}}]}
+    finding = parse_sarif(write_sarif(tmp_path, [run]))[0]
+    assert finding.scores[0].value == 8.1
+    assert finding.scores[0].system == "security-severity"
+
+
+@pytest.mark.parametrize("score", [True, "NaN", "bad", -1, 11])
+def test_invalid_security_score_is_rejected(tmp_path, score):
+    run = {"tool": {"driver": {"rules": [{"id": "py/test", "properties": {"security-severity": score}}]}},
+           "results": [{"ruleId": "py/test", "message": {"text": "Example"}}]}
+    with pytest.raises(AppException):
+        parse_sarif(write_sarif(tmp_path, [run]))
 
 
 @pytest.mark.parametrize("run", [

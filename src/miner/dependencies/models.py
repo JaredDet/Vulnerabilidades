@@ -3,6 +3,7 @@
 from datetime import datetime
 from pathlib import Path
 from typing import Literal
+from miner.scores import VulnerabilityScore
 
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.dataclasses import dataclass
@@ -24,6 +25,7 @@ class VulnerabilityFinding(BaseModel):
     model_config = ConfigDict(frozen=True, strict=True)
 
     vulnerability_id: str = Field(min_length=1)
+    scores: list[VulnerabilityScore] = Field(default_factory=list)
     description: str | None = None
     severity: str | None = None
     package: str = Field(min_length=1)

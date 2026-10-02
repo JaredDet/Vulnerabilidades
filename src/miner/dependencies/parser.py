@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .errors import GrypeErrors
 from .models import VulnerabilityFinding
+from ..scores import VulnerabilityScore
 
 
 def parse_grype(path: Path) -> list[VulnerabilityFinding]:
@@ -19,11 +20,25 @@ def parse_grype(path: Path) -> list[VulnerabilityFinding]:
         for match in matches:
             vulnerability = match["vulnerability"]
             artifact = match["artifact"]
+            scores = []
+            for metadata in [vulnerability, *match.get("relatedVulnerabilities", [])]:
+                for cvss in metadata.get("cvss", []):
+                    value = cvss.get("metrics", {}).get("baseScore")
+                    if value is None:
+                        continue
+                    if isinstance(value, bool):
+                        raise ValueError("Puntaje inválido")
+                    scores.append(VulnerabilityScore(
+                        value=value, system="CVSS", source=cvss.get("source") or metadata.get("dataSource") or "grype",
+                        version=cvss.get("version"), vector=cvss.get("vector"),
+                        vulnerability_id=metadata.get("id"),
+                    ))
             locations = artifact.get("locations", [])
             if not isinstance(locations, list):
                 raise ValueError("locations debe ser una lista")
             findings.append(VulnerabilityFinding(
                 vulnerability_id=vulnerability["id"],
+                scores=scores,
                 description=vulnerability.get("description"),
                 severity=vulnerability.get("severity"),
                 package=artifact["name"],

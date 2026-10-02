@@ -1,6 +1,7 @@
 """Modelos de resultados del análisis con CodeQL."""
 
 from typing import Literal
+from miner.scores import VulnerabilityScore
 
 from pydantic import (
     BaseModel,
@@ -18,6 +19,7 @@ class Finding(BaseModel):
     model_config = ConfigDict(frozen=True, strict=True)
 
     rule_id: str = Field(min_length=1)
+    scores: list[VulnerabilityScore] = Field(default_factory=list)
     message: str = Field(min_length=1)
     severity: Literal["none", "note", "warning", "error"] | None = None
     file: str | None = None

@@ -21,6 +21,38 @@ puedes definir la variable en el entorno. `.env` está excluido de Git.
 
 ## Uso
 
+Para ejecutar el flujo completo en orden: clonación, CodeQL, Syft, Grype y dataset:
+
+```powershell
+uv run miner run --organization pallets
+```
+
+`run` acepta `--workspace`, `--codeql`, `--syft`, `--grype` y `--timeout`
+(600 segundos por operación). Todas las etapas reutilizan la misma ejecución
+de clones y Grype consume el SBOM recién generado. Los fallos individuales se
+conservan en los reportes; un error global detiene el flujo.
+
+Para integrar resultados existentes sin volver a ejecutar las herramientas:
+
+```powershell
+uv run miner generate-dataset --organization pallets --run-id zrhbvqrb
+```
+
+El archivo `dataset.json` queda junto a `clones.json`, dentro de `clone-<id>/`.
+Contiene una lista común de hallazgos de CodeQL y Grype, repositorio, identificador,
+descripción, severidad, ubicaciones, lenguaje o paquete y versión, y rutas relativas
+a la evidencia original. El commit se conserva cuando la fuente lo proporciona.
+`severity_kind` distingue el nivel SARIF de la severidad de vulnerabilidad de Grype.
+El esquema 1.1 incluye `scores`: una lista de puntajes originales con `value`,
+`system`, `source`, `version`, `vector` e identificador de vulnerabilidad.
+CodeQL aporta `security-severity`; Grype aporta los puntajes base CVSS disponibles,
+incluidos los de vulnerabilidades relacionadas, sin elegir ni promediar fuentes.
+Si no hay puntajes, la lista queda vacía. Los campos de versión o vector ausentes
+quedan en `null`. No se calcula un puntaje a partir de la severidad cualitativa.
+También conserva los estados y errores por repositorio; `not_run` significa que
+no se encontró un reporte de esa herramienta. Selecciona el último reporte terminado
+de cada herramienta dentro de la ejecución de clones indicada.
+
 ```powershell
 # Consultar la organización y clonar repositorios
 uv run miner clone-repositories --organization pallets
