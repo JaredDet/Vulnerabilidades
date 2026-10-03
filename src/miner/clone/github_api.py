@@ -23,13 +23,6 @@ def _build_headers(token: str) -> dict[str, str]:
     }
 
 
-def _parse_repository(data: object) -> Repository:
-    try:
-        return Repository.model_validate(data)
-    except ValidationError:
-        raise CloneErrors.InvalidGitHubResponse from None
-
-
 def _get_json(
     client: requests.Session,
     path: str,
@@ -64,12 +57,6 @@ def _get_json(
             CloneErrors.GitHubRequestFailed,
         )
 
-    except requests.Timeout:
-        raise CloneErrors.GitHubTimeout from None
-
-    except requests.exceptions.JSONDecodeError:
-        raise CloneErrors.InvalidGitHubResponse from None
-
     except requests.RequestException:
         raise CloneErrors.GitHubRequestFailed from None
 
@@ -91,9 +78,12 @@ def _get_repository_page(
     )
 
     if not isinstance(data, list):
-        raise CloneErrors.InvalidGitHubResponse
+        raise CloneErrors.GitHubRequestFailed
 
-    return [_parse_repository(repository) for repository in data]
+    try:
+        return [Repository.model_validate(repository) for repository in data]
+    except ValidationError:
+        raise CloneErrors.GitHubRequestFailed from None
 
 
 def _get_all_repository_pages(

@@ -38,18 +38,6 @@ class CloneErrors:
         ErrorType.CONFLICT,
     )
 
-    DestinationAccessFailed = AppException(
-        "destination_access_failed",
-        "No se pudo acceder al destino de clonación",
-        ErrorType.UNEXPECTED,
-    )
-
-    GitNotAvailable = AppException(
-        "git_not_available",
-        "No se pudo ejecutar Git",
-        ErrorType.UNEXPECTED,
-    )
-
     GitCloneTimeout = AppException(
         "git_clone_timeout",
         "La clonación superó el tiempo límite",
@@ -58,7 +46,7 @@ class CloneErrors:
 
     GitCloneFailed = AppException(
         "git_clone_failed",
-        "Git no pudo clonar el repositorio",
+        "No se pudo clonar el repositorio; revisa Git, la URL y el acceso al destino",
         ErrorType.UNEXPECTED,
     )
 
@@ -86,21 +74,9 @@ class CloneErrors:
         ErrorType.UNEXPECTED,
     )
 
-    GitHubTimeout = AppException(
-        "github_timeout",
-        "Se agotó el tiempo de espera al consultar GitHub",
-        ErrorType.UNEXPECTED,
-    )
-
     GitHubRequestFailed = AppException(
         "github_request_failed",
-        "No se pudo completar la conexión con GitHub",
-        ErrorType.UNEXPECTED,
-    )
-
-    InvalidGitHubResponse = AppException(
-        "invalid_github_response",
-        "GitHub devolvió una respuesta inválida",
+        "No se pudo consultar GitHub; revisa la conexión e intenta nuevamente",
         ErrorType.UNEXPECTED,
     )
 

@@ -21,8 +21,8 @@ from miner.dependencies.pipeline import (
     scan_organization_vulnerabilities,
 )
 
-from .clone.constants import DEFAULT_CLONE_TIMEOUT
-from .clone.loader import load_latest_clones
+from .clone.clone import DEFAULT_CLONE_TIMEOUT
+from .clone.pipeline import load_latest_clones
 from .clone.pipeline import clone_organization
 from .codeql.constants import (
     DEFAULT_ANALYSIS_TIMEOUT,

@@ -7,7 +7,7 @@ from pathlib import Path
 from core.exceptions import AppException
 from core.filesystem import create_temporary_directory
 
-from ..clone.loader import load_latest_clones
+from ..clone.pipeline import load_latest_clones
 from ..sbom.constants import (
     SBOM_DIRECTORY,
     SBOM_REPORT_FILENAME,

@@ -7,16 +7,15 @@ from pathlib import Path
 from .errors import CloneErrors
 from .models import Repository
 
+CLONE_RUN_PREFIX = "clone-"
+CLONE_REPOSITORIES_DIRECTORY = "repositories"
+CLONE_MANIFEST_FILENAME = "clones.json"
+
+DEFAULT_CLONE_TIMEOUT = 300
+
 REPOSITORY_NAME_PART_PATTERN = re.compile(r"[A-Za-z0-9_.-]+")
 
 DEFAULT_CLONE_DIRECTORY = Path("repositories")
-DEFAULT_CLONE_TIMEOUT = 300
-
-GIT_TERMINAL_PROMPT = "0"
-GCM_INTERACTIVE = "Never"
-GIT_CONFIG_COUNT = "2"
-GIT_AUTH_CONFIG_KEY = "http.https://github.com/.extraheader"
-GIT_CREDENTIAL_HELPER_KEY = "credential.helper"
 
 
 def _prepare_destination(full_name: str, destination: Path) -> Path:
@@ -41,7 +40,7 @@ def _prepare_destination(full_name: str, destination: Path) -> Path:
         target.parent.mkdir(parents=True, exist_ok=True)
 
     except OSError:
-        raise CloneErrors.DestinationAccessFailed from None
+        raise CloneErrors.GitCloneFailed from None
 
     return target
 
@@ -49,8 +48,8 @@ def _prepare_destination(full_name: str, destination: Path) -> Path:
 def _build_environment(token: str | None) -> dict[str, str]:
     environment = {
         **os.environ,
-        "GIT_TERMINAL_PROMPT": GIT_TERMINAL_PROMPT,
-        "GCM_INTERACTIVE": GCM_INTERACTIVE,
+        "GIT_TERMINAL_PROMPT": "0",
+        "GCM_INTERACTIVE": "Never",
     }
 
     if token:
@@ -58,10 +57,10 @@ def _build_environment(token: str | None) -> dict[str, str]:
 
         environment.update(
             {
-                "GIT_CONFIG_COUNT": GIT_CONFIG_COUNT,
-                "GIT_CONFIG_KEY_0": GIT_AUTH_CONFIG_KEY,
+                "GIT_CONFIG_COUNT": "2",
+                "GIT_CONFIG_KEY_0": "http.https://github.com/.extraheader",
                 "GIT_CONFIG_VALUE_0": (f"Authorization: Basic {credentials}"),
-                "GIT_CONFIG_KEY_1": GIT_CREDENTIAL_HELPER_KEY,
+                "GIT_CONFIG_KEY_1": "credential.helper",
                 "GIT_CONFIG_VALUE_1": "",
             }
         )
@@ -99,7 +98,7 @@ def _run_git_clone(
         raise CloneErrors.GitCloneFailed from None
 
     except OSError:
-        raise CloneErrors.GitNotAvailable from None
+        raise CloneErrors.GitCloneFailed from None
 
 
 def clone_repository(

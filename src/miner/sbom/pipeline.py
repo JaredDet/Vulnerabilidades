@@ -9,7 +9,7 @@ from pathlib import Path
 from core.exceptions import AppException
 from core.filesystem import create_temporary_directory
 
-from ..clone.loader import load_latest_clones
+from ..clone.pipeline import load_latest_clones
 from ..clone.models import CloneResult
 from .constants import (
     DEFAULT_GIT_TIMEOUT,

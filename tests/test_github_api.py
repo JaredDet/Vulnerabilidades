@@ -36,11 +36,11 @@ def test_repository_query_requests_only_public_repositories():
 def test_failed_page_propagates(monkeypatch):
     repo = api.Repository(
         full_name="org/a", clone_url="https://github.com/org/a.git")
-    page = Mock(side_effect=[[repo], CloneErrors.GitHubTimeout])
+    page = Mock(side_effect=[[repo], CloneErrors.GitHubRequestFailed])
     monkeypatch.setattr(api, "_get_repository_page", page)
     with pytest.raises(AppException) as raised:
         api.get_organization_repositories("org", "fake", page_size=1)
-    assert raised.value is CloneErrors.GitHubTimeout
+    assert raised.value is CloneErrors.GitHubRequestFailed
 
 
 @pytest.mark.parametrize("status,headers,expected", [
@@ -65,7 +65,7 @@ def test_http_errors(status, headers, expected):
 @pytest.mark.parametrize(
     "failure,expected",
     [
-        (requests.Timeout("secret"), CloneErrors.GitHubTimeout),
+        (requests.Timeout("secret"), CloneErrors.GitHubRequestFailed),
         (requests.ConnectionError("secret"), CloneErrors.GitHubRequestFailed),
     ],
 )
@@ -85,4 +85,4 @@ def test_invalid_response(body):
     with pytest.raises(AppException) as error:
         api._get_repository_page(
             Mock(get=Mock(return_value=response)), "org", 1, 10)
-    assert error.value is CloneErrors.InvalidGitHubResponse
+    assert error.value is CloneErrors.GitHubRequestFailed

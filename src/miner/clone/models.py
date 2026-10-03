@@ -12,19 +12,6 @@ class CloneExecution:
     timeout: float
     progress: Callable[[str], None]
 
-    def __init__(
-        self,
-        root: Path,
-        token: str,
-        timeout: float,
-        progress: Callable[[str], None],
-    ) -> None:
-        self.root = root
-        self.token = token
-        self.timeout = timeout
-        self.progress = progress
-
-
 class Repository(BaseModel):
     model_config = ConfigDict(
         frozen=True,
