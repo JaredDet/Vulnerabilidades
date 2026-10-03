@@ -1,4 +1,5 @@
 import json
+import re
 from unittest.mock import Mock
 
 from typer.testing import CliRunner
@@ -9,6 +10,13 @@ from miner.codeql.models import OrganizationResult
 from miner.clone.errors import CloneErrors
 from miner.clone.models import CloneResult, OrganizationCloneResult, Repository
 from miner.dependencies.models import VulnerabilityReport
+
+
+ANSI_ESCAPE = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
+
+
+def plain_output(output: str) -> str:
+    return ANSI_ESCAPE.sub("", output)
 
 
 def test_cli_api_error(monkeypatch):
@@ -178,9 +186,10 @@ def test_cli_help_keeps_command_names_and_options():
 
     analyze_help = runner.invoke(cli.app, ["analyze-code", "--help"])
     assert analyze_help.exit_code == 0
-    assert "--organization" in analyze_help.output
-    assert "--run-id" in analyze_help.output
-    assert "--timeout" in analyze_help.output
+    analyze_output = plain_output(analyze_help.output)
+    assert "--organization" in analyze_output
+    assert "--run-id" in analyze_output
+    assert "--timeout" in analyze_output
 
 
 def test_dependency_vulnerabilities_cli_uses_selected_sbom_run(monkeypatch, tmp_path):
@@ -219,7 +228,7 @@ def test_cli_rejects_invalid_option_before_running_command(monkeypatch):
     )
 
     assert result.exit_code == 2
-    assert "--timeout" in result.output
+    assert "--timeout" in plain_output(result.output)
     clone.assert_not_called()
 
 
