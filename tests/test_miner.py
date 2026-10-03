@@ -193,3 +193,14 @@ def test_clone_failure_is_available_without_analysis(pipeline, tmp_path):
     assert clones.repositories[0].error == CloneErrors.GitCloneFailed.message
     assert clones.repositories[1].source == tmp_path
     analysis.create_database.assert_not_called()
+
+
+def test_codeql_without_export_saves_only_run_report(tmp_path, pipeline):
+    clones = miner.clone_organization(
+        "org", "test-token", workspace_path=tmp_path / "work", progress=lambda _: None,
+    )
+    result = analysis.analyze_organization(clones, token="test-token", progress=lambda _: None)
+    paths = list(tmp_path.rglob("codeql-results.json"))
+    assert len(paths) == 1
+    assert json.loads(paths[0].read_text())["summary"]["findings"] == result.summary.findings
+    assert not (tmp_path / "results.json").exists()

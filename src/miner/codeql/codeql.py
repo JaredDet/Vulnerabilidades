@@ -64,8 +64,6 @@ def create_database(
             env=environment,
         )
 
-    except FileNotFoundError:
-        raise CodeQLErrors.CodeQLNotAvailable from None
     except subprocess.TimeoutExpired:
         raise CodeQLErrors.DatabaseCreationTimeout from None
     except subprocess.CalledProcessError:
@@ -128,8 +126,6 @@ def analyze_database(
         if not output.is_file():
             raise CodeQLErrors.SarifNotGenerated
 
-    except FileNotFoundError:
-        raise CodeQLErrors.CodeQLNotAvailable from None
     except subprocess.TimeoutExpired:
         raise CodeQLErrors.AnalysisTimeout from None
     except subprocess.CalledProcessError:

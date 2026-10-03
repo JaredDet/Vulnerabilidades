@@ -44,12 +44,6 @@ class CodeQLErrors:
         ErrorType.VALIDATION,
     )
 
-    CodeQLNotAvailable = AppException(
-        "codeql_not_available",
-        "No se encontró CodeQL o una ruta necesaria",
-        ErrorType.UNEXPECTED,
-    )
-
     DatabaseCreationTimeout = AppException(
         "database_creation_timeout",
         "Se agotó el tiempo al crear las bases de datos CodeQL",

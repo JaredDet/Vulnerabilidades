@@ -38,12 +38,6 @@ class SBOMErrors:
         ErrorType.UNEXPECTED,
     )
 
-    GitNotAvailable = AppException(
-        "git_not_available",
-        "No se encontró Git o una ruta necesaria",
-        ErrorType.UNEXPECTED,
-    )
-
     CommitTimeout = AppException(
         "commit_timeout",
         "Se agotó el tiempo al consultar el commit del repositorio",
@@ -56,33 +50,9 @@ class SBOMErrors:
         ErrorType.UNEXPECTED,
     )
 
-    CommitNotFound = AppException(
-        "commit_not_found",
-        "No se encontró un commit en el repositorio",
-        ErrorType.UNEXPECTED,
-    )
-
-    GitAccessFailed = AppException(
-        "git_access_failed",
-        "No se pudo ejecutar Git o acceder a sus archivos",
-        ErrorType.UNEXPECTED,
-    )
-
     InvalidSBOM = AppException(
         "invalid_sbom",
         "Syft generó un documento SBOM inválido",
-        ErrorType.UNEXPECTED,
-    )
-
-    InvalidSBOMComponents = AppException(
-        "invalid_components",
-        "El SBOM contiene una lista de componentes inválida",
-        ErrorType.UNEXPECTED,
-    )
-
-    SyftNotAvailable = AppException(
-        "syft_not_available",
-        "No se encontró Syft o una ruta necesaria",
         ErrorType.UNEXPECTED,
     )
 
@@ -95,12 +65,6 @@ class SBOMErrors:
     VersionFailed = AppException(
         "version_failed",
         "Syft no pudo obtener su versión",
-        ErrorType.UNEXPECTED,
-    )
-
-    InvalidVersionResponse = AppException(
-        "invalid_version_response",
-        "Syft devolvió una versión con formato inválido",
         ErrorType.UNEXPECTED,
     )
 

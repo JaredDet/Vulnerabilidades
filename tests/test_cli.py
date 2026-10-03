@@ -97,14 +97,13 @@ def test_analyze_cli_never_clones(monkeypatch, tmp_path):
     monkeypatch.setattr(cli, "analyze_organization", analyze)
     result = CliRunner().invoke(cli.app, [
         "analyze-code", "--organization", "org", "--output", str(tmp_path / "out.json"),
-        "--run-id", "example", "--codeql", "custom-codeql", "--timeout", "42",
+        "--run-id", "example", "--timeout", "42",
     ])
     assert result.exit_code == 0
     clone.assert_not_called()
     load.assert_called_once_with("org", run_id="example")
     assert analyze.call_args.args == (clones, tmp_path / "out.json")
     assert analyze.call_args.kwargs["token"] == "test-token"
-    assert analyze.call_args.kwargs["executable"] == "custom-codeql"
     assert analyze.call_args.kwargs["timeout"] == 42
     monkeypatch.delenv("GITHUB_TOKEN")
     assert CliRunner().invoke(
@@ -126,7 +125,6 @@ def test_clone_cli_does_not_analyze(monkeypatch, tmp_path):
     monkeypatch.setattr(cli, "analyze_organization", analyze)
     result = CliRunner().invoke(cli.app, [
         "clone-repositories", "-o", "org", "--workspace", str(tmp_path), "--timeout", "42",
-        "--page-size", "7",
     ])
     assert result.exit_code == 0
     data = json.loads(result.stdout)
@@ -136,7 +134,6 @@ def test_clone_cli_does_not_analyze(monkeypatch, tmp_path):
     assert clone.call_args.args == ("org", "test-token")
     assert clone.call_args.kwargs["workspace_path"] == tmp_path
     assert clone.call_args.kwargs["timeout"] == 42
-    assert clone.call_args.kwargs["page_size"] == 7
     analyze.assert_not_called()
 
 
@@ -191,14 +188,13 @@ def test_dependency_vulnerabilities_cli_uses_selected_sbom_run(monkeypatch, tmp_
 
     result = CliRunner().invoke(cli.app, [
         "scan-dependency-vulnerabilities", "-o", "org", "--run-id", "example",
-        "--output", str(tmp_path / "vulnerabilities.json"), "--grype", "custom-grype",
+        "--output", str(tmp_path / "vulnerabilities.json"),
         "--timeout", "42",
     ])
 
     assert result.exit_code == 0
     assert scan.call_args.args == ("org", tmp_path / "vulnerabilities.json")
     assert scan.call_args.kwargs["run_id"] == "example"
-    assert scan.call_args.kwargs["executable"] == "custom-grype"
     assert scan.call_args.kwargs["timeout"] == 42
     assert callable(scan.call_args.kwargs["progress"])
     assert "custom-grype" not in result.output

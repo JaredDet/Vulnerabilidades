@@ -227,3 +227,12 @@ def test_find_sbom_run_reports_missing_directory_and_run(tmp_path):
     with pytest.raises(AppException) as missing_run:
         pipeline._find_sbom_directory(tmp_path, "missing")
     assert missing_run.value is GrypeErrors.SBOMRunNotFound
+
+
+def test_scan_without_export_saves_only_run_report(tmp_path, setup_scan):
+    workspace, *_ = setup_scan
+    _write_sbom_report(workspace, "sbom-run", [_sbom_result(workspace, "a")])
+    report = pipeline.scan_organization_vulnerabilities("org", progress=lambda _: None)
+    paths = list(tmp_path.rglob(VULNERABILITY_REPORT_FILENAME))
+    assert len(paths) == 1
+    assert VulnerabilityReport.model_validate_json(paths[0].read_text()) == report

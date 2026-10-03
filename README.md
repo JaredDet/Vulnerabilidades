@@ -7,7 +7,7 @@ analizarlos con CodeQL y generar inventarios SBOM con Syft. Los resultados se gu
 
 Requiere Python 3.11+, uv y Git. Para analizar también necesitas CodeQL CLI
 con sus extractores y paquetes de consultas instalados. Git y CodeQL deben
-estar en `PATH`; puedes indicar otra ruta de CodeQL con `--codeql`.
+estar en `PATH`, al igual que Syft y Grype.
 
 ```powershell
 uv sync
@@ -27,7 +27,7 @@ Para ejecutar el flujo completo en orden: clonación, CodeQL, Syft, Grype y data
 uv run miner run --organization pallets
 ```
 
-`run` acepta `--workspace`, `--codeql`, `--syft`, `--grype` y `--timeout`
+`run` acepta `--workspace` y `--timeout`
 (600 segundos por operación). Todas las etapas reutilizan la misma ejecución
 de clones y Grype consume el SBOM recién generado. Los fallos individuales se
 conservan en los reportes; un error global detiene el flujo.
@@ -82,8 +82,7 @@ El progreso de ambos comandos va a stderr.
 | `--run-id ID` | `scan-dependency-vulnerabilities` | Elegir una ejecución SBOM por su identificador, sin `sbom-` ni la ruta completa. |
 | `--timeout SEGUNDOS` | `clone-repositories` | Límite por clonación; por defecto, 300. |
 | `--timeout SEGUNDOS` | `analyze-code` | Límite por creación de base y análisis; por defecto, 600. |
-| `--output ARCHIVO` | `analyze-code` | Reporte JSON; por defecto, `results.json`. |
-| `--codeql RUTA` | `analyze-code` | Ejecutable de CodeQL; por defecto, `codeql`. |
+| `--output ARCHIVO` | `analyze-code`, `generate-sbom`, `scan-dependency-vulnerabilities` | Exportar una copia adicional; no se exporta por defecto. |
 
 Los códigos de salida permiten distinguir errores globales del comando:
 
@@ -103,7 +102,6 @@ Los errores de repositorios individuales se incluyen en el reporte y no cambian
 el código de salida si el comando pudo completar el resto del trabajo.
 
 ```powershell
-uv run miner analyze-code --organization pallets --codeql "C:\Program Files (x86)\codeql\codeql.exe"
 uv run miner --help
 ```
 
@@ -128,12 +126,10 @@ Abre una terminal nueva y comprueba `syft version`. Luego ejecuta:
 ```powershell
 uv run miner generate-sbom --organization pallets
 uv run miner generate-sbom --organization pallets --run-id xkfbl6pl --output sbom-results.json
-# Si Syft no está en PATH
-uv run miner generate-sbom --organization pallets --syft "C:\tools\syft\syft.exe"
 ```
 
 SBOM reutiliza los clones locales sin requerir token ni volver a clonar.
-Acepta `--syft RUTA` y `--timeout SEGUNDOS` (600 por defecto).
+Acepta `--timeout SEGUNDOS` (600 por defecto); Syft se busca en `PATH`.
 Cada ejecución guarda archivos CycloneDX JSON en una carpeta nueva `sbom-<id>/`
 dentro de la clonación, y un reporte con commit, versión de Syft, fecha,
 cantidad de componentes y errores. Si no hay repositorios, escribe un reporte vacío.
@@ -148,6 +144,20 @@ uv run miner scan-dependency-vulnerabilities --organization pallets --run-id 7o9
 
 ## Resultados
 
+Cada etapa guarda un único reporte dentro de la ejecución de clones:
+
+- `analysis_results/codeql-<id>/codeql-results.json`
+- `sboms/sbom-<id>/sbom-results.json`
+- `vulnerabilities/vulnerability-<id>/vulnerability-results.json`
+
+`clones.json` y `dataset.json` quedan junto a esas carpetas. Los comandos
+individuales aceptan `--output` para exportar una copia cuando sea necesaria.
+El tamaño de página de GitHub queda fijo en 100. Los límites de tiempo y la
+selección por `--run-id` o última ejecución se mantienen. La API de Python
+conserva la posibilidad de indicar ejecutables para integraciones y pruebas.
+Los errores de acceso a cada herramienta se agrupan; los tiempos agotados,
+conflictos y estados de análisis siguen distinguiéndose.
+
 CodeQL detecta los lenguajes al crear el clúster de bases y ejecuta la suite
 `<lenguaje>-code-scanning.qls`. Los proyectos compilados pueden necesitar sus
 dependencias y herramientas de construcción.
@@ -161,7 +171,7 @@ Los fallos individuales quedan en el resultado y no detienen los demás
 repositorios. `partial` indica que algunos lenguajes se analizaron y otros
 fallaron. Revisa el resumen aunque el comando termine con código cero.
 Los errores globales de consulta o escritura terminan con código distinto de cero.
-El reporte se actualiza de forma atómica después de cada repositorio; una
+El reporte se escribe de forma atómica al terminar la etapa; una
 organización vacía también genera un JSON.
 
 ## Desarrollo
@@ -173,9 +183,7 @@ de GitHub Actions. Syft y Grype usan imágenes versionadas; la imagen de CodeQL
 se configura en `CODEQL_IMAGE` porque el contenedor disponible está en vista
 previa y puede cambiar.
 
-Esto no cambia la ejecución local del programa: `--codeql`, `--syft` y
-`--grype` siguen aceptando rutas a los ejecutables instalados en el PC, y por
-defecto se buscan `codeql`, `syft` y `grype` en `PATH`.
+La ejecución local busca `codeql`, `syft` y `grype` en `PATH`.
 
 ```text
 src/miner/

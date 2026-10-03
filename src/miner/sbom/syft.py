@@ -23,8 +23,6 @@ def get_version(executable: str = DEFAULT_SYFT_EXECUTABLE) -> str:
         )
     except subprocess.TimeoutExpired:
         raise SBOMErrors.VersionTimeout from None
-    except FileNotFoundError:
-        raise SBOMErrors.SyftNotAvailable from None
     except subprocess.CalledProcessError:
         raise SBOMErrors.VersionFailed from None
     except OSError:
@@ -38,7 +36,7 @@ def get_version(executable: str = DEFAULT_SYFT_EXECUTABLE) -> str:
             raise ValueError
 
     except (json.JSONDecodeError, KeyError, TypeError, ValueError):
-        raise SBOMErrors.InvalidVersionResponse from None
+        raise SBOMErrors.VersionFailed from None
 
     return version.strip()
 
@@ -81,8 +79,6 @@ def generate_sbom(
             text=True,
             timeout=timeout,
         )
-    except FileNotFoundError:
-        raise SBOMErrors.SyftNotAvailable from None
     except subprocess.TimeoutExpired:
         raise SBOMErrors.GenerationTimeout from None
     except subprocess.CalledProcessError:

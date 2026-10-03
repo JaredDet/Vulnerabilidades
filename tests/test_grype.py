@@ -23,7 +23,7 @@ def test_get_version_uses_selected_executable(monkeypatch):
 @pytest.mark.parametrize(
     ("failure", "expected"),
     [
-        (FileNotFoundError(), GrypeErrors.GrypeNotAvailable),
+        (FileNotFoundError(), GrypeErrors.GrypeAccessFailed),
         (subprocess.TimeoutExpired("grype", 1), GrypeErrors.VersionTimeout),
         (subprocess.CalledProcessError(1, "grype"), GrypeErrors.VersionFailed),
         (PermissionError(), GrypeErrors.GrypeAccessFailed),
@@ -45,7 +45,7 @@ def test_get_version_rejects_empty_response(monkeypatch, stdout):
     with pytest.raises(AppException) as raised:
         grype.get_version()
 
-    assert raised.value is GrypeErrors.InvalidVersionResponse
+    assert raised.value is GrypeErrors.VersionFailed
 
 
 def test_scan_vulnerabilities_builds_command_and_returns_output(tmp_path, monkeypatch):
@@ -80,7 +80,7 @@ def test_scan_vulnerabilities_builds_command_and_returns_output(tmp_path, monkey
 @pytest.mark.parametrize(
     ("failure", "expected"),
     [
-        (FileNotFoundError(), GrypeErrors.GrypeNotAvailable),
+        (FileNotFoundError(), GrypeErrors.GrypeAccessFailed),
         (subprocess.TimeoutExpired("grype", 1), GrypeErrors.ScanTimeout),
         (subprocess.CalledProcessError(1, "grype"), GrypeErrors.ScanFailed),
         (PermissionError(), GrypeErrors.GrypeAccessFailed),

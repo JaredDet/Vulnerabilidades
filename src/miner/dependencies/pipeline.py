@@ -163,7 +163,7 @@ def _process_repositories(
 
 def scan_organization_vulnerabilities(
     organization: str,
-    output: Path,
+    output: Path | None = None,
     *,
     workspace: Path | None = None,
     clone_run_id: str | None = None,
@@ -226,6 +226,7 @@ def scan_organization_vulnerabilities(
     )
 
     write_report(report, output_directory / VULNERABILITY_REPORT_FILENAME)
-    write_report(report, output)
+    if output is not None:
+        write_report(report, output)
 
     return report

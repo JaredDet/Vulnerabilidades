@@ -8,12 +8,8 @@ from typing import Annotated, Callable, ParamSpec, TypeVar
 import typer
 from dotenv import load_dotenv
 
-from core.exception_handler import ExitCode, handle_exception
+from core.exception_handler import handle_exception
 from core.exceptions import AppException
-from miner.clone.github_api import PAGE_SIZE
-from miner.dependencies.constants import (
-    DEFAULT_GRYPE_EXECUTABLE,
-)
 from miner.dependencies.constants import (
     DEFAULT_SCAN_TIMEOUT as DEFAULT_GRYPE_SCAN_TIMEOUT,
 )
@@ -26,15 +22,11 @@ from .clone.pipeline import load_latest_clones
 from .clone.pipeline import clone_organization
 from .codeql.constants import (
     DEFAULT_ANALYSIS_TIMEOUT,
-    DEFAULT_CODEQL_EXECUTABLE,
 )
 from .codeql.pipeline import analyze_organization
 from .dataset import generate_dataset
 from .sbom.constants import (
     DEFAULT_SCAN_TIMEOUT as DEFAULT_SBOM_SCAN_TIMEOUT,
-)
-from .sbom.constants import (
-    DEFAULT_SYFT_EXECUTABLE,
 )
 from .sbom.pipeline import generate_organization_sbom
 
@@ -89,8 +81,10 @@ def _token() -> str:
 @command(name="analyze-code")
 def analyze(
     organization: Annotated[str, typer.Option("--organization", "-o")],
-    output: Annotated[Path, typer.Option("--output")] = Path("results.json"),
-    codeql: Annotated[str, typer.Option("--codeql")] = DEFAULT_CODEQL_EXECUTABLE,
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", help="Exporta una copia del reporte."),
+    ] = None,
     run_id: Annotated[
         str | None,
         typer.Option(
@@ -113,13 +107,12 @@ def analyze(
         clones,
         output,
         token=token,
-        executable=codeql,
         timeout=timeout,
         progress=lambda text: typer.echo(text, err=True),
     )
 
     typer.echo(
-        f"JSON: {output}; repositorios: {report.summary.repositories}; "
+        f"Reporte guardado en la ejecución; repositorios: {report.summary.repositories}; "
         f"hallazgos: {report.summary.findings}",
         err=True,
     )
@@ -133,16 +126,6 @@ def clone(
         float,
         typer.Option("--timeout", min=1),
     ] = DEFAULT_CLONE_TIMEOUT,
-    page_size: Annotated[
-        int,
-        typer.Option(
-            "--page-size",
-            "-p",
-            min=1,
-            max=PAGE_SIZE,  # GitHub no permite pedir más de 100 por página
-            help="Tamaño de página para las consultas de repositorios a la API de GitHub.",
-        ),
-    ] = PAGE_SIZE,
 ) -> None:
     """Clona los repositorios y muestra sus rutas, sin ejecutar análisis."""
     token = _token()
@@ -152,7 +135,6 @@ def clone(
         token,
         workspace_path=workspace,
         timeout=timeout,
-        page_size=page_size,
         progress=lambda text: typer.echo(text, err=True),
     )
 
@@ -169,8 +151,10 @@ def sbom(
             help="Clone-run ID (e.g. xkfbl6pl). Uses the latest clone run if omitted.",
         ),
     ] = None,
-    output: Annotated[Path, typer.Option("--output")] = Path("sbom-results.json"),
-    syft: Annotated[str, typer.Option("--syft")] = DEFAULT_SYFT_EXECUTABLE,
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", help="Exporta una copia del reporte."),
+    ] = None,
     timeout: Annotated[
         float,
         typer.Option("--timeout", min=1),
@@ -181,13 +165,12 @@ def sbom(
         organization,
         output,
         run_id=run_id,
-        executable=syft,
         timeout=timeout,
         progress=lambda text: typer.echo(text, err=True),
     )
 
     typer.echo(
-        f"JSON: {output}; repositorios: {len(report.repositories)}",
+        f"Reporte guardado en la ejecución; repositorios: {len(report.repositories)}",
         err=True,
     )
 
@@ -202,10 +185,10 @@ def vulnerabilities(
             help="ID after sbom- (e.g. 7o9x8nb_). Uses the latest SBOM run if omitted.",
         ),
     ] = None,
-    output: Annotated[Path, typer.Option("--output")] = Path(
-        "vulnerability-results.json"
-    ),
-    grype: Annotated[str, typer.Option("--grype")] = DEFAULT_GRYPE_EXECUTABLE,
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", help="Exporta una copia del reporte."),
+    ] = None,
     timeout: Annotated[
         float,
         typer.Option("--timeout", min=1),
@@ -216,13 +199,12 @@ def vulnerabilities(
         organization,
         output,
         run_id=run_id,
-        executable=grype,
         timeout=timeout,
         progress=lambda text: typer.echo(text, err=True),
     )
 
     typer.echo(
-        f"JSON: {output}; repositorios: {len(report.repositories)}",
+        f"Reporte guardado en la ejecución; repositorios: {len(report.repositories)}",
         err=True,
     )
 
@@ -242,9 +224,6 @@ def dataset(
 def run(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
-    codeql: Annotated[str, typer.Option("--codeql")] = DEFAULT_CODEQL_EXECUTABLE,
-    syft: Annotated[str, typer.Option("--syft")] = DEFAULT_SYFT_EXECUTABLE,
-    grype: Annotated[str, typer.Option("--grype")] = DEFAULT_GRYPE_EXECUTABLE,
     timeout: Annotated[float, typer.Option("--timeout", min=1)] = 600,
 ) -> None:
     """Clona, analiza código, genera SBOM, analiza dependencias e integra el dataset."""
@@ -256,20 +235,19 @@ def run(
     root = clones.workspace.resolve()
     clone_id = root.name.removeprefix("clone-")
     analyze_organization(
-        clones, root / "codeql-results.json", token=token,
-        executable=codeql, timeout=timeout, progress=progress,
+        clones, token=token, timeout=timeout, progress=progress,
     )
     sbom_report = generate_organization_sbom(
-        clones.organization, root / "sbom-results.json", workspace=root.parent,
-        run_id=clone_id, executable=syft, timeout=timeout, progress=progress,
+        clones.organization, workspace=root.parent,
+        run_id=clone_id, timeout=timeout, progress=progress,
     )
     sbom_id = (
         Path(sbom_report.repositories[0].sbom_path).parent.name.removeprefix("sbom-")
         if sbom_report.repositories else None
     )
     scan_organization_vulnerabilities(
-        clones.organization, root / "vulnerability-results.json", workspace=root.parent,
-        clone_run_id=clone_id, run_id=sbom_id, executable=grype,
+        clones.organization, workspace=root.parent,
+        clone_run_id=clone_id, run_id=sbom_id,
         timeout=timeout, progress=progress,
     )
     typer.echo(f"Dataset: {generate_dataset(clones)}")

@@ -28,8 +28,6 @@ def get_version(
         )
     except subprocess.TimeoutExpired:
         raise GrypeErrors.VersionTimeout from None
-    except FileNotFoundError:
-        raise GrypeErrors.GrypeNotAvailable from None
     except subprocess.CalledProcessError:
         raise GrypeErrors.VersionFailed from None
     except OSError:
@@ -38,7 +36,7 @@ def get_version(
     version = result.stdout.strip()
 
     if not version:
-        raise GrypeErrors.InvalidVersionResponse
+        raise GrypeErrors.VersionFailed
 
     return version
 
@@ -78,8 +76,6 @@ def scan_vulnerabilities(
             text=True,
             timeout=timeout,
         )
-    except FileNotFoundError:
-        raise GrypeErrors.GrypeNotAvailable from None
     except subprocess.TimeoutExpired:
         raise GrypeErrors.ScanTimeout from None
     except subprocess.CalledProcessError:

@@ -93,7 +93,7 @@ def _process_repositories(
 
 def analyze_organization(
     clones: OrganizationCloneResult,
-    output: Path,
+    output: Path | None = None,
     *,
     token: str,
     executable: str = DEFAULT_CODEQL_EXECUTABLE,
@@ -123,7 +123,8 @@ def analyze_organization(
     )
 
     write_report(report, report_path)
-    write_report(report, output)
+    if output is not None:
+        write_report(report, output)
 
     return report
 

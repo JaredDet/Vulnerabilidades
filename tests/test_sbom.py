@@ -114,10 +114,10 @@ def test_syft_unavailable_preserves_report(tmp_path, dependencies):
     save_clones(tmp_path / "clone-one")
     output = tmp_path / "out.json"
     output.write_text("existing report")
-    dependencies[0].side_effect = SBOMErrors.SyftNotAvailable
+    dependencies[0].side_effect = SBOMErrors.SyftAccessFailed
     with pytest.raises(AppException) as raised:
         pipeline.generate_organization_sbom("org", output, workspace=tmp_path)
-    assert raised.value is SBOMErrors.SyftNotAvailable
+    assert raised.value is SBOMErrors.SyftAccessFailed
     assert output.read_text() == "existing report"
 
 
@@ -128,12 +128,13 @@ def test_cli_sbom_uses_clones_without_token_or_cloning(tmp_path, monkeypatch, de
     clone = Mock(side_effect=AssertionError("must not clone"))
     monkeypatch.setattr(cli, "clone_organization", clone)
     result = CliRunner().invoke(cli.app, [
-        "generate-sbom", "-o", "org", "--run-id", "one", "--syft", "custom-syft", "--timeout", "42",
+        "generate-sbom", "-o", "org", "--run-id", "one", "--timeout", "42",
     ])
     assert result.exit_code == 0, result.output
-    assert (tmp_path / "sbom-results.json").is_file()
-    dependencies[0].assert_called_once_with("custom-syft")
-    assert dependencies[2].call_args.kwargs == {"executable": "custom-syft", "timeout": 42}
+    assert not (tmp_path / "sbom-results.json").exists()
+    assert len(list(tmp_path.glob("organizations/org/work/clone-one/sboms/sbom-*/sbom-results.json"))) == 1
+    dependencies[0].assert_called_once_with("syft")
+    assert dependencies[2].call_args.kwargs == {"executable": "syft", "timeout": 42}
     clone.assert_not_called()
 
 

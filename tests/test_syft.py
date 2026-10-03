@@ -57,7 +57,7 @@ def test_invalid_version(monkeypatch, contents):
     monkeypatch.setattr(syft.subprocess, "run", Mock(return_value=Mock(stdout=contents)))
     with pytest.raises(AppException) as raised:
         syft.get_version()
-    assert raised.value is SBOMErrors.InvalidVersionResponse
+    assert raised.value is SBOMErrors.VersionFailed
 
 
 def test_version_timeout(monkeypatch):

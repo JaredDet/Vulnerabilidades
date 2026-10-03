@@ -56,12 +56,6 @@ class GrypeErrors:
         ErrorType.CONFLICT,
     )
 
-    GrypeNotAvailable = AppException(
-        "grype_not_available",
-        "No se encontró Grype o una ruta necesaria",
-        ErrorType.UNEXPECTED,
-    )
-
     VersionTimeout = AppException(
         "version_timeout",
         "Grype excedió el tiempo al obtener su versión",
@@ -71,12 +65,6 @@ class GrypeErrors:
     VersionFailed = AppException(
         "version_failed",
         "No se pudo obtener la versión de Grype",
-        ErrorType.UNEXPECTED,
-    )
-
-    InvalidVersionResponse = AppException(
-        "invalid_version_response",
-        "Grype no devolvió su versión",
         ErrorType.UNEXPECTED,
     )
 

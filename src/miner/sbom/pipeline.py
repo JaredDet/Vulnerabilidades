@@ -36,17 +36,15 @@ def _get_commit(source: Path) -> str:
         )
     except subprocess.TimeoutExpired:
         raise SBOMErrors.CommitTimeout from None
-    except FileNotFoundError:
-        raise SBOMErrors.GitNotAvailable from None
     except subprocess.CalledProcessError:
         raise SBOMErrors.CommitFailed from None
     except OSError:
-        raise SBOMErrors.GitAccessFailed from None
+        raise SBOMErrors.CommitFailed from None
 
     commit = result.stdout.strip()
 
     if not commit:
-        raise SBOMErrors.CommitNotFound
+        raise SBOMErrors.CommitFailed
 
     return commit
 
@@ -65,7 +63,7 @@ def _count_components(sbom_path: Path) -> int:
     if not isinstance(components, list) or any(
         not isinstance(item, dict) for item in components
     ):
-        raise SBOMErrors.InvalidSBOMComponents
+        raise SBOMErrors.InvalidSBOM
 
     return len(components)
 
@@ -143,7 +141,7 @@ def _process_repositories(
 
 def generate_organization_sbom(
     organization: str,
-    output: Path,
+    output: Path | None = None,
     *,
     workspace: Path | None = None,
     run_id: str | None = None,
@@ -191,6 +189,7 @@ def generate_organization_sbom(
     )
 
     write_report(report, execution.output_directory / SBOM_REPORT_FILENAME)
-    write_report(report, output)
+    if output is not None:
+        write_report(report, output)
 
     return report
