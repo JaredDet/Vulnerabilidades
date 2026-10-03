@@ -1,0 +1,21 @@
+@startuml
+title Flujo completo del Miner
+
+start
+:Etapa 1/5 - Clonar repositorios públicos por lotes;
+:Guardar clones.json;
+:Etapa 2/5 - Analizar código con CodeQL;
+:Guardar SARIF y codeql-results.json;
+:Etapa 3/5 - Generar SBOM CycloneDX con Syft;
+:Guardar SBOM y sbom-results.json;
+:Etapa 4/5 - Analizar los SBOM con Grype;
+:Guardar resultados originales y vulnerability-results.json;
+:Etapa 5/5 - Integrar repositorios y hallazgos;
+:Guardar dataset.json junto a clones.json;
+stop
+
+note right
+Cada etapa informa cuándo comienza y cuándo termina.
+Los identificadores enlazan la evidencia con la clonación.
+end note
+@enduml

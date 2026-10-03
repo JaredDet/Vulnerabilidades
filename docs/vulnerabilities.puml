@@ -1,9 +1,28 @@
 @startuml
-actor Usuario
-Usuario -> Miner: scan-dependency-vulnerabilities
-Miner -> SBOM: Seleccionar SBOM de los repositorios
-SBOM --> Miner: Artefactos CycloneDX
-Miner -> Grype: Analizar dependencias
-Grype --> Miner: Vulnerabilidades
-Miner -> Miner: Guardar reporte por organización
+title Vulnerabilidades de dependencias con Grype
+
+start
+:Cargar clones.json y seleccionar la ejecución sbom-<id>;
+:Validar sbom-results.json;
+:Crear una ejecución vulnerability-<id>;
+
+while (¿Quedan repositorios?) is (sí)
+  if (¿El SBOM se generó correctamente?) then (sí)
+    :Ejecutar Grype sobre el SBOM CycloneDX;
+    :Guardar el JSON original de Grype;
+    :Normalizar cada match;
+    :Extraer vulnerabilidad, descripción, severidad,
+puntajes CVSS, paquete, versión, tipo y ubicaciones;
+  else (no)
+    :Registrar fallo de SBOM;
+  endif
+endwhile (no)
+
+:Guardar vulnerability-results.json;
+stop
+
+note right
+Cero coincidencias es un análisis válido.
+Los errores se distinguen de un resultado vacío.
+end note
 @enduml

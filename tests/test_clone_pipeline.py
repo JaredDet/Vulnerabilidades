@@ -79,14 +79,22 @@ def test_invalid_latest_manifest_is_not_silently_skipped(tmp_path):
 
 
 def test_clone_persists_result_for_later_analysis(tmp_path, monkeypatch):
-    repository = Repository(full_name="org/repo", clone_url="https://github.com/org/repo.git")
-    query = Mock(return_value=[repository])
-    monkeypatch.setattr(pipeline, "get_organization_repositories", query)
+    repositories = [
+        Repository(full_name="org/a", clone_url="https://github.com/org/a.git"),
+        Repository(full_name="org/b", clone_url="https://github.com/org/b.git"),
+    ]
+    query = Mock(return_value=[[repositories[0]], [repositories[1]]])
+    progress = Mock()
+    monkeypatch.setattr(pipeline, "get_organization_repository_pages", query)
     monkeypatch.setattr(pipeline, "clone_repository", Mock(return_value=tmp_path / "source"))
     result = pipeline.clone_organization(
-        "org", "test-token", workspace_path=tmp_path, page_size=7, progress=lambda _: None,
+        "org", "test-token", workspace_path=tmp_path, page_size=7, progress=progress,
     )
-    query.assert_called_once_with("org", "test-token", page_size=7)
+    query.assert_called_once_with("org", "test-token", 7)
+    assert [item.repository for item in result.repositories] == repositories
+    messages = [call.args[0] for call in progress.call_args_list]
+    assert any("Lote 1" in message for message in messages)
+    assert any("Lote 2" in message for message in messages)
     restored = pipeline.load_latest_clones("org", workspace_path=tmp_path)
     assert restored == result
     assert "test-token" not in (result.workspace / "clones.json").read_text(encoding="utf-8")

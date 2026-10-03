@@ -1,6 +1,37 @@
 @startuml
-actor Usuario
-Usuario -> Miner: analyze-code
-Miner -> CodeQL: Analizar repositorios
-CodeQL --> Miner: Resultados
+title Análisis de código con CodeQL
+
+start
+:Cargar clones.json por run-id o seleccionar la última ejecución;
+
+while (¿Quedan repositorios?) is (sí)
+  if (¿El clon está disponible?) then (sí)
+    :Crear clúster de bases CodeQL;
+    if (¿CodeQL creó bases por lenguaje?) then (sí)
+      while (¿Quedan lenguajes?) is (sí)
+        :Ejecutar code-scanning.qls;
+        :Guardar results.sarif;
+        :Normalizar hallazgos, ubicaciones,
+nivel SARIF y security-severity;
+      endwhile (no)
+      if (¿Todos los lenguajes terminaron bien?) then (sí)
+        :Eliminar el clúster de bases CodeQL;
+      else (no)
+        :Conservar las bases para diagnóstico;
+      endif
+    else (no)
+      :Registrar repositorio no soportado;
+    endif
+  else (no)
+    :Registrar fallo de clonación;
+  endif
+endwhile (no)
+
+:Guardar codeql-results.json;
+stop
+
+note right
+Los SARIF y el reporte normalizado se conservan.
+Un fallo por repositorio no detiene los demás.
+end note
 @enduml

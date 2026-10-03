@@ -87,3 +87,12 @@ def test_run_orders_stages_and_pins_runs(tmp_path, monkeypatch):
     assert mocks["generate_organization_sbom"].call_args.kwargs["run_id"] == "example"
     assert mocks["scan_organization_vulnerabilities"].call_args.kwargs["clone_run_id"] == "example"
     assert mocks["scan_organization_vulnerabilities"].call_args.kwargs["run_id"] == "selected"
+    for stage, name in enumerate([
+        "clonación de repositorios",
+        "análisis de código con CodeQL",
+        "generación de SBOM con Syft",
+        "análisis de dependencias con Grype",
+        "generación del dataset integrado",
+    ], 1):
+        assert f"Etapa {stage}/5 iniciada: {name}" in result.output
+        assert f"Etapa {stage}/5 completada: {name}" in result.output

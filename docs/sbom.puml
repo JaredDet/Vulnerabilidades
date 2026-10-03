@@ -1,6 +1,26 @@
 @startuml
-actor Usuario
-Usuario -> Miner: generate-sbom
-Miner -> Syft: Generar SBOM
-Syft --> Miner: SBOM
+title Generación del inventario SBOM con Syft
+
+start
+:Cargar clones.json por run-id o seleccionar la última ejecución;
+:Crear una ejecución sbom-<id>;
+
+while (¿Quedan repositorios?) is (sí)
+  if (¿El clon está disponible?) then (sí)
+    :Obtener el commit analizado;
+    :Syft examina el repositorio completo y detecta sus ecosistemas;
+    :Guardar SBOM CycloneDX JSON;
+    :Validar el documento y contar componentes;
+  else (no)
+    :Registrar fallo sin generar SBOM;
+  endif
+endwhile (no)
+
+:Guardar sbom-results.json;
+stop
+
+note right
+No se detectan manifiestos manualmente.
+Syft construye el inventario desde el repositorio.
+end note
 @enduml

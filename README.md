@@ -112,8 +112,10 @@ Sin `--run-id`, `analyze-code` busca en `organizations/<organización>/work/`.
 Por ejemplo, `--run-id xkfbl6pl` selecciona `clone-xkfbl6pl` dentro de esa carpeta.
 La búsqueda de `analyze-code` usa este directorio estándar; los clones guardados con
 un `--workspace` personalizado pueden procesarse mediante la API de Python.
-El análisis crea un directorio `codeql-<id>/` dentro de esa misma ejecución
-para las bases CodeQL y los archivos SARIF.
+El análisis crea un directorio `codeql-<id>/` dentro de esa misma ejecución.
+Los archivos SARIF y el reporte normalizado se conservan. La base CodeQL de un
+repositorio se elimina cuando todos sus lenguajes se analizan y normalizan
+correctamente; si alguno falla, se conserva para facilitar el diagnóstico.
 
 Para generar SBOM necesitas Syft instalado aparte del entorno Python. En Windows:
 
@@ -154,8 +156,10 @@ Cada etapa guarda un único reporte dentro de la ejecución de clones:
 individuales aceptan `--output` para exportar una copia cuando sea necesaria.
 `--page-size` (o `-p`) controla los repositorios por petición a GitHub,
 entre 1 y 100 (100 por defecto), en `clone-repositories` y `run`.
-Se recorren todas las páginas sin filtrar por lenguaje ni limitar el total. Los límites de tiempo y la
-selección por `--run-id` o última ejecución se mantienen. La API de Python
+Cada página se clona antes de solicitar la siguiente; todos los lotes pertenecen
+a la misma ejecución y se consolidan en un único `clones.json`. Se recorren
+todas las páginas sin filtrar por lenguaje ni limitar el total. Los límites de
+tiempo y la selección por `--run-id` o última ejecución se mantienen. La API de Python
 conserva la posibilidad de indicar ejecutables para integraciones y pruebas.
 Los errores de acceso a cada herramienta se agrupan; los tiempos agotados,
 conflictos y estados de análisis siguen distinguiéndose.

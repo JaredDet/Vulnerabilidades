@@ -1,5 +1,6 @@
 """Coordina el análisis de repositorios con CodeQL."""
 
+import shutil
 from collections.abc import Callable
 from pathlib import Path
 
@@ -145,6 +146,11 @@ def _language_databases(database: Path) -> list[tuple[str, Path]]:
     return sorted(databases, key=lambda item: item[0])
 
 
+def _remove_database(database: Path) -> None:
+    """Elimina una base CodeQL cuyo resultado ya fue normalizado."""
+    shutil.rmtree(database, ignore_errors=True)
+
+
 def _analyze_language(
     database: Path,
     language: str,
@@ -236,6 +242,7 @@ def analyze_repository(
         if all(language.status == "analyzed" for language in languages):
             status = "analyzed"
             error = None
+            _remove_database(database)
         elif any(language.status == "analyzed" for language in languages):
             status = "partial"
             error = "Uno o más lenguajes no pudieron analizarse"

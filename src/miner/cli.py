@@ -245,29 +245,47 @@ def run(
     """Clona, analiza código, genera SBOM, analiza dependencias e integra el dataset."""
     token = _token()
     progress = lambda message: typer.echo(message, err=True)
+
+    progress("Etapa 1/5 iniciada: clonación de repositorios")
     clones = clone_organization(
         organization, token, workspace_path=workspace, page_size=page_size,
         timeout=timeout, progress=progress,
     )
+    progress("Etapa 1/5 completada: clonación de repositorios")
+
     root = clones.workspace.resolve()
     clone_id = root.name.removeprefix("clone-")
+
+    progress("Etapa 2/5 iniciada: análisis de código con CodeQL")
     analyze_organization(
         clones, token=token, timeout=timeout, progress=progress,
     )
+    progress("Etapa 2/5 completada: análisis de código con CodeQL")
+
+    progress("Etapa 3/5 iniciada: generación de SBOM con Syft")
     sbom_report = generate_organization_sbom(
         clones.organization, workspace=root.parent,
         run_id=clone_id, timeout=timeout, progress=progress,
     )
+    progress("Etapa 3/5 completada: generación de SBOM con Syft")
+
     sbom_id = (
         Path(sbom_report.repositories[0].sbom_path).parent.name.removeprefix("sbom-")
         if sbom_report.repositories else None
     )
+
+    progress("Etapa 4/5 iniciada: análisis de dependencias con Grype")
     scan_organization_vulnerabilities(
         clones.organization, workspace=root.parent,
         clone_run_id=clone_id, run_id=sbom_id,
         timeout=timeout, progress=progress,
     )
-    typer.echo(f"Dataset: {generate_dataset(clones)}")
+    progress("Etapa 4/5 completada: análisis de dependencias con Grype")
+
+    progress("Etapa 5/5 iniciada: generación del dataset integrado")
+    dataset_path = generate_dataset(clones)
+    progress("Etapa 5/5 completada: generación del dataset integrado")
+    typer.echo(f"Dataset: {dataset_path}")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+from collections.abc import Iterator
 from http import HTTPStatus
 from urllib.parse import quote
 
@@ -86,39 +87,12 @@ def _get_repository_page(
         raise CloneErrors.GitHubRequestFailed from None
 
 
-def _get_all_repository_pages(
-    client: requests.Session,
-    organization: str,
-    page_size: int,
-) -> list[Repository]:
-    """Obtiene todos los repositorios de una organización."""
-    repositories: list[Repository] = []
-    page = 1
-
-    while True:
-        page_repositories = _get_repository_page(
-            client,
-            organization,
-            page,
-            page_size,
-        )
-
-        repositories.extend(page_repositories)
-
-        if len(page_repositories) < page_size:
-            break
-
-        page += 1
-
-    return repositories
-
-
-def get_organization_repositories(
+def get_organization_repository_pages(
     organization: str,
     token: str,
-    page_size: int = PAGE_SIZE,
-) -> list[Repository]:
-    """Devuelve los repositorios accesibles de una organización."""
+    page_size: int,
+) -> Iterator[list[Repository]]:
+    """Entrega una página de repositorios públicos a la vez."""
     organization = organization.strip()
     token = token.strip()
 
@@ -128,6 +102,40 @@ def get_organization_repositories(
     if not token:
         raise CloneErrors.TokenRequired
 
+    page = 1
+
     with requests.Session() as client:
         client.headers.update(_build_headers(token))
-        return _get_all_repository_pages(client, organization, page_size)
+
+        while True:
+            page_repositories = _get_repository_page(
+                client,
+                organization,
+                page,
+                page_size,
+            )
+
+            if page_repositories:
+                yield page_repositories
+
+            if len(page_repositories) < page_size:
+                break
+
+            page += 1
+
+
+def get_organization_repositories(
+    organization: str,
+    token: str,
+    page_size: int = PAGE_SIZE,
+) -> list[Repository]:
+    """Devuelve los repositorios accesibles de una organización."""
+    return [
+        repository
+        for repositories in get_organization_repository_pages(
+            organization,
+            token,
+            page_size,
+        )
+        for repository in repositories
+    ]

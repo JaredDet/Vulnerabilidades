@@ -16,11 +16,13 @@ from miner.codeql.models import Finding
 def pipeline(monkeypatch, tmp_path):
     monkeypatch.setattr(
         miner,
-        "get_organization_repositories",
+        "get_organization_repository_pages",
         Mock(
             return_value=[
-                Repository(full_name="org/b", clone_url="https://github.com/org/b.git"),
-                Repository(full_name="org/a", clone_url="https://github.com/org/a.git"),
+                [
+                    Repository(full_name="org/b", clone_url="https://github.com/org/b.git"),
+                    Repository(full_name="org/a", clone_url="https://github.com/org/a.git"),
+                ],
             ]
         ),
     )
@@ -37,6 +39,7 @@ def pipeline(monkeypatch, tmp_path):
         "parse_sarif",
         Mock(return_value=[Finding(rule_id="py/a", message="Example")]),
     )
+    monkeypatch.setattr(analysis, "_remove_database", Mock())
     def run():
         clones = miner.clone_organization(
             "org", "test-token", workspace_path=tmp_path / "work", progress=lambda _: None,
@@ -102,7 +105,7 @@ def test_unsupported(pipeline):
 
 
 def test_empty_organization(pipeline, tmp_path):
-    miner.get_organization_repositories.return_value = []
+    miner.get_organization_repository_pages.return_value = []
     result = pipeline()
     assert result.summary.repositories == 0
     assert json.loads((tmp_path / "results.json").read_text())["repositories"] == []
@@ -111,7 +114,7 @@ def test_empty_organization(pipeline, tmp_path):
 def test_failed_list_does_not_replace_report(pipeline, tmp_path):
     output = tmp_path / "results.json"
     output.write_text("existing report")
-    miner.get_organization_repositories.side_effect = CloneErrors.GitHubRequestFailed
+    miner.get_organization_repository_pages.side_effect = CloneErrors.GitHubRequestFailed
     with pytest.raises(AppException) as raised:
         pipeline()
     assert raised.value is CloneErrors.GitHubRequestFailed
@@ -149,6 +152,30 @@ def test_sarif_failure_preserves_language_status(pipeline):
     assert result.repositories[0].languages[0].status == "sarif_failed"
 
 
+def test_successful_analysis_removes_codeql_database(pipeline):
+    result = pipeline()
+    assert result.summary.analyzed == 2
+    assert analysis._remove_database.call_count == 2
+    analysis._remove_database.assert_any_call(analysis.create_database.return_value)
+
+
+def test_failed_analysis_preserves_codeql_database(pipeline):
+    analysis.analyze_database.side_effect = CodeQLErrors.AnalysisFailed
+    result = pipeline()
+    assert result.summary.failed == 2
+    analysis._remove_database.assert_not_called()
+
+
+def test_remove_database_deletes_directory(tmp_path):
+    database = tmp_path / "database"
+    database.mkdir()
+    (database / "codeql-database.yml").touch()
+
+    analysis._remove_database(database)
+
+    assert not database.exists()
+
+
 def test_unexpected_failure_continues_to_next_repository(pipeline):
     analysis.create_database.side_effect = [
         RuntimeError("private details"), analysis.create_database.return_value,
@@ -167,7 +194,7 @@ def test_clones_can_be_reused_without_cloning_again(pipeline, tmp_path):
     assert clones.workspace.is_absolute()
     analysis.create_database.assert_not_called()
     miner.clone_repository.reset_mock()
-    miner.get_organization_repositories.reset_mock()
+    miner.get_organization_repository_pages.reset_mock()
 
     for name in ["first.json", "second.json"]:
         result = analysis.analyze_organization(
@@ -176,7 +203,7 @@ def test_clones_can_be_reused_without_cloning_again(pipeline, tmp_path):
         assert result.summary.analyzed == 2
 
     miner.clone_repository.assert_not_called()
-    miner.get_organization_repositories.assert_not_called()
+    miner.get_organization_repository_pages.assert_not_called()
     paths = [call.args[1] for call in analysis.create_database.call_args_list]
     assert paths[0] != paths[2]
 

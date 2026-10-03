@@ -16,7 +16,7 @@ from .clone import (
     clone_repository,
 )
 from .errors import CloneErrors
-from .github_api import PAGE_SIZE, get_organization_repositories
+from .github_api import PAGE_SIZE, get_organization_repository_pages
 from .models import CloneExecution, CloneResult, OrganizationCloneResult, Repository
 
 
@@ -45,13 +45,15 @@ def _clone_repository(
 def _clone_repositories(
     repositories: list[Repository],
     execution: CloneExecution,
+    batch: int,
 ) -> list[CloneResult]:
-    """Clona los repositorios y conserva los fallos individuales."""
+    """Clona un lote y conserva los fallos individuales."""
     results = []
 
     for index, repository in enumerate(repositories, 1):
         execution.progress(
-            f"[{index}/{len(repositories)}] Clonando {repository.full_name}"
+            f"[Lote {batch}, {index}/{len(repositories)}] "
+            f"Clonando {repository.full_name}"
         )
 
         result = _clone_repository(repository, execution)
@@ -86,10 +88,6 @@ def clone_organization(
         raise CloneErrors.InvalidTimeout
 
     workspace_path = workspace(organization, workspace_path)
-    repositories = sorted(
-        get_organization_repositories(organization, token, page_size=page_size),
-        key=lambda repository: repository.full_name,
-    )
     root = create_temporary_directory(workspace_path, CLONE_RUN_PREFIX)
 
     execution = CloneExecution(
@@ -99,10 +97,29 @@ def clone_organization(
         progress=progress,
     )
 
+    results = []
+    pages = get_organization_repository_pages(
+        organization,
+        token,
+        page_size,
+    )
+
+    for batch, repositories in enumerate(pages, 1):
+        results.extend(
+            _clone_repositories(
+                sorted(repositories, key=lambda repository: repository.full_name),
+                execution,
+                batch,
+            )
+        )
+
     result = OrganizationCloneResult(
         organization=organization,
         workspace=root,
-        repositories=_clone_repositories(repositories, execution),
+        repositories=sorted(
+            results,
+            key=lambda item: item.repository.full_name,
+        ),
     )
 
     save_data(

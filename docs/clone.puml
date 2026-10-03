@@ -1,8 +1,25 @@
 @startuml
-actor Usuario
-Usuario -> Miner: clone-repositories
-Miner -> GitHub: Obtener repositorios
-GitHub --> Miner: Repositorios
-Miner -> Git: Clonar repositorios
-Git --> Miner: Repositorios clonados
+title Clonación de repositorios
+
+start
+:Validar organización, token,
+page-size y timeout;
+:Crear una ejecución clone-<id>;
+
+repeat
+  :Solicitar una página de repositorios públicos a GitHub;
+  :Clonar inmediatamente los repositorios de la página;
+  :Registrar ruta o error por repositorio;
+repeat while (¿La página está completa?) is (sí)
+-> no;
+
+:Ordenar todos los resultados;
+:Guardar un único clones.json en clone-<id>;
+stop
+
+note right
+page-size define el tamaño del lote,
+no el total de repositorios.
+Los repositorios no se filtran por lenguaje.
+end note
 @enduml
