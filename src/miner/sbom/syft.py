@@ -7,9 +7,6 @@ from .constants import (
     DEFAULT_SYFT_EXECUTABLE,
     DEFAULT_VERSION_TIMEOUT,
     SYFT_SBOM_OUTPUT,
-    SYFT_SCAN_COMMAND,
-    SYFT_VERSION_COMMAND,
-    SYFT_VERSION_OUTPUT,
 )
 from .errors import SBOMErrors
 
@@ -18,12 +15,7 @@ def get_version(executable: str = DEFAULT_SYFT_EXECUTABLE) -> str:
     """Devuelve la versión de Syft instalada."""
     try:
         result = subprocess.run(
-            [
-                executable,
-                SYFT_VERSION_COMMAND,
-                "--output",
-                SYFT_VERSION_OUTPUT,
-            ],
+            [executable, "version", "--output", "json"],
             check=True,
             capture_output=True,
             text=True,
@@ -80,7 +72,7 @@ def generate_sbom(
         subprocess.run(
             [
                 executable,
-                SYFT_SCAN_COMMAND,
+                "scan",
                 str(source),
                 f"--output={SYFT_SBOM_OUTPUT}={output}",
             ],

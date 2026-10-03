@@ -5,7 +5,7 @@ import pytest
 
 from core import filesystem
 from miner.sbom.models import SBOMReport, SBOMResult
-from miner.sbom.report import write_report
+from miner.sbom.pipeline import write_report
 
 
 def test_report_is_sorted_and_preserves_input(tmp_path):

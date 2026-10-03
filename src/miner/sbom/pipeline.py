@@ -8,6 +8,7 @@ from pathlib import Path
 
 from core.exceptions import AppException
 from core.filesystem import create_temporary_directory
+from core.reporting import write_json_report
 
 from ..clone.pipeline import load_latest_clones
 from ..clone.models import CloneResult
@@ -15,29 +16,19 @@ from .constants import (
     DEFAULT_GIT_TIMEOUT,
     DEFAULT_SCAN_TIMEOUT,
     DEFAULT_SYFT_EXECUTABLE,
-    GIT_COMMIT_COMMAND,
-    GIT_EXECUTABLE,
-    GIT_HEAD_REFERENCE,
     SBOM_DIRECTORY,
     SBOM_REPORT_FILENAME,
     SBOM_RUN_PREFIX,
 )
 from .errors import SBOMErrors
 from .models import SBOMExecution, SBOMReport, SBOMResult
-from .report import write_report
 from .syft import generate_sbom, get_version
 
 
 def _get_commit(source: Path) -> str:
     try:
         result = subprocess.run(
-            [
-                GIT_EXECUTABLE,
-                "-C",
-                str(source),
-                GIT_COMMIT_COMMAND,
-                GIT_HEAD_REFERENCE,
-            ],
+            ["git", "-C", str(source), "rev-parse", "HEAD"],
             check=True,
             capture_output=True,
             text=True,
@@ -79,70 +70,43 @@ def _count_components(sbom_path: Path) -> int:
     return len(components)
 
 
-def _has_cloned_repositories(repositories: list[CloneResult]) -> bool:
-    return any(repository.source is not None for repository in repositories)
+def _order_report(result: SBOMReport) -> None:
+    result.repositories.sort(key=lambda repository: repository.full_name)
 
 
-def _get_syft_version(
-    repositories: list[CloneResult],
-    executable: str,
-) -> str:
-    if not _has_cloned_repositories(repositories):
-        return "unknown"
-
-    return get_version(executable)
+def write_report(result: SBOMReport, output: Path) -> Path:
+    """Escribe el reporte validado de forma atómica."""
+    return write_json_report(result, output, order=_order_report)
 
 
-def _create_execution(
-    workspace: Path,
-    repositories: list[CloneResult],
-    executable: str,
-    timeout: float,
-) -> SBOMExecution:
-    return SBOMExecution(
-        output_directory=create_temporary_directory(
-            workspace / SBOM_DIRECTORY,
-            SBOM_RUN_PREFIX,
-        ),
-        syft_version=_get_syft_version(repositories, executable),
-        executable=executable,
-        timeout=timeout,
-    )
-
-
-def _get_repository_output(clone: CloneResult, output_directory: Path) -> Path:
+def _process_repository(clone: CloneResult, execution: SBOMExecution) -> SBOMResult:
     filename = f"{clone.repository.full_name.replace('/', '-')}.json"
-    return output_directory / filename
+    output = execution.output_directory / filename
+    generation_date = datetime.now(UTC)
 
+    try:
+        if clone.source is None:
+            raise SBOMErrors.CloneFailed
+        commit = _get_commit(clone.source)
+        generate_sbom(
+            clone.source,
+            output,
+            executable=execution.executable,
+            timeout=execution.timeout,
+        )
+        component_count = _count_components(output)
+    except AppException as error:
+        return SBOMResult(
+            full_name=clone.repository.full_name,
+            commit="unknown",
+            generation_date=generation_date,
+            syft_version=execution.syft_version,
+            status="failed",
+            component_count=0,
+            sbom_path=str(output),
+            error=error.message,
+        )
 
-def _generate_repository_sbom(
-    clone: CloneResult,
-    execution: SBOMExecution,
-    output: Path,
-) -> tuple[str, int]:
-    if clone.source is None:
-        raise SBOMErrors.CloneFailed
-
-    commit = _get_commit(clone.source)
-
-    generate_sbom(
-        clone.source,
-        output,
-        executable=execution.executable,
-        timeout=execution.timeout,
-    )
-
-    return commit, _count_components(output)
-
-
-def _create_generated_result(
-    clone: CloneResult,
-    execution: SBOMExecution,
-    output: Path,
-    commit: str,
-    generation_date: datetime,
-    component_count: int,
-) -> SBOMResult:
     return SBOMResult(
         full_name=clone.repository.full_name,
         commit=commit,
@@ -151,57 +115,6 @@ def _create_generated_result(
         status="generated",
         component_count=component_count,
         sbom_path=str(output),
-    )
-
-
-def _create_failed_result(
-    clone: CloneResult,
-    execution: SBOMExecution,
-    output: Path,
-    generation_date: datetime,
-    error: AppException,
-) -> SBOMResult:
-    return SBOMResult(
-        full_name=clone.repository.full_name,
-        commit="unknown",
-        generation_date=generation_date,
-        syft_version=execution.syft_version,
-        status="failed",
-        component_count=0,
-        sbom_path=str(output),
-        error=error.message,
-    )
-
-
-def _process_repository(
-    clone: CloneResult,
-    execution: SBOMExecution,
-) -> SBOMResult:
-    output = _get_repository_output(clone, execution.output_directory)
-    generation_date = datetime.now(UTC)
-
-    try:
-        commit, component_count = _generate_repository_sbom(
-            clone,
-            execution,
-            output,
-        )
-    except AppException as error:
-        return _create_failed_result(
-            clone,
-            execution,
-            output,
-            generation_date,
-            error,
-        )
-
-    return _create_generated_result(
-        clone,
-        execution,
-        output,
-        commit,
-        generation_date,
-        component_count,
     )
 
 
@@ -226,18 +139,6 @@ def _process_repositories(
         progress(f"  {result.status}" + (f": {result.error}" if result.error else ""))
 
     return report
-
-
-def _write_reports(
-    report: SBOMReport,
-    execution: SBOMExecution,
-    output: Path,
-) -> None:
-    write_report(
-        report,
-        execution.output_directory / SBOM_REPORT_FILENAME,
-    )
-    write_report(report, output)
 
 
 def generate_organization_sbom(
@@ -270,11 +171,16 @@ def generate_organization_sbom(
         key=lambda item: item.repository.full_name,
     )
 
-    execution = _create_execution(
-        clones.workspace,
-        repositories,
-        executable,
-        timeout,
+    output_directory = create_temporary_directory(
+        clones.workspace / SBOM_DIRECTORY,
+        SBOM_RUN_PREFIX,
+    )
+    has_clones = any(repository.source is not None for repository in repositories)
+    execution = SBOMExecution(
+        output_directory=output_directory,
+        syft_version=get_version(executable) if has_clones else "unknown",
+        executable=executable,
+        timeout=timeout,
     )
 
     report = _process_repositories(
@@ -284,6 +190,7 @@ def generate_organization_sbom(
         progress,
     )
 
-    _write_reports(report, execution, output)
+    write_report(report, execution.output_directory / SBOM_REPORT_FILENAME)
+    write_report(report, output)
 
     return report
