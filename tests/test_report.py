@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import pytest
 
 from core import filesystem
-from miner.codeql.report import write_report
+from miner.codeql.pipeline import write_report
 from miner.codeql.models import Finding, LanguageResult, OrganizationResult, RepositoryResult
 
 

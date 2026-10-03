@@ -7,11 +7,6 @@ from .constants import (
     DEFAULT_GRYPE_EXECUTABLE,
     DEFAULT_SCAN_TIMEOUT,
     DEFAULT_VERSION_TIMEOUT,
-    GRYPE_FILE_OPTION,
-    GRYPE_OUTPUT_OPTION,
-    GRYPE_SBOM_PREFIX,
-    GRYPE_SCAN_OUTPUT,
-    GRYPE_VERSION_COMMAND,
 )
 from .errors import GrypeErrors
 
@@ -24,7 +19,7 @@ def get_version(
         result = subprocess.run(
             [
                 executable,
-                GRYPE_VERSION_COMMAND,
+                "version",
             ],
             check=True,
             capture_output=True,
@@ -74,9 +69,9 @@ def scan_vulnerabilities(
         subprocess.run(
             [
                 executable,
-                f"{GRYPE_SBOM_PREFIX}{sbom}",
-                f"{GRYPE_FILE_OPTION}={output}",
-                f"{GRYPE_OUTPUT_OPTION}={GRYPE_SCAN_OUTPUT}",
+                f"sbom:{sbom}",
+                f"--file={output}",
+                "--output=json",
             ],
             check=True,
             capture_output=True,

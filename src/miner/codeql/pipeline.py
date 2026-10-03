@@ -5,6 +5,7 @@ from pathlib import Path
 
 from core.exceptions import AppException
 from core.filesystem import create_temporary_directory
+from core.reporting import write_json_report
 
 from ..clone.models import OrganizationCloneResult, Repository
 from .codeql import analyze_database, create_database
@@ -15,8 +16,31 @@ from .constants import (
 )
 from .errors import CodeQLErrors
 from .models import LanguageResult, OrganizationResult, RepositoryResult
-from .report import write_report
 from .sarif import parse_sarif
+
+
+def _order_result(result: OrganizationResult) -> None:
+    result.repositories.sort(key=lambda repository: repository.name)
+
+    for repository in result.repositories:
+        repository.languages.sort(key=lambda language: language.language)
+
+        for language in repository.languages:
+            language.findings.sort(
+                key=lambda finding: (
+                    finding.file or "",
+                    finding.start_line or 0,
+                    finding.rule_id,
+                    finding.start_column or 0,
+                    finding.message,
+                    finding.severity or "",
+                )
+            )
+
+
+def write_report(result: OrganizationResult, output: Path) -> Path:
+    """Escribe el resultado validado de forma atómica."""
+    return write_json_report(result, output, order=_order_result)
 
 
 def _process_repositories(
@@ -161,70 +185,6 @@ def _analyze_language(
     )
 
 
-def _analyze_repository(
-    repository: Repository,
-    source: Path,
-    root: Path,
-    token: str,
-    executable: str,
-    timeout: float,
-) -> RepositoryResult:
-    try:
-        database = create_database(
-            source,
-            root / "database",
-            token=token,
-            executable=executable,
-            timeout=timeout,
-        )
-    except AppException as error:
-        return RepositoryResult(
-            name=repository.full_name,
-            url=repository.clone_url.removesuffix(".git"),
-            status="database_failed",
-            error=error.message,
-        )
-
-    databases = _language_databases(database)
-
-    if not databases:
-        return RepositoryResult(
-            name=repository.full_name,
-            url=repository.clone_url.removesuffix(".git"),
-            status="unsupported",
-            error="CodeQL no creó ninguna base de datos",
-        )
-
-    languages = [
-        _analyze_language(
-            database_path,
-            language,
-            root,
-            executable,
-            timeout,
-        )
-        for language, database_path in databases
-    ]
-
-    if all(language.status == "analyzed" for language in languages):
-        status = "analyzed"
-        error = None
-    elif any(language.status == "analyzed" for language in languages):
-        status = "partial"
-        error = "Uno o más lenguajes no pudieron analizarse"
-    else:
-        status = "analysis_failed"
-        error = "No se pudo analizar ningún lenguaje"
-
-    return RepositoryResult(
-        name=repository.full_name,
-        url=repository.clone_url.removesuffix(".git"),
-        status=status,
-        error=error,
-        languages=languages,
-    )
-
-
 def analyze_repository(
     repository: Repository,
     source: Path,
@@ -235,13 +195,59 @@ def analyze_repository(
 ) -> RepositoryResult:
     """Analiza un repositorio ya preparado y consolida sus hallazgos."""
     try:
-        return _analyze_repository(
-            repository,
-            source,
-            root,
-            token,
-            executable,
-            timeout,
+        try:
+            database = create_database(
+                source,
+                root / "database",
+                token=token,
+                executable=executable,
+                timeout=timeout,
+            )
+        except AppException as error:
+            return RepositoryResult(
+                name=repository.full_name,
+                url=repository.clone_url.removesuffix(".git"),
+                status="database_failed",
+                error=error.message,
+            )
+
+        databases = _language_databases(database)
+
+        if not databases:
+            return RepositoryResult(
+                name=repository.full_name,
+                url=repository.clone_url.removesuffix(".git"),
+                status="unsupported",
+                error="CodeQL no creó ninguna base de datos",
+            )
+
+        languages = [
+            _analyze_language(
+                database_path,
+                language,
+                root,
+                executable,
+                timeout,
+            )
+            for language, database_path in databases
+        ]
+
+        if all(language.status == "analyzed" for language in languages):
+            status = "analyzed"
+            error = None
+        elif any(language.status == "analyzed" for language in languages):
+            status = "partial"
+            error = "Uno o más lenguajes no pudieron analizarse"
+        else:
+            status = "analysis_failed"
+            error = "No se pudo analizar ningún lenguaje"
+
+        return RepositoryResult(
+            name=repository.full_name,
+            url=repository.clone_url.removesuffix(".git"),
+            status=status,
+            error=error,
+            languages=languages,
         )
     except Exception as error:  # noqa: BLE001
         return RepositoryResult(

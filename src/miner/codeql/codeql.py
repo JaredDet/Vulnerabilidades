@@ -6,12 +6,8 @@ import subprocess
 from pathlib import Path
 
 from .constants import (
-    CODEQL_ANALYZE_COMMAND,
-    CODEQL_CREATE_COMMAND,
-    CODEQL_DATABASE_COMMAND,
     CODEQL_DATABASE_FILENAME,
     CODEQL_LANGUAGE_PATTERN,
-    CODEQL_SARIF_FORMAT,
     DEFAULT_ANALYSIS_TIMEOUT,
     DEFAULT_CODEQL_EXECUTABLE,
     DEFAULT_DATABASE_TIMEOUT,
@@ -56,8 +52,8 @@ def create_database(
         subprocess.run(
             [
                 executable,
-                CODEQL_DATABASE_COMMAND,
-                CODEQL_CREATE_COMMAND,
+                "database",
+                "create",
                 str(database),
                 "--db-cluster",
                 f"--source-root={source}",
@@ -117,11 +113,11 @@ def analyze_database(
         subprocess.run(
             [
                 executable,
-                CODEQL_DATABASE_COMMAND,
-                CODEQL_ANALYZE_COMMAND,
+                "database",
+                "analyze",
                 str(database),
                 suite,
-                f"--format={CODEQL_SARIF_FORMAT}",
+                "--format=sarifv2.1.0",
                 f"--output={output}",
             ],
             check=True,
