@@ -8,11 +8,6 @@ on:
 permissions:
   contents: read
 
-env:
-  SYFT_IMAGE: anchore/syft:v1.52.0
-  GRYPE_IMAGE: anchore/grype:v0.119.0
-  CODEQL_IMAGE: mcr.microsoft.com/cstsectools/codeql-container
-
 jobs:
   tests:
     name: Tests
@@ -37,13 +32,16 @@ jobs:
       - name: Create artifact directories
         run: mkdir -p artifacts/sbom artifacts/grype artifacts/codeql
 
+      - name: Build Miner image with the analysis tools
+        run: docker build --tag miner-ci .
+
       - name: Generate CycloneDX SBOM with Syft
         run: >-
           docker run --rm
           -v "$GITHUB_WORKSPACE:/workspace:ro"
           -v "$GITHUB_WORKSPACE/artifacts/sbom:/output"
-          "$SYFT_IMAGE"
-          scan dir:/workspace
+          miner-ci
+          syft scan dir:/workspace
           --output cyclonedx-json=/output/sbom.json
 
       - name: Scan the SBOM with Grype
@@ -51,8 +49,8 @@ jobs:
           docker run --rm
           -v "$GITHUB_WORKSPACE/artifacts/sbom:/sbom:ro"
           -v "$GITHUB_WORKSPACE/artifacts/grype:/output"
-          "$GRYPE_IMAGE"
-          sbom:/sbom/sbom.json
+          miner-ci
+          grype sbom:/sbom/sbom.json
           --output json
           --file /output/vulnerabilities.json
 
@@ -61,16 +59,16 @@ jobs:
           docker run --rm
           -v "$GITHUB_WORKSPACE:/opt/src:ro"
           -v "$GITHUB_WORKSPACE/artifacts/codeql:/opt/results"
-          -e "CODEQL_CLI_ARGS=database create --language=python /opt/results/database --source-root=/opt/src"
-          "$CODEQL_IMAGE"
+          miner-ci
+          codeql database create --language=python /opt/results/database --source-root=/opt/src
 
       - name: Analyze with CodeQL
         run: >-
           docker run --rm
           -v "$GITHUB_WORKSPACE:/opt/src:ro"
           -v "$GITHUB_WORKSPACE/artifacts/codeql:/opt/results"
-          -e "CODEQL_CLI_ARGS=database analyze /opt/results/database python-security-and-quality.qls --format=sarifv2.1.0 --output=/opt/results/results.sarif"
-          "$CODEQL_IMAGE"
+          miner-ci
+          codeql database analyze /opt/results/database codeql/python-queries:codeql-suites/python-code-scanning.qls --format=sarifv2.1.0 --output=/opt/results/results.sarif
 
       - name: Upload scanner reports
         if: always()

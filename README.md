@@ -187,6 +187,23 @@ previa y puede cambiar.
 
 La ejecución local busca `codeql`, `syft` y `grype` en `PATH`.
 
+Para construir una imagen local que incluya Miner, Git, CodeQL, Syft y Grype:
+
+```powershell
+docker build -t miner:local .
+New-Item -ItemType Directory -Force organizations, results
+docker run --rm --env-file .env `
+  -v "${PWD}/organizations:/app/organizations" `
+  -v "${PWD}/results:/app/results" `
+  miner:local clone-repositories --organization pallets
+```
+
+La imagen mantiene las ejecuciones de clones en `organizations/`. Los reportes
+que quieras conservar en el host deben guardarse en `/app/results`, por ejemplo
+con `--output /app/results/results.json`. Las versiones de las tres herramientas
+se fijan mediante los argumentos `CODEQL_VERSION`, `SYFT_VERSION` y
+`GRYPE_VERSION` del Dockerfile.
+
 ```text
 src/miner/
     cli.py        # Comandos y composición de los flujos
