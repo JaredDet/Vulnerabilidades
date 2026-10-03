@@ -18,6 +18,7 @@ from miner.dependencies.pipeline import (
 )
 
 from .clone.clone import DEFAULT_CLONE_TIMEOUT
+from .clone.github_api import PAGE_SIZE
 from .clone.pipeline import load_latest_clones
 from .clone.pipeline import clone_organization
 from .codeql.constants import (
@@ -126,6 +127,13 @@ def clone(
         float,
         typer.Option("--timeout", min=1),
     ] = DEFAULT_CLONE_TIMEOUT,
+    page_size: Annotated[
+        int,
+        typer.Option(
+            "--page-size", "-p", min=1, max=PAGE_SIZE,
+            help="Repositorios por petición a GitHub; no limita el total procesado.",
+        ),
+    ] = PAGE_SIZE,
 ) -> None:
     """Clona los repositorios y muestra sus rutas, sin ejecutar análisis."""
     token = _token()
@@ -134,6 +142,7 @@ def clone(
         organization,
         token,
         workspace_path=workspace,
+        page_size=page_size,
         timeout=timeout,
         progress=lambda text: typer.echo(text, err=True),
     )
@@ -225,12 +234,20 @@ def run(
     organization: Annotated[str, typer.Option("--organization", "-o")],
     workspace: Annotated[Path | None, typer.Option("--workspace")] = None,
     timeout: Annotated[float, typer.Option("--timeout", min=1)] = 600,
+    page_size: Annotated[
+        int,
+        typer.Option(
+            "--page-size", "-p", min=1, max=PAGE_SIZE,
+            help="Repositorios por petición a GitHub; no limita el total procesado.",
+        ),
+    ] = PAGE_SIZE,
 ) -> None:
     """Clona, analiza código, genera SBOM, analiza dependencias e integra el dataset."""
     token = _token()
     progress = lambda message: typer.echo(message, err=True)
     clones = clone_organization(
-        organization, token, workspace_path=workspace, timeout=timeout, progress=progress,
+        organization, token, workspace_path=workspace, page_size=page_size,
+        timeout=timeout, progress=progress,
     )
     root = clones.workspace.resolve()
     clone_id = root.name.removeprefix("clone-")

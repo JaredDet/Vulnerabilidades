@@ -27,7 +27,7 @@ Para ejecutar el flujo completo en orden: clonación, CodeQL, Syft, Grype y data
 uv run miner run --organization pallets
 ```
 
-`run` acepta `--workspace` y `--timeout`
+`run` acepta `--workspace`, `--page-size` y `--timeout`
 (600 segundos por operación). Todas las etapas reutilizan la misma ejecución
 de clones y Grype consume el SBOM recién generado. Los fallos individuales se
 conservan en los reportes; un error global detiene el flujo.
@@ -152,7 +152,9 @@ Cada etapa guarda un único reporte dentro de la ejecución de clones:
 
 `clones.json` y `dataset.json` quedan junto a esas carpetas. Los comandos
 individuales aceptan `--output` para exportar una copia cuando sea necesaria.
-El tamaño de página de GitHub queda fijo en 100. Los límites de tiempo y la
+`--page-size` (o `-p`) controla los repositorios por petición a GitHub,
+entre 1 y 100 (100 por defecto), en `clone-repositories` y `run`.
+Se recorren todas las páginas sin filtrar por lenguaje ni limitar el total. Los límites de tiempo y la
 selección por `--run-id` o última ejecución se mantienen. La API de Python
 conserva la posibilidad de indicar ejecutables para integraciones y pruebas.
 Los errores de acceso a cada herramienta se agrupan; los tiempos agotados,

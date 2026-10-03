@@ -80,9 +80,10 @@ def test_run_orders_stages_and_pins_runs(tmp_path, monkeypatch):
             return _result
         mocks[name] = Mock(side_effect=invoke)
         monkeypatch.setattr(cli, name, mocks[name])
-    result = CliRunner().invoke(cli.app, ["run", "-o", "org", "--workspace", str(tmp_path)])
+    result = CliRunner().invoke(cli.app, ["run", "-o", "org", "--workspace", str(tmp_path), "--page-size", "7"])
     assert result.exit_code == 0, result.output
     assert calls == list(mocks)
+    assert mocks["clone_organization"].call_args.kwargs["page_size"] == 7
     assert mocks["generate_organization_sbom"].call_args.kwargs["run_id"] == "example"
     assert mocks["scan_organization_vulnerabilities"].call_args.kwargs["clone_run_id"] == "example"
     assert mocks["scan_organization_vulnerabilities"].call_args.kwargs["run_id"] == "selected"

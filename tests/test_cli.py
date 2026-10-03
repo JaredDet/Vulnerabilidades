@@ -125,6 +125,7 @@ def test_clone_cli_does_not_analyze(monkeypatch, tmp_path):
     monkeypatch.setattr(cli, "analyze_organization", analyze)
     result = CliRunner().invoke(cli.app, [
         "clone-repositories", "-o", "org", "--workspace", str(tmp_path), "--timeout", "42",
+        "--page-size", "7",
     ])
     assert result.exit_code == 0
     data = json.loads(result.stdout)
@@ -133,6 +134,7 @@ def test_clone_cli_does_not_analyze(monkeypatch, tmp_path):
     assert "test-token" not in result.output
     assert clone.call_args.args == ("org", "test-token")
     assert clone.call_args.kwargs["workspace_path"] == tmp_path
+    assert clone.call_args.kwargs["page_size"] == 7
     assert clone.call_args.kwargs["timeout"] == 42
     analyze.assert_not_called()
 
@@ -235,3 +237,14 @@ def test_cli_does_not_hide_unexpected_programming_errors(monkeypatch):
 
     assert result.exit_code == 1
     assert isinstance(result.exception, RuntimeError)
+
+
+def test_clone_rejects_page_size_outside_github_range(monkeypatch):
+    clone = Mock()
+    monkeypatch.setattr(cli, "clone_organization", clone)
+    for size in ("0", "101"):
+        result = CliRunner().invoke(
+            cli.app, ["clone-repositories", "-o", "org", "--page-size", size],
+        )
+        assert result.exit_code == 2
+    clone.assert_not_called()
