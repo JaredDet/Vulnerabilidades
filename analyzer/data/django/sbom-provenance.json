@@ -1,0 +1,170 @@
+{
+  "source": "../../../miner/organizations/django/work/clone-x269596i/sboms/sbom-j7jbqezb",
+  "snapshot": "clone-x269596i/sboms/sbom-j7jbqezb",
+  "organization": "django",
+  "clone_run": "clone-x269596i",
+  "sbom_run": "sbom-j7jbqezb",
+  "dataset_sha256": "a86cf521bcab688f5bbc7e63f6a0c832be645f82d563ffab89217f11e772cab3",
+  "files": [
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-.github.json",
+      "sha256": "de377ed8acb4fd54fa1e0a03f12a8310f77bbdd02e54c0727c1a3bc750265049",
+      "bytes": 533
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-accessibility.json",
+      "sha256": "0c722e594fc97c7a5a4aeb3de9c1bdb45da260d783ea12a0e424e87adcd6c92c",
+      "bytes": 539
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-asgi_ipc.json",
+      "sha256": "ff311d0ed8d4311d6f63fe23dd0712dd949a9b945b23e1a5f350261a9a6c2fdc",
+      "bytes": 534
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-asgiref.json",
+      "sha256": "17ac26192863e7fddc0ac0f1eec573f90b14b49e5b27423d576e96b58f0c7e96",
+      "bytes": 2149
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-birthday20.json",
+      "sha256": "8fa2c7c33afdb3eaad15bf76b1316037f89a727be0bcc1351e650e7f0a5fe175",
+      "bytes": 13123
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-channels.json",
+      "sha256": "18985b76b75130e7dacbc3e05b79e594980415092f2af61302e66ae9b297f6ac",
+      "bytes": 4919
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-channels_redis.json",
+      "sha256": "52ea7dc397f5d1e0a008e0b99ab123f1c1c236ca271f4a744bc6a48fb037ec8d",
+      "bytes": 2156
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-code-of-conduct.json",
+      "sha256": "2e52e1b8d31e6d39293e17dca759c6f7bf6f81b129822dbf033a11aa7e0beb03",
+      "bytes": 2188
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-code.djangoproject.com.json",
+      "sha256": "84f8a15b722423718886241cda11d5a319673117b96a3fd497bc1720285037e7",
+      "bytes": 20975
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-daphne.json",
+      "sha256": "ab3c1f975c9a98bae1b8121d00f51fa36d7cdce5032d1457a0b3fa32d3e4eacf",
+      "bytes": 2148
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-deps.json",
+      "sha256": "81e5de7e6b4832c77922a3903227ef9f191f5adfea007d61036455e921db722d",
+      "bytes": 530
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-django-asv.json",
+      "sha256": "139a5e8c906aca00e6a0606e5d74fe9001eba3d60a318d04fb6a16956d960a59",
+      "bytes": 9670
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-django-box.json",
+      "sha256": "6000e9bcc15cfbb3c3905c4fe0cba922d4ddac1bfb3ef38eb0ac366d5119a424",
+      "bytes": 536
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-django-contrib-comments.json",
+      "sha256": "33a77de579a3cf790cbdb881ea5f7348adf6eb5f56764a1660350d7f5cc76e8a",
+      "bytes": 2163
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-django-docker-box.json",
+      "sha256": "747907b638f769e6b988884eb4e26331fc7591ed7fed898949415b668e101dcb",
+      "bytes": 2651
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-django-docs-translations.json",
+      "sha256": "0a151a3902fb2ed75915f6f2e37e22aacff655f465951c4cb50a1d019363c51d",
+      "bytes": 550
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-django-fuzzers.json",
+      "sha256": "be11a7a31c4c3d9f19461454fcab3cd123317bec01f9a393bdc06790ae6b8343",
+      "bytes": 540
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-django-localflavor.json",
+      "sha256": "39710ad70e6c00515db802cc1b2713ff50d45397a88b6a653489b630273d210f",
+      "bytes": 2158
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-django.json",
+      "sha256": "201691fc6f354d05aaf58317ca53649d0ab3583f6919f61cdef456f7c007780f",
+      "bytes": 39019
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-djangobench.json",
+      "sha256": "53249a8182bee75cf17a7424ee16bb54b1e2f1ff4a4c71682380d98e839ebdaa",
+      "bytes": 2151
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-djangogigs.com.json",
+      "sha256": "06fbdfaebf915582a8bbc54591e1f400398a430ec50d5ad59615f57f1bd195ad",
+      "bytes": 5907
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-djangopeople.json",
+      "sha256": "4fc4162990415dbd77eb6800d413ed6a4e165c2e32c510565c5adab288bd7980",
+      "bytes": 62118
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-djangoproject.com.json",
+      "sha256": "1ef8e4b33c3731e018c0ec4eaf463e4b347e0418f677bd73cec340b12b220a04",
+      "bytes": 188422
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-djangosnippets.org.json",
+      "sha256": "becc07d6a509825b0612df80968f07e0a4cb7e4771aaeefbe462f7ced3091dad",
+      "bytes": 190322
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-dsf-bylaws.json",
+      "sha256": "99739c1f47f2bd92749cc86931e4cbd99d7af233508b2c68c0ed041565cf4d85",
+      "bytes": 536
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-dsf-minutes.json",
+      "sha256": "b4256467befde191b677e189639b33f44758881c4f0a1de124d1a38c854ff54e",
+      "bytes": 6499
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-dsf-working-groups.json",
+      "sha256": "b9d1cdbcbfae0a5154ac89c0ab1a768fe0b93cda34e90c2be1187b73c33a3419",
+      "bytes": 544
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-new-features.json",
+      "sha256": "d6d260687f720ffafc1ae7e9406949d5bb3637fa0111db000a919dcd5793f2ab",
+      "bytes": 3831
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-online-community-working-group.json",
+      "sha256": "8b2731bfa26ffc9e4ceb95fb034407ebb02ccb7958e58a5941e5a43442a8fe88",
+      "bytes": 3849
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-steering-council.json",
+      "sha256": "c683203c9016080e032fddc5f678b38b0c6502d855fa2bb3b989c15dd59ccd8b",
+      "bytes": 542
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/django-ticketbot.json",
+      "sha256": "cb20c674df72bea5a38094123a0de512e5ea92f5ca0335d6f761af8e0e775db0",
+      "bytes": 2476
+    },
+    {
+      "path": "clone-x269596i/sboms/sbom-j7jbqezb/sbom-results.json",
+      "sha256": "6c07f080a580561bdf32df1e8d3d9e6bc98f6de4debe09e566aa85f631e5105e",
+      "bytes": 14472
+    }
+  ]
+}

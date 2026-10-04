@@ -1,0 +1,3014 @@
+{
+  "organization": "django",
+  "summary": {
+    "repositories": 31,
+    "analyzed": 19,
+    "failed": 12,
+    "unsupported": 0,
+    "partial": 0,
+    "findings": 69
+  },
+  "repositories": [
+    {
+      "name": "django/.github",
+      "url": "https://github.com/django/.github",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/accessibility",
+      "url": "https://github.com/django/accessibility",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/asgi_ipc",
+      "url": "https://github.com/django/asgi_ipc",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/asgiref",
+      "url": "https://github.com/django/asgiref",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/birthday20",
+      "url": "https://github.com/django/birthday20",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/channels",
+      "url": "https://github.com/django/channels",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/channels_redis",
+      "url": "https://github.com/django/channels_redis",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/code-of-conduct",
+      "url": "https://github.com/django/code-of-conduct",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/code.djangoproject.com",
+      "url": "https://github.com/django/code.djangoproject.com",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/daphne",
+      "url": "https://github.com/django/daphne",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/deps",
+      "url": "https://github.com/django/deps",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/django",
+      "url": "https://github.com/django/django",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "js/incomplete-url-substring-sanitization",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "js/incomplete-url-substring-sanitization"
+                }
+              ],
+              "message": "'[earthdata.nasa.gov](1)' can be anywhere in the URL, and arbitrary hosts may come before or after it.",
+              "severity": "warning",
+              "file": "js_tests/gis/mapwidget.test.js",
+              "start_line": 156,
+              "start_column": 13
+            }
+          ],
+          "findings_count": 1
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+              "severity": "error",
+              "file": "django/contrib/admin/sites.py",
+              "start_line": 427,
+              "start_column": 41
+            },
+            {
+              "rule_id": "py/weak-sensitive-data-hashing",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/weak-sensitive-data-hashing"
+                }
+              ],
+              "message": "[Sensitive data (password)](1) is used in a hashing algorithm (MD5) that is insecure for password hashing, since it is not a computationally expensive hash function.\n[Sensitive data (password)](2) is used in a hashing algorithm (MD5) that is insecure for password hashing, since it is not a computationally expensive hash function.",
+              "severity": "warning",
+              "file": "django/contrib/auth/hashers.py",
+              "start_line": 665,
+              "start_column": 28
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+              "severity": "error",
+              "file": "django/contrib/auth/views.py",
+              "start_line": 96,
+              "start_column": 41
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+              "severity": "error",
+              "file": "django/contrib/auth/views.py",
+              "start_line": 117,
+              "start_column": 37
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+              "severity": "error",
+              "file": "django/contrib/auth/views.py",
+              "start_line": 149,
+              "start_column": 41
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "django/contrib/auth/views.py",
+              "start_line": 295,
+              "start_column": 49
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "django/contrib/contenttypes/views.py",
+              "start_line": 86,
+              "start_column": 37
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "django/contrib/flatpages/views.py",
+              "start_line": 42,
+              "start_column": 50
+            },
+            {
+              "rule_id": "py/stack-trace-exposure",
+              "scores": [
+                {
+                  "value": 5.4,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/stack-trace-exposure"
+                }
+              ],
+              "message": "[Stack trace information](1) flows to this location and may be exposed to an external user.",
+              "severity": "error",
+              "file": "django/core/handlers/asgi.py",
+              "start_line": 294,
+              "start_column": 17
+            },
+            {
+              "rule_id": "py/clear-text-logging-sensitive-data",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/clear-text-logging-sensitive-data"
+                }
+              ],
+              "message": "This expression logs [sensitive data (password)](1) as clear text.\nThis expression logs [sensitive data (password)](1) as clear text.",
+              "severity": "error",
+              "file": "django/db/backends/oracle/creation.py",
+              "start_line": 334,
+              "start_column": 23
+            },
+            {
+              "rule_id": "py/clear-text-storage-sensitive-data",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/clear-text-storage-sensitive-data"
+                }
+              ],
+              "message": "This expression stores [sensitive data (secret)](1) as clear text.\nThis expression stores [sensitive data (secret)](2) as clear text.\nThis expression stores [sensitive data (secret)](3) as clear text.\nThis expression stores [sensitive data (secret)](4) as clear text.\nThis expression stores [sensitive data (secret)](2) as clear text.\nThis expression stores [sensitive data (secret)](5) as clear text.",
+              "severity": "error",
+              "file": "django/http/response.py",
+              "start_line": 250,
+              "start_column": 29
+            },
+            {
+              "rule_id": "py/cookie-injection",
+              "scores": [
+                {
+                  "value": 5.0,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/cookie-injection"
+                }
+              ],
+              "message": "Cookie is constructed from a [user-supplied input](1).",
+              "severity": "warning",
+              "file": "django/http/response.py",
+              "start_line": 250,
+              "start_column": 29
+            },
+            {
+              "rule_id": "py/clear-text-storage-sensitive-data",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/clear-text-storage-sensitive-data"
+                }
+              ],
+              "message": "This expression stores [sensitive data (secret)](1) as clear text.\nThis expression stores [sensitive data (secret)](2) as clear text.\nThis expression stores [sensitive data (secret)](3) as clear text.\nThis expression stores [sensitive data (secret)](4) as clear text.\nThis expression stores [sensitive data (secret)](2) as clear text.\nThis expression stores [sensitive data (secret)](5) as clear text.",
+              "severity": "error",
+              "file": "django/middleware/csrf.py",
+              "start_line": 262,
+              "start_column": 17
+            },
+            {
+              "rule_id": "py/polynomial-redos",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/polynomial-redos"
+                }
+              ],
+              "message": "This [regular expression](1) that depends on a [user-provided value](2) may run slow on strings starting with '{{%' and with many repetitions of '{{%'.\nThis [regular expression](3) that depends on a [user-provided value](2) may run slow on strings starting with '{{{{' and with many repetitions of '{{{{'.\nThis [regular expression](4) that depends on a [user-provided value](2) may run slow on strings starting with '{{#' and with many repetitions of '{{#'.",
+              "severity": "warning",
+              "file": "django/template/base.py",
+              "start_line": 426,
+              "start_column": 42
+            },
+            {
+              "rule_id": "py/polynomial-redos",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/polynomial-redos"
+                }
+              ],
+              "message": "This [regular expression](1) that depends on a [user-provided value](2) may run slow on strings starting with '{{%' and with many repetitions of '{{%'.\nThis [regular expression](3) that depends on a [user-provided value](2) may run slow on strings starting with '{{{{' and with many repetitions of '{{{{'.\nThis [regular expression](4) that depends on a [user-provided value](2) may run slow on strings starting with '{{#' and with many repetitions of '{{#'.",
+              "severity": "warning",
+              "file": "django/template/base.py",
+              "start_line": 471,
+              "start_column": 38
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "django/views/generic/base.py",
+              "start_line": 259,
+              "start_column": 16
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "django/views/generic/base.py",
+              "start_line": 266,
+              "start_column": 21
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "django/views/generic/base.py",
+              "start_line": 269,
+              "start_column": 45
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+              "severity": "error",
+              "file": "django/views/generic/edit.py",
+              "start_line": 63,
+              "start_column": 37
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "django/views/i18n.py",
+              "start_line": 56,
+              "start_column": 37
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "django/views/i18n.py",
+              "start_line": 63,
+              "start_column": 53
+            },
+            {
+              "rule_id": "py/cookie-injection",
+              "scores": [
+                {
+                  "value": 5.0,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/cookie-injection"
+                }
+              ],
+              "message": "Cookie is constructed from a [user-supplied input](1).",
+              "severity": "warning",
+              "file": "django/views/i18n.py",
+              "start_line": 66,
+              "start_column": 17
+            },
+            {
+              "rule_id": "py/path-injection",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/path-injection"
+                }
+              ],
+              "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).",
+              "severity": "error",
+              "file": "django/views/static.py",
+              "start_line": 46,
+              "start_column": 8
+            },
+            {
+              "rule_id": "py/path-injection",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/path-injection"
+                }
+              ],
+              "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).",
+              "severity": "error",
+              "file": "django/views/static.py",
+              "start_line": 50,
+              "start_column": 12
+            },
+            {
+              "rule_id": "py/path-injection",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/path-injection"
+                }
+              ],
+              "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).",
+              "severity": "error",
+              "file": "django/views/static.py",
+              "start_line": 53,
+              "start_column": 15
+            },
+            {
+              "rule_id": "py/path-injection",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/path-injection"
+                }
+              ],
+              "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).",
+              "severity": "error",
+              "file": "django/views/static.py",
+              "start_line": 60,
+              "start_column": 29
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/admin_views/views.py",
+              "start_line": 7,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/admin_views/views.py",
+              "start_line": 12,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).\nCross-site scripting vulnerability due to a [user-provided value](2).",
+              "severity": "error",
+              "file": "tests/asgi/urls.py",
+              "start_line": 13,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/asgi/urls.py",
+              "start_line": 19,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/asgi/urls.py",
+              "start_line": 45,
+              "start_column": 29
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/resolve_url/views.py",
+              "start_line": 10,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/resolve_url/views.py",
+              "start_line": 20,
+              "start_column": 29
+            },
+            {
+              "rule_id": "py/bind-socket-all-network-interfaces",
+              "scores": [
+                {
+                  "value": 6.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/bind-socket-all-network-interfaces"
+                }
+              ],
+              "message": "Binding a socket to all interfaces (using [''](1)) is a security risk.",
+              "severity": "error",
+              "file": "tests/servers/tests.py",
+              "start_line": 385,
+              "start_column": 17
+            },
+            {
+              "rule_id": "py/full-ssrf",
+              "scores": [
+                {
+                  "value": 9.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/full-ssrf"
+                }
+              ],
+              "message": "The full URL of this request depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/servers/views.py",
+              "start_line": 39,
+              "start_column": 10
+            },
+            {
+              "rule_id": "py/full-ssrf",
+              "scores": [
+                {
+                  "value": 9.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/full-ssrf"
+                }
+              ],
+              "message": "The full URL of this request depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/servers/views.py",
+              "start_line": 44,
+              "start_column": 10
+            },
+            {
+              "rule_id": "py/full-ssrf",
+              "scores": [
+                {
+                  "value": 9.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/full-ssrf"
+                }
+              ],
+              "message": "The full URL of this request depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/servers/views.py",
+              "start_line": 46,
+              "start_column": 10
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/servers/views.py",
+              "start_line": 52,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/path-injection",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/path-injection"
+                }
+              ],
+              "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).\nThis path depends on a [user-provided value](4).\nThis path depends on a [user-provided value](5).\nThis path depends on a [user-provided value](6).",
+              "severity": "error",
+              "file": "tests/staticfiles_tests/storage.py",
+              "start_line": 36,
+              "start_column": 31
+            },
+            {
+              "rule_id": "py/template-injection",
+              "scores": [
+                {
+                  "value": 9.3,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/template-injection"
+                }
+              ],
+              "message": "This template construction depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client/views.py",
+              "start_line": 122,
+              "start_column": 18
+            },
+            {
+              "rule_id": "py/xml-bomb",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/xml-bomb"
+                }
+              ],
+              "message": "XML parsing depends on a [user-provided value](1) without guarding against uncontrolled entity expansion.",
+              "severity": "warning",
+              "file": "tests/test_client/views.py",
+              "start_line": 139,
+              "start_column": 28
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+              "severity": "error",
+              "file": "tests/test_client/views.py",
+              "start_line": 171,
+              "start_column": 33
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client/views.py",
+              "start_line": 421,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client_regress/views.py",
+              "start_line": 65,
+              "start_column": 29
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client_regress/views.py",
+              "start_line": 87,
+              "start_column": 9
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client_regress/views.py",
+              "start_line": 104,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client_regress/views.py",
+              "start_line": 146,
+              "start_column": 9
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client_regress/views.py",
+              "start_line": 152,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client_regress/views.py",
+              "start_line": 157,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/test_client_regress/views.py",
+              "start_line": 162,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/reflective-xss",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/reflective-xss"
+                }
+              ],
+              "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+              "severity": "error",
+              "file": "tests/urlpatterns_reverse/views.py",
+              "start_line": 63,
+              "start_column": 29
+            }
+          ],
+          "findings_count": 51
+        }
+      ],
+      "findings": [
+        {
+          "rule_id": "js/incomplete-url-substring-sanitization",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "js/incomplete-url-substring-sanitization"
+            }
+          ],
+          "message": "'[earthdata.nasa.gov](1)' can be anywhere in the URL, and arbitrary hosts may come before or after it.",
+          "severity": "warning",
+          "file": "js_tests/gis/mapwidget.test.js",
+          "start_line": 156,
+          "start_column": 13
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+          "severity": "error",
+          "file": "django/contrib/admin/sites.py",
+          "start_line": 427,
+          "start_column": 41
+        },
+        {
+          "rule_id": "py/weak-sensitive-data-hashing",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/weak-sensitive-data-hashing"
+            }
+          ],
+          "message": "[Sensitive data (password)](1) is used in a hashing algorithm (MD5) that is insecure for password hashing, since it is not a computationally expensive hash function.\n[Sensitive data (password)](2) is used in a hashing algorithm (MD5) that is insecure for password hashing, since it is not a computationally expensive hash function.",
+          "severity": "warning",
+          "file": "django/contrib/auth/hashers.py",
+          "start_line": 665,
+          "start_column": 28
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+          "severity": "error",
+          "file": "django/contrib/auth/views.py",
+          "start_line": 96,
+          "start_column": 41
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+          "severity": "error",
+          "file": "django/contrib/auth/views.py",
+          "start_line": 117,
+          "start_column": 37
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+          "severity": "error",
+          "file": "django/contrib/auth/views.py",
+          "start_line": 149,
+          "start_column": 41
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "django/contrib/auth/views.py",
+          "start_line": 295,
+          "start_column": 49
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "django/contrib/contenttypes/views.py",
+          "start_line": 86,
+          "start_column": 37
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "django/contrib/flatpages/views.py",
+          "start_line": 42,
+          "start_column": 50
+        },
+        {
+          "rule_id": "py/stack-trace-exposure",
+          "scores": [
+            {
+              "value": 5.4,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/stack-trace-exposure"
+            }
+          ],
+          "message": "[Stack trace information](1) flows to this location and may be exposed to an external user.",
+          "severity": "error",
+          "file": "django/core/handlers/asgi.py",
+          "start_line": 294,
+          "start_column": 17
+        },
+        {
+          "rule_id": "py/clear-text-logging-sensitive-data",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/clear-text-logging-sensitive-data"
+            }
+          ],
+          "message": "This expression logs [sensitive data (password)](1) as clear text.\nThis expression logs [sensitive data (password)](1) as clear text.",
+          "severity": "error",
+          "file": "django/db/backends/oracle/creation.py",
+          "start_line": 334,
+          "start_column": 23
+        },
+        {
+          "rule_id": "py/clear-text-storage-sensitive-data",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/clear-text-storage-sensitive-data"
+            }
+          ],
+          "message": "This expression stores [sensitive data (secret)](1) as clear text.\nThis expression stores [sensitive data (secret)](2) as clear text.\nThis expression stores [sensitive data (secret)](3) as clear text.\nThis expression stores [sensitive data (secret)](4) as clear text.\nThis expression stores [sensitive data (secret)](2) as clear text.\nThis expression stores [sensitive data (secret)](5) as clear text.",
+          "severity": "error",
+          "file": "django/http/response.py",
+          "start_line": 250,
+          "start_column": 29
+        },
+        {
+          "rule_id": "py/cookie-injection",
+          "scores": [
+            {
+              "value": 5.0,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/cookie-injection"
+            }
+          ],
+          "message": "Cookie is constructed from a [user-supplied input](1).",
+          "severity": "warning",
+          "file": "django/http/response.py",
+          "start_line": 250,
+          "start_column": 29
+        },
+        {
+          "rule_id": "py/clear-text-storage-sensitive-data",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/clear-text-storage-sensitive-data"
+            }
+          ],
+          "message": "This expression stores [sensitive data (secret)](1) as clear text.\nThis expression stores [sensitive data (secret)](2) as clear text.\nThis expression stores [sensitive data (secret)](3) as clear text.\nThis expression stores [sensitive data (secret)](4) as clear text.\nThis expression stores [sensitive data (secret)](2) as clear text.\nThis expression stores [sensitive data (secret)](5) as clear text.",
+          "severity": "error",
+          "file": "django/middleware/csrf.py",
+          "start_line": 262,
+          "start_column": 17
+        },
+        {
+          "rule_id": "py/polynomial-redos",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/polynomial-redos"
+            }
+          ],
+          "message": "This [regular expression](1) that depends on a [user-provided value](2) may run slow on strings starting with '{{%' and with many repetitions of '{{%'.\nThis [regular expression](3) that depends on a [user-provided value](2) may run slow on strings starting with '{{{{' and with many repetitions of '{{{{'.\nThis [regular expression](4) that depends on a [user-provided value](2) may run slow on strings starting with '{{#' and with many repetitions of '{{#'.",
+          "severity": "warning",
+          "file": "django/template/base.py",
+          "start_line": 426,
+          "start_column": 42
+        },
+        {
+          "rule_id": "py/polynomial-redos",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/polynomial-redos"
+            }
+          ],
+          "message": "This [regular expression](1) that depends on a [user-provided value](2) may run slow on strings starting with '{{%' and with many repetitions of '{{%'.\nThis [regular expression](3) that depends on a [user-provided value](2) may run slow on strings starting with '{{{{' and with many repetitions of '{{{{'.\nThis [regular expression](4) that depends on a [user-provided value](2) may run slow on strings starting with '{{#' and with many repetitions of '{{#'.",
+          "severity": "warning",
+          "file": "django/template/base.py",
+          "start_line": 471,
+          "start_column": 38
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "django/views/generic/base.py",
+          "start_line": 259,
+          "start_column": 16
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "django/views/generic/base.py",
+          "start_line": 266,
+          "start_column": 21
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "django/views/generic/base.py",
+          "start_line": 269,
+          "start_column": 45
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+          "severity": "error",
+          "file": "django/views/generic/edit.py",
+          "start_line": 63,
+          "start_column": 37
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "django/views/i18n.py",
+          "start_line": 56,
+          "start_column": 37
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "django/views/i18n.py",
+          "start_line": 63,
+          "start_column": 53
+        },
+        {
+          "rule_id": "py/cookie-injection",
+          "scores": [
+            {
+              "value": 5.0,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/cookie-injection"
+            }
+          ],
+          "message": "Cookie is constructed from a [user-supplied input](1).",
+          "severity": "warning",
+          "file": "django/views/i18n.py",
+          "start_line": 66,
+          "start_column": 17
+        },
+        {
+          "rule_id": "py/path-injection",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/path-injection"
+            }
+          ],
+          "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).",
+          "severity": "error",
+          "file": "django/views/static.py",
+          "start_line": 46,
+          "start_column": 8
+        },
+        {
+          "rule_id": "py/path-injection",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/path-injection"
+            }
+          ],
+          "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).",
+          "severity": "error",
+          "file": "django/views/static.py",
+          "start_line": 50,
+          "start_column": 12
+        },
+        {
+          "rule_id": "py/path-injection",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/path-injection"
+            }
+          ],
+          "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).",
+          "severity": "error",
+          "file": "django/views/static.py",
+          "start_line": 53,
+          "start_column": 15
+        },
+        {
+          "rule_id": "py/path-injection",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/path-injection"
+            }
+          ],
+          "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).",
+          "severity": "error",
+          "file": "django/views/static.py",
+          "start_line": 60,
+          "start_column": 29
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/admin_views/views.py",
+          "start_line": 7,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/admin_views/views.py",
+          "start_line": 12,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).\nCross-site scripting vulnerability due to a [user-provided value](2).",
+          "severity": "error",
+          "file": "tests/asgi/urls.py",
+          "start_line": 13,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/asgi/urls.py",
+          "start_line": 19,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/asgi/urls.py",
+          "start_line": 45,
+          "start_column": 29
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/resolve_url/views.py",
+          "start_line": 10,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/resolve_url/views.py",
+          "start_line": 20,
+          "start_column": 29
+        },
+        {
+          "rule_id": "py/bind-socket-all-network-interfaces",
+          "scores": [
+            {
+              "value": 6.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/bind-socket-all-network-interfaces"
+            }
+          ],
+          "message": "Binding a socket to all interfaces (using [''](1)) is a security risk.",
+          "severity": "error",
+          "file": "tests/servers/tests.py",
+          "start_line": 385,
+          "start_column": 17
+        },
+        {
+          "rule_id": "py/full-ssrf",
+          "scores": [
+            {
+              "value": 9.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/full-ssrf"
+            }
+          ],
+          "message": "The full URL of this request depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/servers/views.py",
+          "start_line": 39,
+          "start_column": 10
+        },
+        {
+          "rule_id": "py/full-ssrf",
+          "scores": [
+            {
+              "value": 9.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/full-ssrf"
+            }
+          ],
+          "message": "The full URL of this request depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/servers/views.py",
+          "start_line": 44,
+          "start_column": 10
+        },
+        {
+          "rule_id": "py/full-ssrf",
+          "scores": [
+            {
+              "value": 9.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/full-ssrf"
+            }
+          ],
+          "message": "The full URL of this request depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/servers/views.py",
+          "start_line": 46,
+          "start_column": 10
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/servers/views.py",
+          "start_line": 52,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/path-injection",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/path-injection"
+            }
+          ],
+          "message": "This path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](1).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](2).\nThis path depends on a [user-provided value](3).\nThis path depends on a [user-provided value](4).\nThis path depends on a [user-provided value](5).\nThis path depends on a [user-provided value](6).",
+          "severity": "error",
+          "file": "tests/staticfiles_tests/storage.py",
+          "start_line": 36,
+          "start_column": 31
+        },
+        {
+          "rule_id": "py/template-injection",
+          "scores": [
+            {
+              "value": 9.3,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/template-injection"
+            }
+          ],
+          "message": "This template construction depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client/views.py",
+          "start_line": 122,
+          "start_column": 18
+        },
+        {
+          "rule_id": "py/xml-bomb",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/xml-bomb"
+            }
+          ],
+          "message": "XML parsing depends on a [user-provided value](1) without guarding against uncontrolled entity expansion.",
+          "severity": "warning",
+          "file": "tests/test_client/views.py",
+          "start_line": 139,
+          "start_column": 28
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).",
+          "severity": "error",
+          "file": "tests/test_client/views.py",
+          "start_line": 171,
+          "start_column": 33
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client/views.py",
+          "start_line": 421,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client_regress/views.py",
+          "start_line": 65,
+          "start_column": 29
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client_regress/views.py",
+          "start_line": 87,
+          "start_column": 9
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client_regress/views.py",
+          "start_line": 104,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client_regress/views.py",
+          "start_line": 146,
+          "start_column": 9
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client_regress/views.py",
+          "start_line": 152,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client_regress/views.py",
+          "start_line": 157,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/test_client_regress/views.py",
+          "start_line": 162,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/reflective-xss",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/reflective-xss"
+            }
+          ],
+          "message": "Cross-site scripting vulnerability due to a [user-provided value](1).",
+          "severity": "error",
+          "file": "tests/urlpatterns_reverse/views.py",
+          "start_line": 63,
+          "start_column": 29
+        }
+      ],
+      "findings_count": 52
+    },
+    {
+      "name": "django/django-asv",
+      "url": "https://github.com/django/django-asv",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "js/functionality-from-untrusted-source",
+              "scores": [
+                {
+                  "value": 6.0,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "js/functionality-from-untrusted-source"
+                }
+              ],
+              "message": "Script loaded using unencrypted connection.",
+              "severity": "warning",
+              "file": "benchmarks/template_benchmarks/template_render/templates/base.html",
+              "start_line": 131,
+              "start_column": 9
+            }
+          ],
+          "findings_count": 1
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [
+        {
+          "rule_id": "js/functionality-from-untrusted-source",
+          "scores": [
+            {
+              "value": 6.0,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "js/functionality-from-untrusted-source"
+            }
+          ],
+          "message": "Script loaded using unencrypted connection.",
+          "severity": "warning",
+          "file": "benchmarks/template_benchmarks/template_render/templates/base.html",
+          "start_line": 131,
+          "start_column": 9
+        }
+      ],
+      "findings_count": 1
+    },
+    {
+      "name": "django/django-box",
+      "url": "https://github.com/django/django-box",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/django-contrib-comments",
+      "url": "https://github.com/django/django-contrib-comments",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).\nUntrusted URL redirection depends on a [user-provided value](3).\nUntrusted URL redirection depends on a [user-provided value](4).",
+              "severity": "error",
+              "file": "django_comments/views/utils.py",
+              "start_line": 40,
+              "start_column": 33
+            }
+          ],
+          "findings_count": 1
+        }
+      ],
+      "findings": [
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).\nUntrusted URL redirection depends on a [user-provided value](2).\nUntrusted URL redirection depends on a [user-provided value](3).\nUntrusted URL redirection depends on a [user-provided value](4).",
+          "severity": "error",
+          "file": "django_comments/views/utils.py",
+          "start_line": 40,
+          "start_column": 33
+        }
+      ],
+      "findings_count": 1
+    },
+    {
+      "name": "django/django-docker-box",
+      "url": "https://github.com/django/django-docker-box",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/django-docs-translations",
+      "url": "https://github.com/django/django-docs-translations",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/django-fuzzers",
+      "url": "https://github.com/django/django-fuzzers",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/django-localflavor",
+      "url": "https://github.com/django/django-localflavor",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/djangobench",
+      "url": "https://github.com/django/djangobench",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "js/functionality-from-untrusted-source",
+              "scores": [
+                {
+                  "value": 6.0,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "js/functionality-from-untrusted-source"
+                }
+              ],
+              "message": "Script loaded using unencrypted connection.",
+              "severity": "warning",
+              "file": "djangobench/benchmarks/template_render/templates/base.html",
+              "start_line": 131,
+              "start_column": 9
+            },
+            {
+              "rule_id": "js/functionality-from-untrusted-source",
+              "scores": [
+                {
+                  "value": 6.0,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "js/functionality-from-untrusted-source"
+                }
+              ],
+              "message": "Script loaded using unencrypted connection.",
+              "severity": "warning",
+              "file": "djangobench/benchmarks/template_render/templates/base_django_lte_13.html",
+              "start_line": 131,
+              "start_column": 9
+            },
+            {
+              "rule_id": "js/functionality-from-untrusted-source",
+              "scores": [
+                {
+                  "value": 6.0,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "js/functionality-from-untrusted-source"
+                }
+              ],
+              "message": "Script loaded using unencrypted connection.",
+              "severity": "warning",
+              "file": "djangobench/benchmarks/template_render/templates/base_django_lte_15.html",
+              "start_line": 132,
+              "start_column": 9
+            }
+          ],
+          "findings_count": 3
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [
+        {
+          "rule_id": "js/functionality-from-untrusted-source",
+          "scores": [
+            {
+              "value": 6.0,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "js/functionality-from-untrusted-source"
+            }
+          ],
+          "message": "Script loaded using unencrypted connection.",
+          "severity": "warning",
+          "file": "djangobench/benchmarks/template_render/templates/base.html",
+          "start_line": 131,
+          "start_column": 9
+        },
+        {
+          "rule_id": "js/functionality-from-untrusted-source",
+          "scores": [
+            {
+              "value": 6.0,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "js/functionality-from-untrusted-source"
+            }
+          ],
+          "message": "Script loaded using unencrypted connection.",
+          "severity": "warning",
+          "file": "djangobench/benchmarks/template_render/templates/base_django_lte_13.html",
+          "start_line": 131,
+          "start_column": 9
+        },
+        {
+          "rule_id": "js/functionality-from-untrusted-source",
+          "scores": [
+            {
+              "value": 6.0,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "js/functionality-from-untrusted-source"
+            }
+          ],
+          "message": "Script loaded using unencrypted connection.",
+          "severity": "warning",
+          "file": "djangobench/benchmarks/template_render/templates/base_django_lte_15.html",
+          "start_line": 132,
+          "start_column": 9
+        }
+      ],
+      "findings_count": 3
+    },
+    {
+      "name": "django/djangogigs.com",
+      "url": "https://github.com/django/djangogigs.com",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "ruby",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/djangopeople",
+      "url": "https://github.com/django/djangopeople",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "js/xss-through-dom",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "js/xss-through-dom"
+                }
+              ],
+              "message": "[DOM text](1) is reinterpreted as HTML without escaping meta-characters.",
+              "severity": "warning",
+              "file": "js/djangopeople.js",
+              "start_line": 45,
+              "start_column": 15
+            }
+          ],
+          "findings_count": 1
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "py/weak-sensitive-data-hashing",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/weak-sensitive-data-hashing"
+                }
+              ],
+              "message": "[Sensitive data (secret)](1) is used in a hashing algorithm (MD5) that is insecure.",
+              "severity": "warning",
+              "file": "djangopeople/django_openidauth/views.py",
+              "start_line": 18,
+              "start_column": 24
+            },
+            {
+              "rule_id": "py/weak-sensitive-data-hashing",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/weak-sensitive-data-hashing"
+                }
+              ],
+              "message": "[Sensitive data (secret)](1) is used in a hashing algorithm (MD5) that is insecure.",
+              "severity": "warning",
+              "file": "djangopeople/django_openidconsumer/util.py",
+              "start_line": 118,
+              "start_column": 28
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "djangopeople/django_openidconsumer/views.py",
+              "start_line": 148,
+              "start_column": 21
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "djangopeople/django_openidconsumer/views.py",
+              "start_line": 162,
+              "start_column": 21
+            }
+          ],
+          "findings_count": 4
+        }
+      ],
+      "findings": [
+        {
+          "rule_id": "js/xss-through-dom",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "js/xss-through-dom"
+            }
+          ],
+          "message": "[DOM text](1) is reinterpreted as HTML without escaping meta-characters.",
+          "severity": "warning",
+          "file": "js/djangopeople.js",
+          "start_line": 45,
+          "start_column": 15
+        },
+        {
+          "rule_id": "py/weak-sensitive-data-hashing",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/weak-sensitive-data-hashing"
+            }
+          ],
+          "message": "[Sensitive data (secret)](1) is used in a hashing algorithm (MD5) that is insecure.",
+          "severity": "warning",
+          "file": "djangopeople/django_openidauth/views.py",
+          "start_line": 18,
+          "start_column": 24
+        },
+        {
+          "rule_id": "py/weak-sensitive-data-hashing",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/weak-sensitive-data-hashing"
+            }
+          ],
+          "message": "[Sensitive data (secret)](1) is used in a hashing algorithm (MD5) that is insecure.",
+          "severity": "warning",
+          "file": "djangopeople/django_openidconsumer/util.py",
+          "start_line": 118,
+          "start_column": 28
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "djangopeople/django_openidconsumer/views.py",
+          "start_line": 148,
+          "start_column": 21
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "djangopeople/django_openidconsumer/views.py",
+          "start_line": 162,
+          "start_column": 21
+        }
+      ],
+      "findings_count": 5
+    },
+    {
+      "name": "django/djangoproject.com",
+      "url": "https://github.com/django/djangoproject.com",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "py/weak-sensitive-data-hashing",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/weak-sensitive-data-hashing"
+                }
+              ],
+              "message": "[Sensitive data (id)](1) is used in a hashing algorithm (MD5) that is insecure.\n[Sensitive data (id)](2) is used in a hashing algorithm (MD5) that is insecure.",
+              "severity": "warning",
+              "file": "accounts/views.py",
+              "start_line": 76,
+              "start_column": 48
+            },
+            {
+              "rule_id": "py/incomplete-url-substring-sanitization",
+              "scores": [
+                {
+                  "value": 7.8,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/incomplete-url-substring-sanitization"
+                }
+              ],
+              "message": "The string [//stackoverflow.com](1) may be at an arbitrary position in the sanitized URL.",
+              "severity": "warning",
+              "file": "aggregator/forms.py",
+              "start_line": 44,
+              "start_column": 25
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "docs/views.py",
+              "start_line": 35,
+              "start_column": 21
+            },
+            {
+              "rule_id": "py/url-redirection",
+              "scores": [
+                {
+                  "value": 6.1,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/url-redirection"
+                }
+              ],
+              "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+              "severity": "error",
+              "file": "docs/views.py",
+              "start_line": 115,
+              "start_column": 21
+            },
+            {
+              "rule_id": "py/stack-trace-exposure",
+              "scores": [
+                {
+                  "value": 5.4,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/stack-trace-exposure"
+                }
+              ],
+              "message": "[Stack trace information](1) flows to this location and may be exposed to an external user.",
+              "severity": "error",
+              "file": "fundraising/views.py",
+              "start_line": 186,
+              "start_column": 29
+            },
+            {
+              "rule_id": "py/stack-trace-exposure",
+              "scores": [
+                {
+                  "value": 5.4,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/stack-trace-exposure"
+                }
+              ],
+              "message": "[Stack trace information](1) flows to this location and may be exposed to an external user.",
+              "severity": "error",
+              "file": "fundraising/views.py",
+              "start_line": 258,
+              "start_column": 25
+            }
+          ],
+          "findings_count": 6
+        }
+      ],
+      "findings": [
+        {
+          "rule_id": "py/weak-sensitive-data-hashing",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/weak-sensitive-data-hashing"
+            }
+          ],
+          "message": "[Sensitive data (id)](1) is used in a hashing algorithm (MD5) that is insecure.\n[Sensitive data (id)](2) is used in a hashing algorithm (MD5) that is insecure.",
+          "severity": "warning",
+          "file": "accounts/views.py",
+          "start_line": 76,
+          "start_column": 48
+        },
+        {
+          "rule_id": "py/incomplete-url-substring-sanitization",
+          "scores": [
+            {
+              "value": 7.8,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/incomplete-url-substring-sanitization"
+            }
+          ],
+          "message": "The string [//stackoverflow.com](1) may be at an arbitrary position in the sanitized URL.",
+          "severity": "warning",
+          "file": "aggregator/forms.py",
+          "start_line": 44,
+          "start_column": 25
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "docs/views.py",
+          "start_line": 35,
+          "start_column": 21
+        },
+        {
+          "rule_id": "py/url-redirection",
+          "scores": [
+            {
+              "value": 6.1,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/url-redirection"
+            }
+          ],
+          "message": "Untrusted URL redirection depends on a [user-provided value](1).",
+          "severity": "error",
+          "file": "docs/views.py",
+          "start_line": 115,
+          "start_column": 21
+        },
+        {
+          "rule_id": "py/stack-trace-exposure",
+          "scores": [
+            {
+              "value": 5.4,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/stack-trace-exposure"
+            }
+          ],
+          "message": "[Stack trace information](1) flows to this location and may be exposed to an external user.",
+          "severity": "error",
+          "file": "fundraising/views.py",
+          "start_line": 186,
+          "start_column": 29
+        },
+        {
+          "rule_id": "py/stack-trace-exposure",
+          "scores": [
+            {
+              "value": 5.4,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/stack-trace-exposure"
+            }
+          ],
+          "message": "[Stack trace information](1) flows to this location and may be exposed to an external user.",
+          "severity": "error",
+          "file": "fundraising/views.py",
+          "start_line": 258,
+          "start_column": 25
+        }
+      ],
+      "findings_count": 6
+    },
+    {
+      "name": "django/djangosnippets.org",
+      "url": "https://github.com/django/djangosnippets.org",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "javascript",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        },
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [
+            {
+              "rule_id": "py/regex-injection",
+              "scores": [
+                {
+                  "value": 7.5,
+                  "system": "security-severity",
+                  "source": "codeql",
+                  "version": null,
+                  "vector": null,
+                  "vulnerability_id": "py/regex-injection"
+                }
+              ],
+              "message": "This regular expression depends on a [user-provided value](1) and is executed by [re.match](2).",
+              "severity": "error",
+              "file": "comments_spamfighter/admin.py",
+              "start_line": 33,
+              "start_column": 26
+            }
+          ],
+          "findings_count": 1
+        },
+        {
+          "language": "ruby",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [
+        {
+          "rule_id": "py/regex-injection",
+          "scores": [
+            {
+              "value": 7.5,
+              "system": "security-severity",
+              "source": "codeql",
+              "version": null,
+              "vector": null,
+              "vulnerability_id": "py/regex-injection"
+            }
+          ],
+          "message": "This regular expression depends on a [user-provided value](1) and is executed by [re.match](2).",
+          "severity": "error",
+          "file": "comments_spamfighter/admin.py",
+          "start_line": 33,
+          "start_column": 26
+        }
+      ],
+      "findings_count": 1
+    },
+    {
+      "name": "django/dsf-bylaws",
+      "url": "https://github.com/django/dsf-bylaws",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/dsf-minutes",
+      "url": "https://github.com/django/dsf-minutes",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/dsf-working-groups",
+      "url": "https://github.com/django/dsf-working-groups",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/new-features",
+      "url": "https://github.com/django/new-features",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/online-community-working-group",
+      "url": "https://github.com/django/online-community-working-group",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/steering-council",
+      "url": "https://github.com/django/steering-council",
+      "status": "database_failed",
+      "error": "CodeQL no pudo crear las bases de datos",
+      "languages": [],
+      "findings": [],
+      "findings_count": 0
+    },
+    {
+      "name": "django/ticketbot",
+      "url": "https://github.com/django/ticketbot",
+      "status": "analyzed",
+      "error": null,
+      "languages": [
+        {
+          "language": "python",
+          "status": "analyzed",
+          "error": null,
+          "findings": [],
+          "findings_count": 0
+        }
+      ],
+      "findings": [],
+      "findings_count": 0
+    }
+  ]
+}

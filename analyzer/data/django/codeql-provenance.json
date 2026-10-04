@@ -1,0 +1,10 @@
+{
+  "source": "../../../miner/organizations/django/work/clone-x269596i/analysis_results/codeql-b4nijni0/codeql-results.json",
+  "snapshot": "clone-x269596i/analysis_results/codeql-b4nijni0/codeql-results.json",
+  "organization": "django",
+  "clone_run": "clone-x269596i",
+  "codeql_run": "codeql-b4nijni0",
+  "sha256": "c3e095c9c64ebad73e21ac266fb1918360312e66032ba12e436c498ffe4bf72c",
+  "bytes": 108627,
+  "purpose": "CodeQL per-language coverage for the CI research question"
+}
