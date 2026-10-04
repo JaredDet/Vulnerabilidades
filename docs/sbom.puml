@@ -1,26 +1,79 @@
 @startuml
+skinparam backgroundColor #E3F2FD
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontColor #344054
+skinparam ArrowColor #37474F
+skinparam activity {
+  BackgroundColor #C3D2E9
+  BorderColor #496BA5
+  FontColor #344054
+  DiamondBackgroundColor #C3D2E9
+  DiamondBorderColor #496BA5
+  StartColor #496BA5
+  EndColor #496BA5
+}
+skinparam activityShape rectangle
+skinparam partition {
+  BackgroundColor transparent
+  BorderColor #FF00AA
+  FontColor #344054
+}
+
+left to right direction
+skinparam linetype ortho
+skinparam state {
+  BackgroundColor #C3D2E9
+  BorderColor #496BA5
+  FontColor #344054
+  RoundCorner 0
+  RoundCorner<<terminal>> 40
+  BackgroundColor<<fase>> transparent
+  BorderColor<<fase>> #FF00AA
+}
+hide stereotype
+
 title Generación del inventario SBOM con Syft
 
-start
-:Cargar clones.json por run-id o seleccionar la última ejecución;
-:Crear una ejecución sbom-<id>;
+state "Inicio" as inicio <<terminal>>
+state "Cargar clones.json por run-id\no seleccionar la última ejecución" as cargar
+state "Crear una ejecución\nsbom-<id>" as ejecucion
 
-while (¿Quedan repositorios?) is (sí)
-  if (¿El clon está disponible?) then (sí)
-    :Obtener el commit analizado;
-    :Syft examina el repositorio completo y detecta sus ecosistemas;
-    :Guardar SBOM CycloneDX JSON;
-    :Validar el documento y contar componentes;
-  else (no)
-    :Registrar fallo sin generar SBOM;
-  endif
-endwhile (no)
+state "Procesamiento por repositorio" as procesamiento <<fase>> {
+  state "¿Quedan repositorios?" as quedanRepos <<choice>>
+  state "¿El clon está disponible?" as clonDisponible <<choice>>
+  state "Validar el clon y obtener\nel commit analizado" as validarClon
+  state "Syft examina el repositorio completo\ny detecta sus ecosistemas" as generar
+  state "Guardar inventario CycloneDX JSON\n<organización>-<repositorio>.json" as guardarInventario
+  state "Validar el documento\ny contar componentes" as validarInventario
+  state "Registrar estado, commit\ny ruta sbom_path" as registrar
+  state "Registrar fallo\nsin generar SBOM" as falloClon
+}
 
-:Guardar sbom-results.json;
-stop
+state "Resumen de generación" as resumen <<fase>> {
+  state "Guardar sbom-results.json\ncon resultados y fallos" as guardar
+}
+state "Fin" as fin <<terminal>>
 
-note right
-No se detectan manifiestos manualmente.
-Syft construye el inventario desde el repositorio.
-end note
+inicio --> cargar
+cargar --> ejecucion
+ejecucion --> quedanRepos
+quedanRepos --> clonDisponible : Sí
+clonDisponible --> validarClon : Sí
+clonDisponible --> falloClon : No
+validarClon --> generar
+generar --> guardarInventario
+guardarInventario --> validarInventario
+validarInventario --> registrar
+registrar --> quedanRepos
+falloClon --> quedanRepos
+quedanRepos --> guardar : No
+guardar --> fin
+
+legend bottom
+  No se detectan manifiestos manualmente.
+  Syft construye el inventario desde el repositorio.
+  Se conservan los inventarios CycloneDX originales.
+  Un fallo por repositorio se registra y el flujo continúa.
+endlegend
 @enduml

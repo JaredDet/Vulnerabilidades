@@ -1,37 +1,92 @@
 @startuml
+skinparam backgroundColor #E3F2FD
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontColor #344054
+skinparam ArrowColor #37474F
+skinparam activity {
+  BackgroundColor #C3D2E9
+  BorderColor #496BA5
+  FontColor #344054
+  DiamondBackgroundColor #C3D2E9
+  DiamondBorderColor #496BA5
+  StartColor #496BA5
+  EndColor #496BA5
+}
+skinparam activityShape rectangle
+skinparam partition {
+  BackgroundColor transparent
+  BorderColor #FF00AA
+  FontColor #344054
+}
+
+left to right direction
+skinparam linetype ortho
+skinparam state {
+  BackgroundColor #C3D2E9
+  BorderColor #496BA5
+  FontColor #344054
+  RoundCorner 0
+  RoundCorner<<terminal>> 40
+  BackgroundColor<<fase>> transparent
+  BorderColor<<fase>> #FF00AA
+}
+hide stereotype
+
 title Análisis de código con CodeQL
 
-start
-:Cargar clones.json por run-id o seleccionar la última ejecución;
+state "Inicio" as inicio <<terminal>>
+state "Cargar clones.json por run-id\no seleccionar la última ejecución" as cargar
 
-while (¿Quedan repositorios?) is (sí)
-  if (¿El clon está disponible?) then (sí)
-    :Crear clúster de bases CodeQL;
-    if (¿CodeQL creó bases por lenguaje?) then (sí)
-      while (¿Quedan lenguajes?) is (sí)
-        :Ejecutar code-scanning.qls;
-        :Guardar results.sarif;
-        :Normalizar hallazgos, ubicaciones,
-nivel SARIF y security-severity;
-      endwhile (no)
-      if (¿Todos los lenguajes terminaron bien?) then (sí)
-        :Eliminar el clúster de bases CodeQL;
-      else (no)
-        :Conservar las bases para diagnóstico;
-      endif
-    else (no)
-      :Registrar repositorio no soportado;
-    endif
-  else (no)
-    :Registrar fallo de clonación;
-  endif
-endwhile (no)
+state "Procesamiento por repositorio" as procesamiento <<fase>> {
+  state "¿Quedan repositorios?" as quedanRepos <<choice>>
+  state "¿El clon está disponible?" as clonDisponible <<choice>>
+  state "Crear clúster de\nbases CodeQL" as crearBases
+  state "¿CodeQL creó bases\npor lenguaje?" as basesCreadas <<choice>>
 
-:Guardar codeql-results.json;
-stop
+  state "Análisis y normalización por lenguaje" as analisis <<fase>> {
+    state "¿Quedan lenguajes?" as quedanLenguajes <<choice>>
+    state "Ejecutar\ncode-scanning.qls" as ejecutar
+    state "Guardar results.sarif" as guardarSarif
+    state "Normalizar hallazgos, ubicaciones,\nnivel SARIF y security-severity" as normalizar
+  }
 
-note right
-Los SARIF y el reporte normalizado se conservan.
-Un fallo por repositorio no detiene los demás.
-end note
+  state "¿Todos los lenguajes\nterminaron bien?" as analisisCorrecto <<choice>>
+  state "Eliminar el clúster\nde bases CodeQL" as eliminarBases
+  state "Conservar las bases\npara diagnóstico" as conservarBases
+  state "Registrar repositorio\nno soportado" as noSoportado
+  state "Registrar fallo\nde clonación" as falloClon
+}
+
+state "Consolidación de resultados" as consolidacion <<fase>> {
+  state "Guardar codeql-results.json" as guardar
+}
+state "Fin" as fin <<terminal>>
+
+inicio --> cargar
+cargar --> quedanRepos
+quedanRepos --> clonDisponible : Sí
+clonDisponible --> crearBases : Sí
+clonDisponible --> falloClon : No
+crearBases --> basesCreadas
+basesCreadas --> quedanLenguajes : Sí
+basesCreadas --> noSoportado : No
+quedanLenguajes --> ejecutar : Sí
+ejecutar --> guardarSarif
+guardarSarif --> normalizar
+normalizar --> quedanLenguajes
+quedanLenguajes --> analisisCorrecto : No
+analisisCorrecto --> eliminarBases : Sí
+analisisCorrecto --> conservarBases : No
+eliminarBases --> quedanRepos
+conservarBases --> quedanRepos
+noSoportado --> quedanRepos
+falloClon --> quedanRepos
+quedanRepos --> guardar : No
+guardar --> fin
+
+legend bottom
+  Los SARIF y el reporte normalizado se conservan.
+  Un fallo por repositorio no detiene los demás.
+endlegend
 @enduml

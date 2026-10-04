@@ -2,6 +2,11 @@
 
 Cada archivo PlantUML describe un comando de la CLI:
 
+Cada diagrama incluye sus estilos: fondo celeste, actividades rectangulares
+y marcos fucsia que agrupan las fases. Los bloques describen las operaciones
+del código; Syft conserva el inventario CycloneDX original y valida su contenido,
+sin una etapa adicional de normalización o limpieza de archivos.
+
 | Diagrama | Flujo |
 | --- | --- |
 | [clone.puml](clone.puml) | `clone-repositories`: consultar y clonar repositorios; guardar rutas y fallos en `clones.json`. |

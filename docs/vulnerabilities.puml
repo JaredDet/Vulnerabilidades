@@ -1,28 +1,84 @@
 @startuml
+skinparam backgroundColor #E3F2FD
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontColor #344054
+skinparam ArrowColor #37474F
+skinparam activity {
+  BackgroundColor #C3D2E9
+  BorderColor #496BA5
+  FontColor #344054
+  DiamondBackgroundColor #C3D2E9
+  DiamondBorderColor #496BA5
+  StartColor #496BA5
+  EndColor #496BA5
+}
+skinparam activityShape rectangle
+skinparam partition {
+  BackgroundColor transparent
+  BorderColor #FF00AA
+  FontColor #344054
+}
+
+left to right direction
+skinparam linetype ortho
+skinparam state {
+  BackgroundColor #C3D2E9
+  BorderColor #496BA5
+  FontColor #344054
+  RoundCorner 0
+  RoundCorner<<terminal>> 40
+  BackgroundColor<<fase>> transparent
+  BorderColor<<fase>> #FF00AA
+}
+hide stereotype
+
 title Vulnerabilidades de dependencias con Grype
 
-start
-:Cargar clones.json y seleccionar la ejecución sbom-<id>;
-:Validar sbom-results.json;
-:Crear una ejecución vulnerability-<id>;
+state "Inicio" as inicio <<terminal>>
+state "Cargar clones.json y seleccionar\nla ejecución sbom-<id>" as cargar
+state "Validar sbom-results.json" as validar
+state "Crear una ejecución\nvulnerability-<id>" as ejecucion
 
-while (¿Quedan repositorios?) is (sí)
-  if (¿El SBOM se generó correctamente?) then (sí)
-    :Ejecutar Grype sobre el SBOM CycloneDX;
-    :Guardar el JSON original de Grype;
-    :Normalizar cada match;
-    :Extraer vulnerabilidad, descripción, severidad,
-puntajes CVSS, paquete, versión, tipo y ubicaciones;
-  else (no)
-    :Registrar fallo de SBOM;
-  endif
-endwhile (no)
+state "Procesamiento por repositorio" as procesamiento <<fase>> {
+  state "¿Quedan repositorios?" as quedanRepos <<choice>>
+  state "¿El SBOM se generó\ncorrectamente?" as sbomCorrecto <<choice>>
 
-:Guardar vulnerability-results.json;
-stop
+  state "Ejecución de Grype" as grype <<fase>> {
+    state "Ejecutar Grype sobre\nel SBOM CycloneDX" as ejecutar
+    state "Guardar el JSON\noriginal de Grype" as guardarOriginal
+  }
 
-note right
-Cero coincidencias es un análisis válido.
-Los errores se distinguen de un resultado vacío.
-end note
+  state "Normalización de vulnerabilidades" as normalizacion <<fase>> {
+    state "Normalizar cada match" as normalizar
+    state "Extraer vulnerabilidad, descripción, severidad,\npuntajes CVSS, paquete, versión, tipo y ubicaciones" as extraer
+  }
+
+  state "Registrar fallo de SBOM" as falloSbom
+}
+
+state "Consolidación de resultados" as consolidacion <<fase>> {
+  state "Guardar vulnerability-results.json\ncon hallazgos y fallos" as guardar
+}
+state "Fin" as fin <<terminal>>
+
+inicio --> cargar
+cargar --> validar
+validar --> ejecucion
+ejecucion --> quedanRepos
+quedanRepos --> sbomCorrecto : Sí
+sbomCorrecto --> ejecutar : Sí
+sbomCorrecto --> falloSbom : No
+ejecutar --> guardarOriginal
+guardarOriginal --> normalizar
+normalizar --> extraer
+extraer --> quedanRepos
+falloSbom --> quedanRepos
+quedanRepos --> guardar : No
+guardar --> fin
+
+legend bottom
+  Cero coincidencias es un análisis válido.
+  Los errores se distinguen de un resultado vacío.
+endlegend
 @enduml

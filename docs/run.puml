@@ -1,21 +1,78 @@
 @startuml
+skinparam backgroundColor #E3F2FD
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontColor #344054
+skinparam ArrowColor #37474F
+skinparam activity {
+  BackgroundColor #C3D2E9
+  BorderColor #496BA5
+  FontColor #344054
+  DiamondBackgroundColor #C3D2E9
+  DiamondBorderColor #496BA5
+  StartColor #496BA5
+  EndColor #496BA5
+}
+skinparam activityShape rectangle
+skinparam partition {
+  BackgroundColor transparent
+  BorderColor #FF00AA
+  FontColor #344054
+}
+
+left to right direction
+skinparam linetype ortho
+skinparam state {
+  BackgroundColor #C3D2E9
+  BorderColor #496BA5
+  FontColor #344054
+  RoundCorner 0
+  RoundCorner<<terminal>> 40
+  BackgroundColor<<fase>> transparent
+  BorderColor<<fase>> #FF00AA
+}
+hide stereotype
+
 title Flujo completo del Miner
 
-start
-:Etapa 1/5 - Clonar repositorios públicos por lotes;
-:Guardar clones.json;
-:Etapa 2/5 - Analizar código con CodeQL;
-:Guardar SARIF y codeql-results.json;
-:Etapa 3/5 - Generar SBOM CycloneDX con Syft;
-:Guardar SBOM y sbom-results.json;
-:Etapa 4/5 - Analizar los SBOM con Grype;
-:Guardar resultados originales y vulnerability-results.json;
-:Etapa 5/5 - Integrar repositorios y hallazgos;
-:Guardar dataset.json junto a clones.json;
-stop
+state "Inicio" as inicio <<terminal>>
 
-note right
-Cada etapa informa cuándo comienza y cuándo termina.
-Los identificadores enlazan la evidencia con la clonación.
-end note
+state "1. Clonación" as clonacion <<fase>> {
+  state "Etapa 1/5 - Clonar repositorios\npúblicos por lotes" as clonar
+  state "Guardar clones.json" as guardarClones
+}
+state "2. Análisis de código" as analisis <<fase>> {
+  state "Etapa 2/5 - Analizar código\ncon CodeQL" as analizar
+  state "Guardar SARIF\ny codeql-results.json" as guardarAnalisis
+}
+state "3. Inventario de dependencias" as inventario <<fase>> {
+  state "Etapa 3/5 - Generar SBOM\nCycloneDX con Syft" as generarSbom
+  state "Guardar SBOM\ny sbom-results.json" as guardarSbom
+}
+state "4. Vulnerabilidades de dependencias" as vulnerabilidades <<fase>> {
+  state "Etapa 4/5 - Analizar\nlos SBOM con Grype" as analizarSbom
+  state "Guardar resultados originales\ny vulnerability-results.json" as guardarVulnerabilidades
+}
+state "5. Dataset integrado" as integracion <<fase>> {
+  state "Etapa 5/5 - Integrar\nrepositorios y hallazgos" as integrar
+  state "Guardar dataset.json\njunto a clones.json" as guardarDataset
+}
+state "Fin" as fin <<terminal>>
+
+inicio --> clonar
+clonar --> guardarClones
+guardarClones --> analizar
+analizar --> guardarAnalisis
+guardarAnalisis --> generarSbom
+generarSbom --> guardarSbom
+guardarSbom --> analizarSbom
+analizarSbom --> guardarVulnerabilidades
+guardarVulnerabilidades --> integrar
+integrar --> guardarDataset
+guardarDataset --> fin
+
+legend bottom
+  Cada etapa informa cuándo comienza y cuándo termina.
+  Los identificadores enlazan la evidencia con la clonación.
+endlegend
 @enduml
