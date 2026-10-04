@@ -12,6 +12,9 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: miner
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -23,6 +26,20 @@ jobs:
       - run: uv sync --locked
       - run: uv run pytest -q
 
+  analyzer:
+    name: Analyzer notebook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: uv sync --locked --project analyzer
+      - run: uv run --project analyzer python analyzer/scripts/validate_notebook.py
+
   security-tools:
     name: Container security tools
     runs-on: ubuntu-latest
@@ -33,12 +50,12 @@ jobs:
         run: mkdir -p artifacts/sbom artifacts/grype artifacts/codeql
 
       - name: Build Miner image with the analysis tools
-        run: docker build --tag miner-ci .
+        run: docker build --tag miner-ci miner
 
       - name: Generate CycloneDX SBOM with Syft
         run: >-
           docker run --rm
-          -v "$GITHUB_WORKSPACE:/workspace:ro"
+          -v "$GITHUB_WORKSPACE/miner:/workspace:ro"
           -v "$GITHUB_WORKSPACE/artifacts/sbom:/output"
           miner-ci
           syft scan dir:/workspace
@@ -57,7 +74,7 @@ jobs:
       - name: Create a CodeQL database
         run: >-
           docker run --rm
-          -v "$GITHUB_WORKSPACE:/opt/src:ro"
+          -v "$GITHUB_WORKSPACE/miner:/opt/src:ro"
           -v "$GITHUB_WORKSPACE/artifacts/codeql:/opt/results"
           miner-ci
           codeql database create --language=python /opt/results/database --source-root=/opt/src
@@ -65,7 +82,7 @@ jobs:
       - name: Analyze with CodeQL
         run: >-
           docker run --rm
-          -v "$GITHUB_WORKSPACE:/opt/src:ro"
+          -v "$GITHUB_WORKSPACE/miner:/opt/src:ro"
           -v "$GITHUB_WORKSPACE/artifacts/codeql:/opt/results"
           miner-ci
           codeql database analyze /opt/results/database codeql/python-queries:codeql-suites/python-code-scanning.qls --format=sarifv2.1.0 --output=/opt/results/results.sarif

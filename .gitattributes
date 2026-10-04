@@ -1,0 +1,4 @@
+* text=auto
+*.json -text
+*.sarif -text
+*.ipynb text eol=lf

@@ -1,0 +1,25 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.egg-info/
+.ruff_cache/
+repositories/
+
+# CodeQL y archivos temporales
+codeql-databases/
+codeql-results/
+*.sarif
+.pytest_cache/
+.coverage
+htmlcov/
+tmp/
+*.tmp
+.uv-cache/
+work/
+organizations/
+build/
+dist/
+results.json
+sbom-results.json
