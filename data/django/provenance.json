@@ -1,0 +1,11 @@
+{
+    "source":  "../../../miner/organizations/django/work/clone-x269596i",
+    "snapshot":  "clone-x269596i",
+    "organization":  "django",
+    "clone_run":  "clone-x269596i",
+    "copied_at_utc":  "2026-10-04T00:42:06.0200704Z",
+    "dataset_sha256":  "A86CF521BCAB688F5BBC7E63F6A0C832BE645F82D563FFAB89217F11E772CAB3",
+    "file_count":  61042,
+    "total_bytes":  1556127624,
+    "verification":  "All relative file paths and sizes match; dataset SHA-256 matches."
+}

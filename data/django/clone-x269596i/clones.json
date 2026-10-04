@@ -1,0 +1,287 @@
+{
+  "organization": "django",
+  "workspace": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i",
+  "repositories": [
+    {
+      "repository": {
+        "full_name": "django/.github",
+        "clone_url": "https://github.com/django/.github.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\.github",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/accessibility",
+        "clone_url": "https://github.com/django/accessibility.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\accessibility",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/asgi_ipc",
+        "clone_url": "https://github.com/django/asgi_ipc.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\asgi_ipc",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/asgiref",
+        "clone_url": "https://github.com/django/asgiref.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\asgiref",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/birthday20",
+        "clone_url": "https://github.com/django/birthday20.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\birthday20",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/channels",
+        "clone_url": "https://github.com/django/channels.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\channels",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/channels_redis",
+        "clone_url": "https://github.com/django/channels_redis.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\channels_redis",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/code-of-conduct",
+        "clone_url": "https://github.com/django/code-of-conduct.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\code-of-conduct",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/code.djangoproject.com",
+        "clone_url": "https://github.com/django/code.djangoproject.com.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\code.djangoproject.com",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/daphne",
+        "clone_url": "https://github.com/django/daphne.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\daphne",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/deps",
+        "clone_url": "https://github.com/django/deps.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\deps",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/django",
+        "clone_url": "https://github.com/django/django.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\django",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/django-asv",
+        "clone_url": "https://github.com/django/django-asv.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\django-asv",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/django-box",
+        "clone_url": "https://github.com/django/django-box.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\django-box",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/django-contrib-comments",
+        "clone_url": "https://github.com/django/django-contrib-comments.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\django-contrib-comments",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/django-docker-box",
+        "clone_url": "https://github.com/django/django-docker-box.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\django-docker-box",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/django-docs-translations",
+        "clone_url": "https://github.com/django/django-docs-translations.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\django-docs-translations",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/django-fuzzers",
+        "clone_url": "https://github.com/django/django-fuzzers.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\django-fuzzers",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/django-localflavor",
+        "clone_url": "https://github.com/django/django-localflavor.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\django-localflavor",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/djangobench",
+        "clone_url": "https://github.com/django/djangobench.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\djangobench",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/djangogigs.com",
+        "clone_url": "https://github.com/django/djangogigs.com.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\djangogigs.com",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/djangopeople",
+        "clone_url": "https://github.com/django/djangopeople.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\djangopeople",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/djangoproject.com",
+        "clone_url": "https://github.com/django/djangoproject.com.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\djangoproject.com",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/djangosnippets.org",
+        "clone_url": "https://github.com/django/djangosnippets.org.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\djangosnippets.org",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/dsf-bylaws",
+        "clone_url": "https://github.com/django/dsf-bylaws.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\dsf-bylaws",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/dsf-minutes",
+        "clone_url": "https://github.com/django/dsf-minutes.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\dsf-minutes",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/dsf-working-groups",
+        "clone_url": "https://github.com/django/dsf-working-groups.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\dsf-working-groups",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/new-features",
+        "clone_url": "https://github.com/django/new-features.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\new-features",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/online-community-working-group",
+        "clone_url": "https://github.com/django/online-community-working-group.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\online-community-working-group",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/steering-council",
+        "clone_url": "https://github.com/django/steering-council.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\steering-council",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "django/ticketbot",
+        "clone_url": "https://github.com/django/ticketbot.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\repositories\\django\\ticketbot",
+      "error": null,
+      "status": "cloned"
+    }
+  ],
+  "cloned": 31,
+  "failed": 0
+}
