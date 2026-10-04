@@ -1,7 +1,6 @@
 .venv/
 .ipynb_checkpoints/
 __pycache__/
-outputs/
 
 # Copia local de artefactos; el dataset y su procedencia se versionan.
 data/django/clone-x269596i/analysis_results/*

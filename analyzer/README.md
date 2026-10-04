@@ -1,94 +1,28 @@
 # Analyzer
 
-Abre la raíz `vulnerabilities` en VS Code con las extensiones Python y Jupyter.
-Ejecuta `uv sync --project analyzer` desde esa raíz y selecciona el entorno
-`analyzer/.venv` como kernel de `analyzer/notebooks/analyzer.ipynb`.
-Ejecuta las celdas en orden.
+Estudia concentraciones, diferencias y relaciones mediante diez preguntas de
+investigación. Exporta tablas y observaciones para el Visualizer.
 
-El notebook carga un `dataset.json` del Miner, comprueba su estructura y prepara
-tablas de repositorios, hallazgos y puntajes. La celda de configuración localiza
-la raíz del repositorio desde cualquier subcarpeta. Selecciona `ORGANIZATION`,
-`CLONE_RUN` y `SBOM_RUN` para una copia de evidencia con la estructura de Django.
-La configuración comprueba el dataset y el reporte SBOM antes de continuar.
-Usa rutas relativas y conserva separadas las escalas de puntajes.
+## Ejecutar
 
-El notebook desarrolla diez preguntas de investigación, con método, resultados,
-interpretación calculada y limitaciones. La pregunta 10 informa que la ejecución
-actual no contiene análisis explícito de Actions; no interpreta esa falta de
-cobertura como ausencia de problemas de CI.
+Desde la raíz del repositorio:
 
-## Evidencia de entrada
+```powershell
+uv sync --project analyzer
+uv run --project analyzer python analyzer/scripts/validate_notebook.py
+```
 
-El notebook usa `data/django/clone-x269596i/dataset.json`. La carpeta
-`data/django/clone-x269596i/` es una copia completa de la ejecución del Miner,
-incluidos los repositorios, resultados de CodeQL, SBOM y resultados de Grype.
-`data/django/provenance.json` registra el origen, la fecha de copia, el SHA-256
-del dataset y la verificación de rutas y tamaños de los archivos copiados.
+También puedes abrir [el notebook](notebooks/analyzer.ipynb), seleccionar
+`analyzer/.venv` como kernel y ejecutar todas las celdas en orden.
+La configuración selecciona organización, clonación y ejecución SBOM; por
+defecto usa la evidencia de Django en `data/django/clone-x269596i/`.
 
-La evidencia para versionar incluye `dataset.json`, `clones.json`,
-`provenance.json` y los SBOM de `sboms/sbom-j7jbqezb/`, con sus hashes en
-`data/django/sbom-provenance.json`. También se versiona el reporte consolidado
-`analysis_results/codeql-b4nijni0/codeql-results.json`, con su hash en
-`data/django/codeql-provenance.json`, para comprobar la cobertura por lenguaje.
-Los repositorios clonados y los demás artefactos de CodeQL y Grype se mantienen
-localmente y están excluidos de Git. Las preguntas 1 a 6 necesitan el dataset;
-las preguntas 7 a 9 cargan además los SBOM y la 10 carga el reporte de CodeQL.
+## Salida
 
-La copia anterior de Pallets sigue en `data/pallets/dataset.json`, con su propio
-`provenance.json`. Conserva estas entradas sin modificar; para estudiar otra
-ejecución, guarda una copia independiente y ajusta la configuración de evidencia.
-La copia antigua de Pallets solo contiene el dataset: para ejecutar también las
-preguntas 7 a 10 con esa organización, incorpora los reportes SBOM y CodeQL
-correspondientes y configura sus rutas.
-Las rutas originales dentro de los reportes se conservan como evidencia; el
-notebook carga el dataset desde la copia local.
+La última celda genera
+[`outputs/django/clone-x269596i/analysis.json`](outputs/django/clone-x269596i/analysis.json).
+Incluye resultados, interpretaciones, cobertura, limitaciones y procedencia.
+El [contrato del Visualizer](docs/visualizer-contract.md) describe su estructura.
 
-## Concentración por archivo
-
-La pregunta 6 muestra los tres archivos con más hallazgos de CodeQL por
-repositorio, sus reglas distintas y la proporción de hallazgos que reúnen.
-Cada hallazgo cuenta una vez por archivo; la concentración conjunta del top 3
-usa hallazgos únicos para evitar duplicarlos entre ubicaciones. Se informa
-la cobertura de ubicación y el estado del análisis, incluidos los fallos.
-
-## Ecosistemas del inventario
-
-La pregunta 7 carga los documentos CycloneDX de la ejecución seleccionada
-en `SBOM_REPORT_PATH`. Cuenta registros de componentes y clasifica el ecosistema
-por `syft:package:type`, con el tipo de PURL como alternativa. Muestra cantidades
-y proporciones globales y por repositorio, conservando por separado los
-inventarios vacíos, fallidos, ausentes o inválidos. Utiliza el inventario completo,
-incluidos los componentes sin coincidencias de Grype.
-
-## Proporción de componentes con coincidencias
-
-La pregunta 8 cruza SBOM y Grype por repositorio, ecosistema, nombre y versión.
-Cada registro de componente cuenta una vez en el numerador, aunque tenga varios
-identificadores asociados. Presenta tamaño del inventario, componentes afectados,
-identidades distintas y proporciones, junto con la cobertura y los registros sin
-correspondencia. Las proporciones quedan sin definir para inventarios vacíos,
-análisis incompletos o correspondencias insuficientes.
-
-## Componentes compartidos y seguridad de CI
-
-La pregunta 9 compara paquetes y versiones entre repositorios usando el
-inventario completo. Separa compartir un paquete de compartir su versión textual
-y conserva los componentes sin coincidencias de Grype.
-
-La pregunta 10 comprueba los resultados por lenguaje del reporte CodeQL.
-Solo un resultado explícito de `actions` acredita análisis de ese lenguaje.
-Muestra cobertura, reglas, niveles SARIF y ubicaciones cuando están disponibles;
-los análisis de otros lenguajes no se utilizan como sustituto.
-
-Las preguntas 1 y 2 interpretan automáticamente la concentración y repetición
-observadas. La 2 incluye rankings globales y por repositorio; la 3 presenta
-distribuciones completas de severidades y puntajes separados por escala y versión;
-la 4 incluye rankings de todos los paquetes e identificadores de Grype, también
-los que aparecen en un único repositorio.
-
-## Puntajes de seguridad
-
-El notebook documenta el uso directo de security-severity de las reglas CodeQL
-y de los puntajes base CVSS publicados en los resultados de Grype. No convierte
-etiquetas cualitativas en números. Los puntajes ausentes no se imputan como cero;
-las escalas se mantienen separadas y múltiples puntajes no multiplican hallazgos.
+La pregunta 10 queda sin respuesta de seguridad de CI porque esta ejecución
+no contiene análisis de Actions. Los fallos y datos ausentes no equivalen a cero.

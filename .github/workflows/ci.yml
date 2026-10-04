@@ -39,6 +39,12 @@ jobs:
           python-version: "3.11"
       - run: uv sync --locked --project analyzer
       - run: uv run --project analyzer python analyzer/scripts/validate_notebook.py
+      - run: uv run --project analyzer python -m unittest discover -s analyzer/tests
+      - uses: actions/upload-artifact@v4
+        with:
+          name: analyzer-results
+          path: analyzer/outputs/
+          if-no-files-found: error
 
   security-tools:
     name: Container security tools
