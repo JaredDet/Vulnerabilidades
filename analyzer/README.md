@@ -1,12 +1,16 @@
 # Analyzer
 
-Abre esta carpeta en VS Code con las extensiones Python y Jupyter.
-Ejecuta `uv sync` y selecciona `.venv` como kernel del notebook
-`notebooks/analyzer.ipynb`.
+Abre la raíz `vulnerabilities` en VS Code con las extensiones Python y Jupyter.
+Ejecuta `uv sync --project analyzer` desde esa raíz y selecciona el entorno
+`analyzer/.venv` como kernel de `analyzer/notebooks/analyzer.ipynb`.
+Ejecuta las celdas en orden.
 
 El notebook carga un `dataset.json` del Miner, comprueba su estructura y prepara
-tablas de repositorios, hallazgos y puntajes. Cambia `DATASET_PATH` para seleccionar
-la ejecución. Usa rutas relativas y conserva separadas las escalas de puntajes.
+tablas de repositorios, hallazgos y puntajes. La celda de configuración localiza
+la raíz del repositorio desde cualquier subcarpeta. Selecciona `ORGANIZATION`,
+`CLONE_RUN` y `SBOM_RUN` para una copia de evidencia con la estructura de Django.
+La configuración comprueba el dataset y el reporte SBOM antes de continuar.
+Usa rutas relativas y conserva separadas las escalas de puntajes.
 
 El notebook desarrolla diez preguntas de investigación, con método, resultados,
 interpretación calculada y limitaciones. La pregunta 10 informa que la ejecución
@@ -32,7 +36,10 @@ las preguntas 7 a 9 cargan además los SBOM y la 10 carga el reporte de CodeQL.
 
 La copia anterior de Pallets sigue en `data/pallets/dataset.json`, con su propio
 `provenance.json`. Conserva estas entradas sin modificar; para estudiar otra
-ejecución, guarda una copia independiente y cambia `DATASET_PATH`.
+ejecución, guarda una copia independiente y ajusta la configuración de evidencia.
+La copia antigua de Pallets solo contiene el dataset: para ejecutar también las
+preguntas 7 a 10 con esa organización, incorpora los reportes SBOM y CodeQL
+correspondientes y configura sus rutas.
 Las rutas originales dentro de los reportes se conservan como evidencia; el
 notebook carga el dataset desde la copia local.
 
