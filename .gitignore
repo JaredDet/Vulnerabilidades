@@ -6,5 +6,4 @@ outputs/
 # Copia local de artefactos; el dataset y su procedencia se versionan.
 data/django/clone-x269596i/analysis_results/
 data/django/clone-x269596i/repositories/
-data/django/clone-x269596i/sboms/
 data/django/clone-x269596i/vulnerabilities/

@@ -8,8 +8,8 @@ El notebook carga un `dataset.json` del Miner, comprueba su estructura y prepara
 tablas de repositorios, hallazgos y puntajes. Cambia `DATASET_PATH` para seleccionar
 la ejecución. Usa rutas relativas y conserva separadas las escalas de puntajes.
 
-El notebook desarrolla seis preguntas de investigación. Las preguntas 1 y 2
-mantienen su interpretación pendiente; las preguntas 3 a 6 incluyen resúmenes
+El notebook desarrolla ocho preguntas de investigación. Las preguntas 1 y 2
+mantienen su interpretación pendiente; las preguntas 3 a 8 incluyen resúmenes
 calculados a partir de la evidencia seleccionada.
 
 ## Evidencia de entrada
@@ -20,9 +20,11 @@ incluidos los repositorios, resultados de CodeQL, SBOM y resultados de Grype.
 `data/django/provenance.json` registra el origen, la fecha de copia, el SHA-256
 del dataset y la verificación de rutas y tamaños de los archivos copiados.
 
-Git conserva `dataset.json`, `clones.json` y `provenance.json`. La copia completa
-de repositorios y artefactos se mantiene localmente y está excluida de Git;
-las preguntas 1 a 6 solo necesitan el dataset versionado.
+La evidencia para versionar incluye `dataset.json`, `clones.json`,
+`provenance.json` y los SBOM de `sboms/sbom-j7jbqezb/`, con sus hashes en
+`data/django/sbom-provenance.json`. Los repositorios clonados y los artefactos
+de CodeQL y Grype se mantienen localmente y están excluidos de Git.
+Las preguntas 1 a 6 necesitan el dataset; las preguntas 7 y 8 cargan además los SBOM.
 
 La copia anterior de Pallets sigue en `data/pallets/dataset.json`, con su propio
 `provenance.json`. Conserva estas entradas sin modificar; para estudiar otra
@@ -37,6 +39,24 @@ repositorio, sus reglas distintas y la proporción de hallazgos que reúnen.
 Cada hallazgo cuenta una vez por archivo; la concentración conjunta del top 3
 usa hallazgos únicos para evitar duplicarlos entre ubicaciones. Se informa
 la cobertura de ubicación y el estado del análisis, incluidos los fallos.
+
+## Ecosistemas del inventario
+
+La pregunta 7 carga los documentos CycloneDX de la ejecución seleccionada
+en `SBOM_REPORT_PATH`. Cuenta registros de componentes y clasifica el ecosistema
+por `syft:package:type`, con el tipo de PURL como alternativa. Muestra cantidades
+y proporciones globales y por repositorio, conservando por separado los
+inventarios vacíos, fallidos, ausentes o inválidos. Utiliza el inventario completo,
+incluidos los componentes sin coincidencias de Grype.
+
+## Proporción de componentes con coincidencias
+
+La pregunta 8 cruza SBOM y Grype por repositorio, ecosistema, nombre y versión.
+Cada registro de componente cuenta una vez en el numerador, aunque tenga varios
+identificadores asociados. Presenta tamaño del inventario, componentes afectados,
+identidades distintas y proporciones, junto con la cobertura y los registros sin
+correspondencia. Las proporciones quedan sin definir para inventarios vacíos,
+análisis incompletos o correspondencias insuficientes.
 
 ## Puntajes de seguridad
 

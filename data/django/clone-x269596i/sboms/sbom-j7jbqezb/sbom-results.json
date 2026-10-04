@@ -1,0 +1,315 @@
+{
+  "organization": "django",
+  "repositories": [
+    {
+      "full_name": "django/.github",
+      "commit": "bb7894ae4614f3dd3ca050048f0a456e37f928e8",
+      "generation_date": "2026-10-03T20:32:47.583872Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-.github.json",
+      "error": null
+    },
+    {
+      "full_name": "django/accessibility",
+      "commit": "007b8a23d78c50db416eed1c5292e6c9e37a9eee",
+      "generation_date": "2026-10-03T20:32:49.519468Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-accessibility.json",
+      "error": null
+    },
+    {
+      "full_name": "django/asgi_ipc",
+      "commit": "dd529ec51489c4bafa070b1faf4e2e0bd71001f6",
+      "generation_date": "2026-10-03T20:32:50.959000Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-asgi_ipc.json",
+      "error": null
+    },
+    {
+      "full_name": "django/asgiref",
+      "commit": "13180847feffec1586204eff2571ed81f0bce1b8",
+      "generation_date": "2026-10-03T20:32:52.668815Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-asgiref.json",
+      "error": null
+    },
+    {
+      "full_name": "django/birthday20",
+      "commit": "4309d59bf4f9615bccb5c78c68eb3684499fff9a",
+      "generation_date": "2026-10-03T20:32:54.524130Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 10,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-birthday20.json",
+      "error": null
+    },
+    {
+      "full_name": "django/channels",
+      "commit": "531894e5b2a825168e16fd82f1766f748f71faf4",
+      "generation_date": "2026-10-03T20:32:58.149197Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 4,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-channels.json",
+      "error": null
+    },
+    {
+      "full_name": "django/channels_redis",
+      "commit": "6c6ec4a023f04d7400780e440c71efd2c669a757",
+      "generation_date": "2026-10-03T20:32:59.680623Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-channels_redis.json",
+      "error": null
+    },
+    {
+      "full_name": "django/code-of-conduct",
+      "commit": "ab8feeaf00859269db9c8f7c1686c7b09d9150b0",
+      "generation_date": "2026-10-03T20:33:00.996354Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-code-of-conduct.json",
+      "error": null
+    },
+    {
+      "full_name": "django/code.djangoproject.com",
+      "commit": "d439ded66a80fe91fb0456f40662a40bad962aa1",
+      "generation_date": "2026-10-03T20:33:02.910032Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 18,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-code.djangoproject.com.json",
+      "error": null
+    },
+    {
+      "full_name": "django/daphne",
+      "commit": "d7a005258cce3ad7893a759274647f46331d782e",
+      "generation_date": "2026-10-03T20:33:04.818738Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-daphne.json",
+      "error": null
+    },
+    {
+      "full_name": "django/deps",
+      "commit": "f5492c9fdf242f3da463f662e385f0555e203403",
+      "generation_date": "2026-10-03T20:33:06.159721Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-deps.json",
+      "error": null
+    },
+    {
+      "full_name": "django/django",
+      "commit": "a461af8ce48762d7ec602260aaff81014ddccbcb",
+      "generation_date": "2026-10-03T20:33:08.279450Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 40,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-django.json",
+      "error": null
+    },
+    {
+      "full_name": "django/django-asv",
+      "commit": "014a2236714d54a6199e82f18f7c6132a8527715",
+      "generation_date": "2026-10-03T20:33:57.324299Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 8,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-django-asv.json",
+      "error": null
+    },
+    {
+      "full_name": "django/django-box",
+      "commit": "9f4e162ad8db7e7a8fa458441ebef339572ecc2a",
+      "generation_date": "2026-10-03T20:35:20.468332Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-django-box.json",
+      "error": null
+    },
+    {
+      "full_name": "django/django-contrib-comments",
+      "commit": "4ad4c701f2a17ca62f040e94d73c2eb08af320e9",
+      "generation_date": "2026-10-03T20:35:22.075428Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-django-contrib-comments.json",
+      "error": null
+    },
+    {
+      "full_name": "django/django-docker-box",
+      "commit": "c6e158cd17f99facdd73e71e3a37f027951bdb7b",
+      "generation_date": "2026-10-03T20:35:26.412574Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-django-docker-box.json",
+      "error": null
+    },
+    {
+      "full_name": "django/django-docs-translations",
+      "commit": "e3a91960f4348845f725979f0b83ce9ac1673f2c",
+      "generation_date": "2026-10-03T20:35:27.790472Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-django-docs-translations.json",
+      "error": null
+    },
+    {
+      "full_name": "django/django-fuzzers",
+      "commit": "063a5ecba0855fdfea7178c69d99b1bdf9d4ae85",
+      "generation_date": "2026-10-03T20:35:29.251459Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-django-fuzzers.json",
+      "error": null
+    },
+    {
+      "full_name": "django/django-localflavor",
+      "commit": "dab72528e36b5f3883783c083cf729eb72e3a2f1",
+      "generation_date": "2026-10-03T20:35:30.739704Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-django-localflavor.json",
+      "error": null
+    },
+    {
+      "full_name": "django/djangobench",
+      "commit": "4c88fa81c4d7618604ae51e07c03c23f6734c2e6",
+      "generation_date": "2026-10-03T20:35:34.649130Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-djangobench.json",
+      "error": null
+    },
+    {
+      "full_name": "django/djangogigs.com",
+      "commit": "542d8265715f7a2489446ef5751168ed0e030d0b",
+      "generation_date": "2026-10-03T20:35:36.004952Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 5,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-djangogigs.com.json",
+      "error": null
+    },
+    {
+      "full_name": "django/djangopeople",
+      "commit": "16a3e3434426597a972855723662be599e0e52f5",
+      "generation_date": "2026-10-03T20:35:37.463070Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 23,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-djangopeople.json",
+      "error": null
+    },
+    {
+      "full_name": "django/djangoproject.com",
+      "commit": "911575b3d8a6e3fb48d116ce6f42cdbcd7dae4bc",
+      "generation_date": "2026-10-03T20:35:41.535170Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 87,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-djangoproject.com.json",
+      "error": null
+    },
+    {
+      "full_name": "django/djangosnippets.org",
+      "commit": "e078a18ac63dc76be69b2434e0db748bca465406",
+      "generation_date": "2026-10-03T20:35:44.383693Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 86,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-djangosnippets.org.json",
+      "error": null
+    },
+    {
+      "full_name": "django/dsf-bylaws",
+      "commit": "8411efee5cdf313fd86b054941c06a02f3e24115",
+      "generation_date": "2026-10-03T20:35:46.023715Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-dsf-bylaws.json",
+      "error": null
+    },
+    {
+      "full_name": "django/dsf-minutes",
+      "commit": "9f9bce1fb02738f0e36b861bcfef296abc3155b9",
+      "generation_date": "2026-10-03T20:35:47.528036Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 5,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-dsf-minutes.json",
+      "error": null
+    },
+    {
+      "full_name": "django/dsf-working-groups",
+      "commit": "844916a2ee53731ff38a3277f3e178e322882455",
+      "generation_date": "2026-10-03T20:35:50.890388Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-dsf-working-groups.json",
+      "error": null
+    },
+    {
+      "full_name": "django/new-features",
+      "commit": "b8186bd240655466f10ef5df0ae253be8d0b2edd",
+      "generation_date": "2026-10-03T20:35:52.864098Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 3,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-new-features.json",
+      "error": null
+    },
+    {
+      "full_name": "django/online-community-working-group",
+      "commit": "44fb9ce3cccdc2303d0295ffa8a6add74738c1d3",
+      "generation_date": "2026-10-03T20:35:54.498512Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 3,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-online-community-working-group.json",
+      "error": null
+    },
+    {
+      "full_name": "django/steering-council",
+      "commit": "fa68a2c595841870848e28829ede6e9eafb7cc9b",
+      "generation_date": "2026-10-03T20:35:56.173164Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-steering-council.json",
+      "error": null
+    },
+    {
+      "full_name": "django/ticketbot",
+      "commit": "b822f8b0593e0ae3156d5942695790cf20c55175",
+      "generation_date": "2026-10-03T20:35:58.493708Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\vulnerabilities\\miner\\organizations\\django\\work\\clone-x269596i\\sboms\\sbom-j7jbqezb\\django-ticketbot.json",
+      "error": null
+    }
+  ]
+}
