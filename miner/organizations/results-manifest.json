@@ -1,0 +1,782 @@
+{
+  "runs": [
+    {
+      "organization": "django",
+      "clone_run": "clone-x269596i",
+      "repositories": 31,
+      "findings": 202,
+      "files": 96,
+      "bytes": 8629280
+    },
+    {
+      "organization": "pallets",
+      "clone_run": "clone-zrhbvqrb",
+      "repositories": 17,
+      "findings": 310,
+      "files": 56,
+      "bytes": 5340652
+    }
+  ],
+  "files": [
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/codeql-results.json",
+      "sha256": "c3e095c9c64ebad73e21ac266fb1918360312e66032ba12e436c498ffe4bf72c",
+      "bytes": 108627
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-asgi_ipc/python/results.sarif",
+      "sha256": "6a124f406f8126f514537738be72ac83afcb9d0593c8b26c8425f3c1fa768727",
+      "bytes": 38999
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-asgiref/python/results.sarif",
+      "sha256": "0b661dfaf46bf97df59ee5998e12771d5467e0adf75714626b4c4d40f3d506f5",
+      "bytes": 48734
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-birthday20/javascript/results.sarif",
+      "sha256": "55d1f67ca371abae91b44368976ea365850d3e7b5771eb5af6dea26f13b2ef65",
+      "bytes": 81149
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-birthday20/python/results.sarif",
+      "sha256": "673b847cb725ff9366ddaaff039f728f1e454f26d7ddd916a305580281e61c3e",
+      "bytes": 39525
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-channels/javascript/results.sarif",
+      "sha256": "eecf2b3c7c0a1b29d022a1735019ae3690df9d9f27622612219fdb0bfa00f2a8",
+      "bytes": 92560
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-channels/python/results.sarif",
+      "sha256": "d803644309d95b59395dd0049e55ef67f25e102fcec59f21d58eb0212eee34f3",
+      "bytes": 73672
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-channels_redis/python/results.sarif",
+      "sha256": "98986a69cd9eef4d3a8fa9718fec7fba06cb9b0e192cd730491002c48f2d49c7",
+      "bytes": 43616
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-code.djangoproject.com/javascript/results.sarif",
+      "sha256": "45008a4322f3c463032ad01acff9a806b8c74728348b2be6d5332f745e06b605",
+      "bytes": 80196
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-code.djangoproject.com/python/results.sarif",
+      "sha256": "773f399d32280f25f69bc34b93e0d55c57d503c5ea575b4ae34acc2deaca8c37",
+      "bytes": 45409
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-daphne/python/results.sarif",
+      "sha256": "cec1034f5da9f47dcfd753ba6ebf90502671fc7a6222d331b371cc8089c510ec",
+      "bytes": 52737
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-django/javascript/results.sarif",
+      "sha256": "3a10bcbb2d0ea2384c3538db2f583acb94263512f09fc4999ee51b68cc951425",
+      "bytes": 1478205
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-django/python/results.sarif",
+      "sha256": "e00e2f3f02017c6e849524e9ab2f2ec26dcd6c3389d252b785a7321b9f97cc0d",
+      "bytes": 2438380
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-django-asv/javascript/results.sarif",
+      "sha256": "b04e49fa7d1e4c5c6e3a542b3c8e5adf6c460fee85e269cf0ae778ff16649fee",
+      "bytes": 147092
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-django-asv/python/results.sarif",
+      "sha256": "d7fb9587a97222872431326a4b570453b04b4b660bbef7c61a3878e5eca6d04e",
+      "bytes": 159004
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-django-contrib-comments/python/results.sarif",
+      "sha256": "bd95b90c15708effd28ba33511229733e7915fcf2e1903bb141fcc90211e0490",
+      "bytes": 79961
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-django-docker-box/python/results.sarif",
+      "sha256": "aab1400f40ede1265a2bc0373f9cdec41ea7f8c8a8566ef191bde7504e21d6b5",
+      "bytes": 36938
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-django-fuzzers/python/results.sarif",
+      "sha256": "e2ebfafc45f01e076f138e79f4bf24ab18d57fff8a37053614d120a2d9968208",
+      "bytes": 39361
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-django-localflavor/python/results.sarif",
+      "sha256": "399ec35e57ac6fe9f4aeefda86415524391b84ed3a83de247033f187b2fd8953",
+      "bytes": 299316
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangobench/javascript/results.sarif",
+      "sha256": "fb1dbcc592ba24d9b5b2ad84d8716ff5355267ad5ed1cee9345db4bb5cd2a063",
+      "bytes": 165379
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangobench/python/results.sarif",
+      "sha256": "e05090159d4ecfe3c2e0e5b8a3f42b7b7311ae0c1d5e5dc19477d997b39d6117",
+      "bytes": 181791
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangogigs.com/ruby/results.sarif",
+      "sha256": "2d7e6fbf7798c270871bd09bcd62bf0341fcefc62dba10808637be4d39dea323",
+      "bytes": 34555
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangopeople/javascript/results.sarif",
+      "sha256": "b78a92d1085c7260856219c55ab7bf7b10b40bce7a16a0d76b922c42444aa5d3",
+      "bytes": 114530
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangopeople/python/results.sarif",
+      "sha256": "50a8a28b04ef4207d6892be728b3bab43d17eb0d9c7ecf66b3f4d436d131eddd",
+      "bytes": 86378
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangoproject.com/javascript/results.sarif",
+      "sha256": "221978619cec2b45822d1b459b227b293e5f6fbcba2cd286272be548e6586562",
+      "bytes": 233735
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangoproject.com/python/results.sarif",
+      "sha256": "622f3736fa6a9474523be15ce9ef14abd90019d9761febfefa39c924f3d2e06e",
+      "bytes": 231059
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangosnippets.org/javascript/results.sarif",
+      "sha256": "303834ce15cafc193afc63cd2f7be7cb50dcbe9481103846b98b5c58677c7539",
+      "bytes": 137540
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangosnippets.org/python/results.sarif",
+      "sha256": "229d38d4974189acda80e423ea87124dc49e3ba933efff4c21358c6479c0a846",
+      "bytes": 101723
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-djangosnippets.org/ruby/results.sarif",
+      "sha256": "c309f592c25842b27c544a9772b899897a779da2a82015d24aeed6f256e69ddc",
+      "bytes": 71317
+    },
+    {
+      "path": "django/work/clone-x269596i/analysis_results/codeql-b4nijni0/django-ticketbot/python/results.sarif",
+      "sha256": "8e5ddeca3f597fb9585e12fee82dbaad59aca4a695d4fd5a03065daeb9782d29",
+      "bytes": 36117
+    },
+    {
+      "path": "django/work/clone-x269596i/clones.json",
+      "sha256": "fdf6c93ef9e12451617e2f6225cbddecb86c145994d83e26eda38ec74e21b386",
+      "bytes": 11686
+    },
+    {
+      "path": "django/work/clone-x269596i/dataset.json",
+      "sha256": "a86cf521bcab688f5bbc7e63f6a0c832be645f82d563ffab89217f11e772cab3",
+      "bytes": 290801
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-.github.json",
+      "sha256": "de377ed8acb4fd54fa1e0a03f12a8310f77bbdd02e54c0727c1a3bc750265049",
+      "bytes": 533
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-accessibility.json",
+      "sha256": "0c722e594fc97c7a5a4aeb3de9c1bdb45da260d783ea12a0e424e87adcd6c92c",
+      "bytes": 539
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-asgi_ipc.json",
+      "sha256": "ff311d0ed8d4311d6f63fe23dd0712dd949a9b945b23e1a5f350261a9a6c2fdc",
+      "bytes": 534
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-asgiref.json",
+      "sha256": "17ac26192863e7fddc0ac0f1eec573f90b14b49e5b27423d576e96b58f0c7e96",
+      "bytes": 2149
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-birthday20.json",
+      "sha256": "8fa2c7c33afdb3eaad15bf76b1316037f89a727be0bcc1351e650e7f0a5fe175",
+      "bytes": 13123
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-channels.json",
+      "sha256": "18985b76b75130e7dacbc3e05b79e594980415092f2af61302e66ae9b297f6ac",
+      "bytes": 4919
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-channels_redis.json",
+      "sha256": "52ea7dc397f5d1e0a008e0b99ab123f1c1c236ca271f4a744bc6a48fb037ec8d",
+      "bytes": 2156
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-code-of-conduct.json",
+      "sha256": "2e52e1b8d31e6d39293e17dca759c6f7bf6f81b129822dbf033a11aa7e0beb03",
+      "bytes": 2188
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-code.djangoproject.com.json",
+      "sha256": "84f8a15b722423718886241cda11d5a319673117b96a3fd497bc1720285037e7",
+      "bytes": 20975
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-daphne.json",
+      "sha256": "ab3c1f975c9a98bae1b8121d00f51fa36d7cdce5032d1457a0b3fa32d3e4eacf",
+      "bytes": 2148
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-deps.json",
+      "sha256": "81e5de7e6b4832c77922a3903227ef9f191f5adfea007d61036455e921db722d",
+      "bytes": 530
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-django-asv.json",
+      "sha256": "139a5e8c906aca00e6a0606e5d74fe9001eba3d60a318d04fb6a16956d960a59",
+      "bytes": 9670
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-django-box.json",
+      "sha256": "6000e9bcc15cfbb3c3905c4fe0cba922d4ddac1bfb3ef38eb0ac366d5119a424",
+      "bytes": 536
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-django-contrib-comments.json",
+      "sha256": "33a77de579a3cf790cbdb881ea5f7348adf6eb5f56764a1660350d7f5cc76e8a",
+      "bytes": 2163
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-django-docker-box.json",
+      "sha256": "747907b638f769e6b988884eb4e26331fc7591ed7fed898949415b668e101dcb",
+      "bytes": 2651
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-django-docs-translations.json",
+      "sha256": "0a151a3902fb2ed75915f6f2e37e22aacff655f465951c4cb50a1d019363c51d",
+      "bytes": 550
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-django-fuzzers.json",
+      "sha256": "be11a7a31c4c3d9f19461454fcab3cd123317bec01f9a393bdc06790ae6b8343",
+      "bytes": 540
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-django-localflavor.json",
+      "sha256": "39710ad70e6c00515db802cc1b2713ff50d45397a88b6a653489b630273d210f",
+      "bytes": 2158
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-django.json",
+      "sha256": "201691fc6f354d05aaf58317ca53649d0ab3583f6919f61cdef456f7c007780f",
+      "bytes": 39019
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-djangobench.json",
+      "sha256": "53249a8182bee75cf17a7424ee16bb54b1e2f1ff4a4c71682380d98e839ebdaa",
+      "bytes": 2151
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-djangogigs.com.json",
+      "sha256": "06fbdfaebf915582a8bbc54591e1f400398a430ec50d5ad59615f57f1bd195ad",
+      "bytes": 5907
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-djangopeople.json",
+      "sha256": "4fc4162990415dbd77eb6800d413ed6a4e165c2e32c510565c5adab288bd7980",
+      "bytes": 62118
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-djangoproject.com.json",
+      "sha256": "1ef8e4b33c3731e018c0ec4eaf463e4b347e0418f677bd73cec340b12b220a04",
+      "bytes": 188422
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-djangosnippets.org.json",
+      "sha256": "becc07d6a509825b0612df80968f07e0a4cb7e4771aaeefbe462f7ced3091dad",
+      "bytes": 190322
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-dsf-bylaws.json",
+      "sha256": "99739c1f47f2bd92749cc86931e4cbd99d7af233508b2c68c0ed041565cf4d85",
+      "bytes": 536
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-dsf-minutes.json",
+      "sha256": "b4256467befde191b677e189639b33f44758881c4f0a1de124d1a38c854ff54e",
+      "bytes": 6499
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-dsf-working-groups.json",
+      "sha256": "b9d1cdbcbfae0a5154ac89c0ab1a768fe0b93cda34e90c2be1187b73c33a3419",
+      "bytes": 544
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-new-features.json",
+      "sha256": "d6d260687f720ffafc1ae7e9406949d5bb3637fa0111db000a919dcd5793f2ab",
+      "bytes": 3831
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-online-community-working-group.json",
+      "sha256": "8b2731bfa26ffc9e4ceb95fb034407ebb02ccb7958e58a5941e5a43442a8fe88",
+      "bytes": 3849
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-steering-council.json",
+      "sha256": "c683203c9016080e032fddc5f678b38b0c6502d855fa2bb3b989c15dd59ccd8b",
+      "bytes": 542
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/django-ticketbot.json",
+      "sha256": "cb20c674df72bea5a38094123a0de512e5ea92f5ca0335d6f761af8e0e775db0",
+      "bytes": 2476
+    },
+    {
+      "path": "django/work/clone-x269596i/sboms/sbom-j7jbqezb/sbom-results.json",
+      "sha256": "6c07f080a580561bdf32df1e8d3d9e6bc98f6de4debe09e566aa85f631e5105e",
+      "bytes": 14472
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-.github.json",
+      "sha256": "52ceadbc2c55d31c365f1c454a198a6f72b15d0ff187e589ce6f039b99d6ff28",
+      "bytes": 6002
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-accessibility.json",
+      "sha256": "68a0ead9c169014b7b0f43e40139f1992b2b0c1da79cc450f924bfbdc9fc2320",
+      "bytes": 6014
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-asgi_ipc.json",
+      "sha256": "4f123f523a04ad9dc38e44da9d22c8503602a1ec5e247f6cc2a287e40f589b87",
+      "bytes": 6004
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-asgiref.json",
+      "sha256": "df51dc2c847385ea51bbb29cdf12a719c491c198d4f61ffc9120f788472b0606",
+      "bytes": 6002
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-birthday20.json",
+      "sha256": "a04166337e0fd9e5fd2840cb2d7980ad3b10bf2bdbdf1ca6a1961af7ba70cce1",
+      "bytes": 6007
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-channels.json",
+      "sha256": "84b442e1433c6919da7ac797084fc9a5e8582b3530cbd51fad2b2227665c1fce",
+      "bytes": 6004
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-channels_redis.json",
+      "sha256": "409bd6844795dbc7bc987e13eb8cb7c872dd55e631aff022dafe288f20432181",
+      "bytes": 6016
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-code-of-conduct.json",
+      "sha256": "0c776a904d66cd33804145be416526c031e2ef5fdd7703bf7669357d3e1c90d2",
+      "bytes": 6018
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-code.djangoproject.com.json",
+      "sha256": "7954bf5455511b5ebf65a610547fc431b9fce5c984cf7c0052033c334e4df29a",
+      "bytes": 13750
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-daphne.json",
+      "sha256": "e329cd61d5ede9e100a4b5b8a9a1d1c9cd40b811ab686af4890b285d5f59b8a5",
+      "bytes": 5998
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-deps.json",
+      "sha256": "c0f89f15e24bfe9467f36daa679ef5b942374473b94be0b484715f489a556c2c",
+      "bytes": 5996
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-django-asv.json",
+      "sha256": "a6f26b03cacda2e0ee0bdbb4d6ae794572ae6bcb1a57565c0466b05b1505ceb0",
+      "bytes": 6008
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-django-box.json",
+      "sha256": "06942234297303ecab664f3614e495ba1ba37498004e3937abefded41b9ab6c1",
+      "bytes": 6008
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-django-contrib-comments.json",
+      "sha256": "9718625187b6ae29cf5677281fabad7f0083fca372d86c584204b0c11299782a",
+      "bytes": 6034
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-django-docker-box.json",
+      "sha256": "e4cd6505443ed2cdc61fff60c44840fb780161b33114a153e5c2c33340c0c46c",
+      "bytes": 6022
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-django-docs-translations.json",
+      "sha256": "87d332ac834d5f45ea6a334a18e6ead0cbd8f93da35e6e9e0e582c1478b91617",
+      "bytes": 6036
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-django-fuzzers.json",
+      "sha256": "a8793898f8a66ecedcd30d5c60d111d5eff3d8b3e073d4a1f4d7f43dc95cc551",
+      "bytes": 6015
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-django-localflavor.json",
+      "sha256": "4e17777ee345efe79ab3470a29846b67bdf903f3beff3d95bb2a70a7f7a4c795",
+      "bytes": 6024
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-django.json",
+      "sha256": "3270e1f16d5b479a7ccf46454163fac4f7b3bae1837927a0d2ed670568ecc13d",
+      "bytes": 9302
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-djangobench.json",
+      "sha256": "72d3cd95957b40a0a9640c59129dc1d7d6afc5593685ae9f23cac6f956d5e2d0",
+      "bytes": 6010
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-djangogigs.com.json",
+      "sha256": "b4e50db77e883fabc83807b9ee0c5bb3f895e8dc57ff85f6bdabdf70301c2fde",
+      "bytes": 6015
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-djangopeople.json",
+      "sha256": "f8386a4d8e3b08ac663339809332c0dddd498724941a7239bb10e16f1505b87a",
+      "bytes": 152901
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-djangoproject.com.json",
+      "sha256": "7f47c37a94edf8a6e685b53afe2d777ac3732af70dfc16040a0c94bf3174c832",
+      "bytes": 22145
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-djangosnippets.org.json",
+      "sha256": "6c1500a229bd83cc918530d77e442fece19c1e1441ae5725f5dc135e8864bca4",
+      "bytes": 379915
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-dsf-bylaws.json",
+      "sha256": "a7fbfc338922132c42500add2ff4cdb3b48ed2ca3924957bf960e5a03cb754bf",
+      "bytes": 6008
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-dsf-minutes.json",
+      "sha256": "1eab790cd58cf9cb94a4f349e5973ef67ea55bc29bd381fc2b0535a20d66ccd6",
+      "bytes": 6010
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-dsf-working-groups.json",
+      "sha256": "207840483f7dbbc920cf4087af46bf7e8f72875726dff6e6944adb736f8fb20a",
+      "bytes": 6024
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-new-features.json",
+      "sha256": "bcaf9cea89a8d7be6fa81010713e23e38bf0cc2a942a4dc8ac00a3eb66f0e80f",
+      "bytes": 6011
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-online-community-working-group.json",
+      "sha256": "13dd9f89c55ce4b710be04ac051c75c2dd1f4d8a5b354e55187435134581a813",
+      "bytes": 6048
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-steering-council.json",
+      "sha256": "82d9ade069bf7ba06665455b0da6635c13b38868e8c37c564fe3158f9782fd8a",
+      "bytes": 6020
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/django-ticketbot.json",
+      "sha256": "750cc8f3fe8c83e56078f3673f630e1e690843fb4d632527dbf347f1d709aeaa",
+      "bytes": 16770
+    },
+    {
+      "path": "django/work/clone-x269596i/vulnerabilities/vulnerability-la7sgqtl/vulnerability-results.json",
+      "sha256": "449ccd1f9e1486977bebef620d79fdb97298c324be740a2e1fc75a9f37c729d1",
+      "bytes": 215301
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/codeql-results.json",
+      "sha256": "ea66f84b3476bc71901cbe0f15eb800feced404731847b09de7763a4badff1ed",
+      "bytes": 66506
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-click/python/results.sarif",
+      "sha256": "b108d018bb8d92dc3f757ca3befbafce48e8bcf4be4d0663e09505a47c0dab3e",
+      "bytes": 104730
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-flask/python/results.sarif",
+      "sha256": "c26ce5d4e71badbc5e71793be7e76b3c3b0f6fa2fe1bf6a67d1f919363fa3df5",
+      "bytes": 106563
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-flask-docs/python/results.sarif",
+      "sha256": "939b19ed85dcede8e677b17a80a2510a030f7101797d28d242d6a13debe9ee72",
+      "bytes": 37444
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-flask-ext-migrate/python/results.sarif",
+      "sha256": "8724038f1d0dbc7d8f5fc62327af0052419cfd2ef86628339140471825db8176",
+      "bytes": 39682
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-flask-sphinx-themes/python/results.sarif",
+      "sha256": "3586724abd6618d2609fd52211fa74dc79692f3858fd6063436e222cb2365332",
+      "bytes": 36842
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-flask-website/javascript/results.sarif",
+      "sha256": "a2c5d40c4609deea6eed432f3227e269364fa9b75ea4811eb86c9e702806ac5c",
+      "bytes": 153211
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-flask-website/python/results.sarif",
+      "sha256": "6340a8c038d3c2f30757f078b0deb66eb0af732782f389f79906aadae4a3e618",
+      "bytes": 60568
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-itsdangerous/python/results.sarif",
+      "sha256": "476cd02a209a291ecc5657e0320ac660853722d1084f8a88c3c396fee8366ff9",
+      "bytes": 47557
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-jinja/python/results.sarif",
+      "sha256": "bee337e223cea41f40b910690022f19e9a97e326ed0e1be78f3536b9991d8da3",
+      "bytes": 111828
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-pallets-sphinx-themes/javascript/results.sarif",
+      "sha256": "66b46d63888f8a9638c232325141dd4f6e445791fb6c1bf4829a87bf197381f8",
+      "bytes": 77337
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-pallets-sphinx-themes/python/results.sarif",
+      "sha256": "50661cd249f92fa8917a8640f2c598a26c4671e156e7dbcf664b7118a47b8699",
+      "bytes": 43187
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-quart/python/results.sarif",
+      "sha256": "1e166e293ec3f5ec46d9f79bdd8477d8b3f168c2f6262ed0bba25a2beecc4814",
+      "bytes": 83987
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-website/python/results.sarif",
+      "sha256": "980407d20ca823a79bcd52a6a1323428c5fc10e81d03c16f958319e3abfafde1",
+      "bytes": 39853
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-website-2016/javascript/results.sarif",
+      "sha256": "8f688d30b013e3e4195df95c49e090e2f6c54506a0c7a71d322e4d98b2109ebe",
+      "bytes": 78863
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-website-2016/python/results.sarif",
+      "sha256": "14b836286da34359c85884286f7f3feba65bbfcac94b3bac8e95a8900b8868a5",
+      "bytes": 37353
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-werkzeug/javascript/results.sarif",
+      "sha256": "7501ff9c2a7057a97dcccb7c4d71b3f0bffe74393e5b8a54c02bb4f442c4e125",
+      "bytes": 142445
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/analysis_results/codeql-0n4rg6pr/pallets-werkzeug/python/results.sarif",
+      "sha256": "4b4021fde00b8ccc5be4da9b41d79bbafb2599f41973ff85fc682e0d82c20519",
+      "bytes": 134370
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/clones.json",
+      "sha256": "3193efa69f2d9d82606b86b825ce95b8f79ff042e5c818d68a74caba174a03a3",
+      "bytes": 6125
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/dataset.json",
+      "sha256": "7e3f10a0f876410b588b9e3578d32427e89825dfdebccb038ad730b2eb7ec1db",
+      "bytes": 417260
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-.github.json",
+      "sha256": "2cf5f974b3fde33ada938c97faea8d9f6c7781b9bd7fc72df604b8e6cadf8583",
+      "bytes": 518
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-actions.json",
+      "sha256": "b7a6206fa2934c19d6b8e2c552a24a65193da74c681167306e98d4c7f1cf30e6",
+      "bytes": 1110
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-click.json",
+      "sha256": "ca5844325b14312374600d1dcbc628bfdbfba20d79b47e828551f515f0558f8b",
+      "bytes": 223831
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-flask-docs.json",
+      "sha256": "87c4c5ebbee6052e7cfef8f8c0553aaec2301de9cd2841741836439c69e36abc",
+      "bytes": 521
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-flask-ext-migrate.json",
+      "sha256": "0a136b04c9afe307b4fd3ab5e180eb84d4883fe303f8c1b5f79ca25a12ce9ada",
+      "bytes": 3293
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-flask-sphinx-themes.json",
+      "sha256": "9d37db50d68d8a4c07647be127c59b363ff2ae0010766b95fcc30804a48c0151",
+      "bytes": 530
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-flask-website.json",
+      "sha256": "851c4629dc483115f808412935d4d2717659d7b43cf7bd321e937dab41948314",
+      "bytes": 524
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-flask.json",
+      "sha256": "68599dfdaef16ef7d48fc017703c2dfdcac6262265e75a73fcc682c2cc94b614",
+      "bytes": 252920
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-itsdangerous.json",
+      "sha256": "da13dc0f890a73738a16d9daf9512dddb13aef9281a8678f2cffee60fc2225fd",
+      "bytes": 173176
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-jinja.json",
+      "sha256": "dbbadfb2145e2159851308515937fbe033b0135aa127144f2e9ac675c665771c",
+      "bytes": 180710
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-markupsafe.json",
+      "sha256": "b7b93615f57fbcf0aba744c6ffa2c498552b44bc34db503c938ba7b78d0c47c4",
+      "bytes": 181023
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-pallets-sphinx-themes.json",
+      "sha256": "9f0540c8498cd83f4084d548d7cd4c6aee0583d647b343bf0c1f31ea54093dfe",
+      "bytes": 204912
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-quart.json",
+      "sha256": "eb1cae3d613b5cd0c5c81a1ca9ec67ae63326b40aa100f77a06863f0adf49404",
+      "bytes": 222781
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-website-2016.json",
+      "sha256": "fb8231c9fd4c7ceef36b089e28a11dec18e638033889f74abd85e920e5131683",
+      "bytes": 587198
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-website.json",
+      "sha256": "36a1ff394707e6f40cabc16488e68303272afe7ff230264a92174d420cb95017",
+      "bytes": 144854
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-werkzeug-website.json",
+      "sha256": "0a8511e3501f0131cfb989bbc02640ad20e42316d5f98286ea26dec3ebcd2818",
+      "bytes": 527
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/pallets-werkzeug.json",
+      "sha256": "27ed77c3f7e04dcce277c8a5a3e28afa22599cde3aef1c25a285c08610ccab67",
+      "bytes": 190789
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/sboms/sbom-i2uookcw/sbom-results.json",
+      "sha256": "898545d4f0d24d2bc85a99089f57e6fdf30758b47e1d5b4566188bfe67cb549d",
+      "bytes": 7641
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-.github.json",
+      "sha256": "742591b936ba7b458a82d9dfab09dddcfc20fd78d2ba7ae7d6956dca69e0fcf0",
+      "bytes": 5970
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-actions.json",
+      "sha256": "a5543d4400c2a8399a2d0e54b4ad4d5d2bf91df2458398e3ab1d12e18ea59fdc",
+      "bytes": 5970
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-click.json",
+      "sha256": "49fd65336b13d3184f5421c5de6b9471649c4a2bc6709a18a1c7e3c7dadf9a1c",
+      "bytes": 86657
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-flask-docs.json",
+      "sha256": "ee3d02f38fa86e7e617c6b1ad7c6b958b70d70177c856569aff48e120218dd9c",
+      "bytes": 5976
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-flask-ext-migrate.json",
+      "sha256": "3d96f221ee5a39f6d2fe9a820bc5896995a89487678392ba0049a9798a3ae9fd",
+      "bytes": 5990
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-flask-sphinx-themes.json",
+      "sha256": "3c6b4d368ddfcd7aa03b62012bd4b54ce28070918371908fc2b31b39c2416812",
+      "bytes": 5994
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-flask-website.json",
+      "sha256": "c9cdb0981ee222ecb4ee6cc94dd93f0eaed04b5a0976505a942be4b91bf3be70",
+      "bytes": 5981
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-flask.json",
+      "sha256": "ce841ef1f4304e593e059ce658dc076e8d590f08170a731a613388494eb97af6",
+      "bytes": 139016
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-itsdangerous.json",
+      "sha256": "914e24423456236737937d4bd2d9d8bc4f2e0f8228b125b270a739e6d90bdd1a",
+      "bytes": 143691
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-jinja.json",
+      "sha256": "09c2cb8f94e3c244dd0f23cb24d3e514835233770fb3a78f8f4a95f6ee529505",
+      "bytes": 143677
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-markupsafe.json",
+      "sha256": "4722ecdd2c88292541f2ea6a8a57773a8e44c7cb19958fe4d1fec95536a6d5c8",
+      "bytes": 123013
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-pallets-sphinx-themes.json",
+      "sha256": "e3a7ddfe8de05298aa10be09a3a3b1daf697e6d51995789d96a2dda9b8d32398",
+      "bytes": 94920
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-quart.json",
+      "sha256": "b80330336b69b1fbdc28e79d98fcbdc0f39a463f0a8a08cf5be153eca58846f8",
+      "bytes": 37015
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-website-2016.json",
+      "sha256": "9a49a9cdbe8c6860d5da39e1794afdf74d82410def87527ac899f94a34fc49b9",
+      "bytes": 188623
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-website.json",
+      "sha256": "83e2c58fa4f3107973cc70c23cb51a8646a4a81c64efd36a5e12a9669e73b4f5",
+      "bytes": 32193
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-werkzeug-website.json",
+      "sha256": "95e57a95100bc1c12d458f53efcbff280915f7259b8f20485eb908309b3b8266",
+      "bytes": 5988
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/pallets-werkzeug.json",
+      "sha256": "e7135ce369fe84e8112bd3768267355de4149aa09462795a5a8c9bf1f991896b",
+      "bytes": 5972
+    },
+    {
+      "path": "pallets/work/clone-zrhbvqrb/vulnerabilities/vulnerability-8xorp9xt/vulnerability-results.json",
+      "sha256": "9a479af4d6ab359c596785240bccd787c34095f4d0542a033990b35a58c97d69",
+      "bytes": 101437
+    }
+  ]
+}

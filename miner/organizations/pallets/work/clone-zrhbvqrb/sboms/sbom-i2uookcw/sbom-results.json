@@ -1,0 +1,175 @@
+{
+  "organization": "pallets",
+  "repositories": [
+    {
+      "full_name": "pallets/.github",
+      "commit": "06702680f531ba49dc901b584479048ab55724f1",
+      "generation_date": "2026-10-02T17:54:15.778894Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-.github.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/actions",
+      "commit": "3255f16f0e8beb235859a5a82035717d5ebcb549",
+      "generation_date": "2026-10-02T17:54:18.173127Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 1,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-actions.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/click",
+      "commit": "06b2a678741131fd577ce170e23e5ca0aeba0309",
+      "generation_date": "2026-10-02T17:54:19.812967Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 101,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-click.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/flask",
+      "commit": "d73fa1cdcbd8b1465c151db8924ba58b1dd14e35",
+      "generation_date": "2026-10-02T17:54:22.738776Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 122,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-flask.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/flask-docs",
+      "commit": "ba4713af853166590cd9119e513dd5943380ed58",
+      "generation_date": "2026-10-02T17:54:27.083163Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-flask-docs.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/flask-ext-migrate",
+      "commit": "913e598e602979959a095d93057a6f7e0f3e0e05",
+      "generation_date": "2026-10-02T17:54:29.173420Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 2,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-flask-ext-migrate.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/flask-sphinx-themes",
+      "commit": "3d562d0f6869f4a1845f8c68cdbcd0139d1e0bbf",
+      "generation_date": "2026-10-02T17:54:30.613179Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-flask-sphinx-themes.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/flask-website",
+      "commit": "8b083412f98842ee5e2b674cad40b8bf18501216",
+      "generation_date": "2026-10-02T17:54:32.157521Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-flask-website.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/itsdangerous",
+      "commit": "672971d66a2ef9f85151e53283113f33d642dabd",
+      "generation_date": "2026-10-02T17:54:34.300795Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 85,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-itsdangerous.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/jinja",
+      "commit": "5ef70112a1ff19c05324ff889dd30405b1002044",
+      "generation_date": "2026-10-02T17:54:36.069527Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 88,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-jinja.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/markupsafe",
+      "commit": "b2e4d9c7687be25695fffbe93a37622302b24fb1",
+      "generation_date": "2026-10-02T17:54:37.933575Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 86,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-markupsafe.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/pallets-sphinx-themes",
+      "commit": "3d18f209a4a974c2c1e1a6978f91d9cc6cf0e798",
+      "generation_date": "2026-10-02T17:54:39.766270Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 89,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-pallets-sphinx-themes.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/quart",
+      "commit": "29d339c87f9efd1ba5268666e2404530fe078911",
+      "generation_date": "2026-10-02T17:54:41.544491Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 107,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-quart.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/website",
+      "commit": "ec1afc97897f0f632d26aa4d24cf6aab88e60501",
+      "generation_date": "2026-10-02T17:54:44.317942Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 70,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-website.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/website-2016",
+      "commit": "9f97f1ead3bae18fe5faf41c2031254182f16de8",
+      "generation_date": "2026-10-02T17:54:47.304009Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 376,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-website-2016.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/werkzeug",
+      "commit": "594452f6a4fe4de38a544962fbf04bfc9d37fbc2",
+      "generation_date": "2026-10-02T17:54:50.494522Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 91,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-werkzeug.json",
+      "error": null
+    },
+    {
+      "full_name": "pallets/werkzeug-website",
+      "commit": "a1243ec5104a0b5eb51d74f40c8ff2386074b101",
+      "generation_date": "2026-10-02T17:54:54.012599Z",
+      "syft_version": "1.51.0",
+      "status": "generated",
+      "component_count": 0,
+      "sbom_path": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\sboms\\sbom-i2uookcw\\pallets-werkzeug-website.json",
+      "error": null
+    }
+  ]
+}

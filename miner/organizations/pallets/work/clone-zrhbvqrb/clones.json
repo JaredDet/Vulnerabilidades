@@ -1,0 +1,161 @@
+{
+  "organization": "pallets",
+  "workspace": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb",
+  "repositories": [
+    {
+      "repository": {
+        "full_name": "pallets/.github",
+        "clone_url": "https://github.com/pallets/.github.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\.github",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/actions",
+        "clone_url": "https://github.com/pallets/actions.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\actions",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/click",
+        "clone_url": "https://github.com/pallets/click.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\click",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/flask",
+        "clone_url": "https://github.com/pallets/flask.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\flask",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/flask-docs",
+        "clone_url": "https://github.com/pallets/flask-docs.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\flask-docs",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/flask-ext-migrate",
+        "clone_url": "https://github.com/pallets/flask-ext-migrate.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\flask-ext-migrate",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/flask-sphinx-themes",
+        "clone_url": "https://github.com/pallets/flask-sphinx-themes.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\flask-sphinx-themes",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/flask-website",
+        "clone_url": "https://github.com/pallets/flask-website.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\flask-website",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/itsdangerous",
+        "clone_url": "https://github.com/pallets/itsdangerous.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\itsdangerous",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/jinja",
+        "clone_url": "https://github.com/pallets/jinja.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\jinja",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/markupsafe",
+        "clone_url": "https://github.com/pallets/markupsafe.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\markupsafe",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/pallets-sphinx-themes",
+        "clone_url": "https://github.com/pallets/pallets-sphinx-themes.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\pallets-sphinx-themes",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/quart",
+        "clone_url": "https://github.com/pallets/quart.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\quart",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/website",
+        "clone_url": "https://github.com/pallets/website.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\website",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/website-2016",
+        "clone_url": "https://github.com/pallets/website-2016.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\website-2016",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/werkzeug",
+        "clone_url": "https://github.com/pallets/werkzeug.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\werkzeug",
+      "error": null,
+      "status": "cloned"
+    },
+    {
+      "repository": {
+        "full_name": "pallets/werkzeug-website",
+        "clone_url": "https://github.com/pallets/werkzeug-website.git"
+      },
+      "source": "C:\\Users\\jamar\\ciberseguridad\\miner\\organizations\\pallets\\work\\clone-zrhbvqrb\\repositories\\pallets\\werkzeug-website",
+      "error": null,
+      "status": "cloned"
+    }
+  ],
+  "cloned": 17,
+  "failed": 0
+}

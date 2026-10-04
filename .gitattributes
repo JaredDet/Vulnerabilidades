@@ -1,4 +1,4 @@
 * text=auto
-*.json -text
-*.sarif -text
+*.json -text whitespace=cr-at-eol
+*.sarif -text whitespace=cr-at-eol
 *.ipynb text eol=lf
