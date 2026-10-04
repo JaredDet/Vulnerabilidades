@@ -4,6 +4,9 @@ __pycache__/
 outputs/
 
 # Copia local de artefactos; el dataset y su procedencia se versionan.
-data/django/clone-x269596i/analysis_results/
+data/django/clone-x269596i/analysis_results/*
+!data/django/clone-x269596i/analysis_results/codeql-b4nijni0/
+data/django/clone-x269596i/analysis_results/codeql-b4nijni0/*
+!data/django/clone-x269596i/analysis_results/codeql-b4nijni0/codeql-results.json
 data/django/clone-x269596i/repositories/
 data/django/clone-x269596i/vulnerabilities/

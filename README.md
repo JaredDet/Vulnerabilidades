@@ -8,9 +8,10 @@ El notebook carga un `dataset.json` del Miner, comprueba su estructura y prepara
 tablas de repositorios, hallazgos y puntajes. Cambia `DATASET_PATH` para seleccionar
 la ejecución. Usa rutas relativas y conserva separadas las escalas de puntajes.
 
-El notebook desarrolla ocho preguntas de investigación. Las preguntas 1 y 2
-mantienen su interpretación pendiente; las preguntas 3 a 8 incluyen resúmenes
-calculados a partir de la evidencia seleccionada.
+El notebook desarrolla diez preguntas de investigación, con método, resultados,
+interpretación calculada y limitaciones. La pregunta 10 informa que la ejecución
+actual no contiene análisis explícito de Actions; no interpreta esa falta de
+cobertura como ausencia de problemas de CI.
 
 ## Evidencia de entrada
 
@@ -22,9 +23,12 @@ del dataset y la verificación de rutas y tamaños de los archivos copiados.
 
 La evidencia para versionar incluye `dataset.json`, `clones.json`,
 `provenance.json` y los SBOM de `sboms/sbom-j7jbqezb/`, con sus hashes en
-`data/django/sbom-provenance.json`. Los repositorios clonados y los artefactos
-de CodeQL y Grype se mantienen localmente y están excluidos de Git.
-Las preguntas 1 a 6 necesitan el dataset; las preguntas 7 y 8 cargan además los SBOM.
+`data/django/sbom-provenance.json`. También se versiona el reporte consolidado
+`analysis_results/codeql-b4nijni0/codeql-results.json`, con su hash en
+`data/django/codeql-provenance.json`, para comprobar la cobertura por lenguaje.
+Los repositorios clonados y los demás artefactos de CodeQL y Grype se mantienen
+localmente y están excluidos de Git. Las preguntas 1 a 6 necesitan el dataset;
+las preguntas 7 a 9 cargan además los SBOM y la 10 carga el reporte de CodeQL.
 
 La copia anterior de Pallets sigue en `data/pallets/dataset.json`, con su propio
 `provenance.json`. Conserva estas entradas sin modificar; para estudiar otra
@@ -57,6 +61,23 @@ identificadores asociados. Presenta tamaño del inventario, componentes afectado
 identidades distintas y proporciones, junto con la cobertura y los registros sin
 correspondencia. Las proporciones quedan sin definir para inventarios vacíos,
 análisis incompletos o correspondencias insuficientes.
+
+## Componentes compartidos y seguridad de CI
+
+La pregunta 9 compara paquetes y versiones entre repositorios usando el
+inventario completo. Separa compartir un paquete de compartir su versión textual
+y conserva los componentes sin coincidencias de Grype.
+
+La pregunta 10 comprueba los resultados por lenguaje del reporte CodeQL.
+Solo un resultado explícito de `actions` acredita análisis de ese lenguaje.
+Muestra cobertura, reglas, niveles SARIF y ubicaciones cuando están disponibles;
+los análisis de otros lenguajes no se utilizan como sustituto.
+
+Las preguntas 1 y 2 interpretan automáticamente la concentración y repetición
+observadas. La 2 incluye rankings globales y por repositorio; la 3 presenta
+distribuciones completas de severidades y puntajes separados por escala y versión;
+la 4 incluye rankings de todos los paquetes e identificadores de Grype, también
+los que aparecen en un único repositorio.
 
 ## Puntajes de seguridad
 
