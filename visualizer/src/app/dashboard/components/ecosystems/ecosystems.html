@@ -1,0 +1,24 @@
+<div class="grid grid-cols-2 gap-4">
+  <app-chart kind="doughnut" [title]="'ecosistemas'" [labels]="doughnut().labels" [series]="doughnut().series" />
+  @if (ecosystems(); as table) {
+    <table class="w-full text-center">
+      <thead>
+        <tr>
+          @for (column of table.columns; track column) {
+            <th class="rounded-xl bg-white p-2 text-sm text-neutral-700">{{ column }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of table.rows; track $index) {
+          <tr>
+            @for (column of table.columns; track column) {
+              <td class="rounded-xl bg-white p-2 text-sm text-neutral-700">{{ cell(table, row, column) }}</td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
+<app-chart [title]="'ecosistemas_por_repositorio'" [stacked]="true" [labels]="stacked().labels" [series]="stacked().series" />

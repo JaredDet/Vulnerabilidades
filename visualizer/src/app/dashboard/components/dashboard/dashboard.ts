@@ -4,6 +4,7 @@ import { Component, PLATFORM_ID, afterNextRender, inject, signal } from '@angula
 import { Analysis } from '../../interfaces/analysis';
 import { AnalysisService } from '../../services/analysis';
 import { Distribution } from '../distribution/distribution';
+import { Ecosystems } from '../ecosystems/ecosystems';
 import { Files } from '../files/files';
 import { Overview } from '../overview/overview';
 import { Packages } from '../packages/packages';
@@ -13,7 +14,7 @@ import { Rules } from '../rules/rules';
 import { Severity } from '../severity/severity';
 
 @Component({
-  imports: [Overview, QuestionPanel, Distribution, Rules, Severity, Packages, Relation, Files],
+  imports: [Overview, QuestionPanel, Distribution, Rules, Severity, Packages, Relation, Files, Ecosystems],
   selector: 'app-dashboard',
   styleUrl: './dashboard.css',
   templateUrl: './dashboard.html',

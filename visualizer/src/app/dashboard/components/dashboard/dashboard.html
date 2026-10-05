@@ -28,6 +28,9 @@
           @case ('q06') {
             <app-files [question]="question" />
           }
+          @case ('q07') {
+            <app-ecosystems [question]="question" [nullText]="analysis.conventions.null" />
+          }
         }
       </app-question-panel>
     }
