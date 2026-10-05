@@ -13,9 +13,10 @@ import { QuestionPanel } from '../question-panel/question-panel';
 import { Relation } from '../relation/relation';
 import { Rules } from '../rules/rules';
 import { Severity } from '../severity/severity';
+import { Shared } from '../shared/shared';
 
 @Component({
-  imports: [Overview, QuestionPanel, Distribution, Rules, Severity, Packages, Relation, Files, Ecosystems, Exposure],
+  imports: [Overview, QuestionPanel, Distribution, Rules, Severity, Packages, Relation, Files, Ecosystems, Exposure, Shared],
   selector: 'app-dashboard',
   styleUrl: './dashboard.css',
   templateUrl: './dashboard.html',

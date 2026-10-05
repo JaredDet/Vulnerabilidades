@@ -34,6 +34,9 @@
           @case ('q08') {
             <app-exposure [question]="question" />
           }
+          @case ('q09') {
+            <app-shared [question]="question" [nullText]="analysis.conventions.null" />
+          }
         }
       </app-question-panel>
     }
