@@ -4,3 +4,4 @@
   }
 </select>
 <app-chart [title]="'top_archivos - hallazgos'" [horizontal]="true" [labels]="chart().labels" [series]="chart().series" />
+<app-data-table [title]="'top_archivos'" [columns]="fileColumns" [rows]="fileRows()" [nullText]="nullText()" [initialSort]="fileSort" />
