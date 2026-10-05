@@ -5,12 +5,13 @@ import { Analysis } from '../../interfaces/analysis';
 import { AnalysisService } from '../../services/analysis';
 import { Distribution } from '../distribution/distribution';
 import { Overview } from '../overview/overview';
+import { Packages } from '../packages/packages';
 import { QuestionPanel } from '../question-panel/question-panel';
 import { Rules } from '../rules/rules';
 import { Severity } from '../severity/severity';
 
 @Component({
-  imports: [Overview, QuestionPanel, Distribution, Rules, Severity],
+  imports: [Overview, QuestionPanel, Distribution, Rules, Severity, Packages],
   selector: 'app-dashboard',
   styleUrl: './dashboard.css',
   templateUrl: './dashboard.html',
