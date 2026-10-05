@@ -1,4 +1,13 @@
-import { Component, computed, effect, input, signal } from '@angular/core';
+import {
+  afterEveryRender,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 
 import { AnalysisValue } from '../../interfaces/analysis';
 import { formatAnalysisNumber } from '../chart/chart';
@@ -26,6 +35,7 @@ export class DataTable {
   readonly initialSort = input<DataTableSort | null>(null);
 
   readonly pageSizes = [5, 10, 20];
+  private readonly pageSizeSelect = viewChild<ElementRef<HTMLSelectElement>>('pageSizeSelect');
   readonly search = signal('');
   readonly filters = signal<Record<string, string>>({});
   readonly sort = signal<DataTableSort | null>(null);
@@ -97,6 +107,12 @@ export class DataTable {
     effect(() => {
       this.rows();
       this.page.set(0);
+    });
+    afterEveryRender(() => {
+      const select = this.pageSizeSelect()?.nativeElement;
+      if (select) {
+        select.value = String(this.pageSize());
+      }
     });
   }
 
