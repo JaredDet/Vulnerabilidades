@@ -8,7 +8,13 @@
         [question]="question"
         [open]="openId() === question.id"
         (toggled)="toggle(question.id)"
-      />
+      >
+        @switch (question.id) {
+          @case ('q01') {
+            <app-distribution [question]="question" />
+          }
+        }
+      </app-question-panel>
     }
   }
   </div>

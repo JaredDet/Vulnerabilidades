@@ -1,0 +1,5 @@
+<div class="grid grid-cols-2 gap-4">
+  @for (chart of charts(); track chart.tool) {
+    <app-chart [title]="'concentracion - ' + chart.tool" [horizontal]="true" [labels]="chart.labels" [series]="chart.series" />
+  }
+</div>
