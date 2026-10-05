@@ -22,6 +22,9 @@
           @case ('q04') {
             <app-packages [question]="question" />
           }
+          @case ('q05') {
+            <app-relation [question]="question" [nullText]="analysis.conventions.null" />
+          }
         }
       </app-question-panel>
     }

@@ -7,11 +7,12 @@ import { Distribution } from '../distribution/distribution';
 import { Overview } from '../overview/overview';
 import { Packages } from '../packages/packages';
 import { QuestionPanel } from '../question-panel/question-panel';
+import { Relation } from '../relation/relation';
 import { Rules } from '../rules/rules';
 import { Severity } from '../severity/severity';
 
 @Component({
-  imports: [Overview, QuestionPanel, Distribution, Rules, Severity, Packages],
+  imports: [Overview, QuestionPanel, Distribution, Rules, Severity, Packages, Relation],
   selector: 'app-dashboard',
   styleUrl: './dashboard.css',
   templateUrl: './dashboard.html',

@@ -1,0 +1,9 @@
+<div class="grid grid-cols-2">
+  @for (stat of stats(); track stat.label) {
+    <div class="flex flex-col items-center justify-center text-center">
+      <p class="text-xl font-semibold">{{ stat.value }}</p>
+      <p class="text-sm text-neutral-500">{{ stat.label }}</p>
+    </div>
+  }
+</div>
+<app-chart [title]="'relacion_conteos'" [horizontal]="true" [labels]="chart().labels" [series]="chart().series" />
