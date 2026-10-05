@@ -74,7 +74,11 @@
       ›
     </button>
     <p>{{ rangeLabel() }}</p>
-    <select class="rounded-xl bg-white p-2" [value]="pageSize()" (change)="onPageSize($event)">
+    <select
+      class="rounded-xl bg-white p-2"
+      [selectedIndex]="pageSizes.indexOf(pageSize())"
+      (change)="onPageSize($event)"
+    >
       @for (size of pageSizes; track size) {
         <option [value]="size">{{ size }}</option>
       }
