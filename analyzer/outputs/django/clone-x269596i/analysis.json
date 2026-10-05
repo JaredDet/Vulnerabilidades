@@ -1,6 +1,6 @@
 {
   "schema_version": "1.1",
-  "generated_at_utc": "2026-10-05T04:20:47.499113+00:00",
+  "generated_at_utc": "2026-10-05T04:32:35.733566+00:00",
   "organization": "django",
   "clone_run": "clone-x269596i",
   "summary": {
@@ -23,11 +23,12 @@
   "provenance": {
     "notebook": "analyzer/notebooks/analyzer.ipynb",
     "notebook_source_sha256": "d1dccd93724e91cb71997a7f5d81466434f216c810308bc7e755efe52eb5abb9",
-    "exporter_sha256": "dddd66275856dd31b00432e6a5c2536862fac85397c9fc07b955d62df9de3a32",
+    "exporter_sha256": "79cf0b3ee6d9f532662b36356ea36c6661cc63b8c45074fcfbe2a7a6feb9873c",
     "python": "3.11.14",
     "packages": {
       "pandas": "2.3.3",
       "matplotlib": "3.11.2",
+      "seaborn": "0.13.2",
       "nbformat": "5.11.1"
     },
     "evidence": [

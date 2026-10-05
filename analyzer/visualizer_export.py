@@ -356,7 +356,7 @@ def build_export(namespace: dict, notebook_path: Path) -> dict:
             "notebook_source_sha256": hashlib.sha256(json.dumps(source, ensure_ascii=False, sort_keys=True).encode()).hexdigest(),
             "exporter_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "python": platform.python_version(),
-            "packages": {name: version(name) for name in ("pandas", "matplotlib", "nbformat")},
+            "packages": {name: version(name) for name in ("pandas", "matplotlib", "seaborn", "nbformat")},
             "evidence": evidence_files(ns),
         },
         "coverage": {
