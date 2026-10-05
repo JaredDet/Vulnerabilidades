@@ -1,0 +1,14 @@
+<div class="grid grid-cols-4">
+  @for (stat of stats(); track $index) {
+    <div class="flex flex-col items-center justify-center text-center">
+      <p class="text-xl font-semibold">{{ stat.value }}</p>
+      <p class="text-sm text-neutral-500">{{ stat.label }}</p>
+    </div>
+  }
+</div>
+<div class="grid grid-cols-2 gap-4">
+  @for (chart of severityCharts(); track chart.tool) {
+    <app-chart [title]="'severidades - ' + chart.tool" [labels]="chart.labels" [series]="chart.series" />
+  }
+</div>
+<app-chart [title]="'puntajes_por_repositorio'" [horizontal]="true" [labels]="scoreChart().labels" [series]="scoreChart().series" />

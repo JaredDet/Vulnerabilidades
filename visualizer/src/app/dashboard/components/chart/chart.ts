@@ -16,6 +16,7 @@ ChartJs.register(...registerables);
 export interface ChartSeries {
   label: string;
   data: Array<number | null>;
+  colors?: string[];
 }
 
 export function formatAnalysisNumber(value: number, key = ''): string {
@@ -89,9 +90,10 @@ export class Chart {
           label: item.label,
           data: item.data,
           backgroundColor:
-            kind === 'doughnut'
+            item.colors ??
+            (kind === 'doughnut'
               ? labels.map((_, slice) => COLORS[slice % COLORS.length])
-              : COLORS[index % COLORS.length],
+              : COLORS[index % COLORS.length]),
         })),
       },
       options: {

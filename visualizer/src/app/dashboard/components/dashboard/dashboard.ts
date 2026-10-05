@@ -7,9 +7,10 @@ import { Distribution } from '../distribution/distribution';
 import { Overview } from '../overview/overview';
 import { QuestionPanel } from '../question-panel/question-panel';
 import { Rules } from '../rules/rules';
+import { Severity } from '../severity/severity';
 
 @Component({
-  imports: [Overview, QuestionPanel, Distribution, Rules],
+  imports: [Overview, QuestionPanel, Distribution, Rules, Severity],
   selector: 'app-dashboard',
   styleUrl: './dashboard.css',
   templateUrl: './dashboard.html',
