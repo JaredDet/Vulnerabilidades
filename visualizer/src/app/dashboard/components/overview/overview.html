@@ -1,0 +1,12 @@
+<section class="flex flex-col gap-4 rounded-2xl bg-neutral-50 p-6">
+  <p class="text-2xl font-semibold tracking-tight">{{ analysis().organization }} {{ analysis().clone_run }}</p>
+  <p class="text-base leading-relaxed text-neutral-600">{{ analysis().summary.scope }}</p>
+  <div class="grid grid-cols-4">
+    @for (item of summaryItems(); track item.label) {
+      <div class="flex flex-col items-center justify-center text-center">
+        <p class="text-xl font-semibold">{{ item.value }}</p>
+        <p class="text-sm text-neutral-500">{{ item.label }}</p>
+      </div>
+    }
+  </div>
+</section>
