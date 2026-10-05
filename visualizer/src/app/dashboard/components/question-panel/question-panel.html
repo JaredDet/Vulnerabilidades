@@ -1,0 +1,20 @@
+<section class="rounded-2xl bg-neutral-50 p-6">
+  <button
+    type="button"
+    class="w-full text-left text-2xl font-semibold tracking-tight"
+    (click)="toggled.emit()"
+  >
+    <span class="block">{{ question().id }} {{ question().title }}</span>
+    <span class="block">{{ question().status }}</span>
+  </button>
+  @if (open()) {
+    <div class="mt-4 flex flex-col gap-4">
+      <p class="text-base leading-relaxed text-neutral-600">{{ statuses()[question().status] }}</p>
+      @for (observation of question().observations; track observation.id) {
+        <p class="text-base leading-relaxed text-neutral-600">{{ observation.text_markdown }}</p>
+      }
+      <p class="text-base leading-relaxed text-neutral-600">{{ question().limitations_markdown }}</p>
+      <ng-content />
+    </div>
+  }
+</section>

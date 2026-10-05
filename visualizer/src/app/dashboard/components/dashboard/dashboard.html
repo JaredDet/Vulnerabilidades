@@ -2,6 +2,14 @@
   <div class="mx-auto flex w-full flex-col gap-4 px-6 py-10">
   @if (analysis(); as analysis) {
     <app-overview [analysis]="analysis" />
+    @for (question of analysis.questions; track question.id) {
+      <app-question-panel
+        [statuses]="analysis.conventions.statuses"
+        [question]="question"
+        [open]="openId() === question.id"
+        (toggled)="toggle(question.id)"
+      />
+    }
   }
   </div>
 </div>
