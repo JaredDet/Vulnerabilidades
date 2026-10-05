@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at_utc": "2026-10-04T21:22:26.311107+00:00",
+  "generated_at_utc": "2026-10-05T00:33:16.870940+00:00",
   "organization": "django",
   "clone_run": "clone-x269596i",
   "summary": {
@@ -22,7 +22,7 @@
   },
   "provenance": {
     "notebook": "analyzer/notebooks/analyzer.ipynb",
-    "notebook_source_sha256": "604b6f13d1877f265120d66cde0034de29af03fe10d38c187bc65b6dd2804764",
+    "notebook_source_sha256": "c3714cd80a36e2b75b6856210277fe042885790402a6ded0f1ae830c8f881873",
     "exporter_sha256": "5dc7e9061fc5018af8aab717a5a826f3aa77864eda565d1cad1ff6d6df98c206",
     "python": "3.11.14",
     "packages": {
@@ -206,11 +206,7 @@
   "coverage": {
     "tools": {
       "grain": "Etapa y estado; número de repositorios.",
-      "columns": [
-        "stage",
-        "status",
-        "repositories"
-      ],
+      "columns": ["stage", "status", "repositories"],
       "row_count": 4,
       "metric_definitions": {},
       "rows": [
@@ -738,7 +734,7 @@
       "id": "q01",
       "title": "¿Los hallazgos se concentran en pocos repositorios?",
       "status": "partial_evidence",
-      "method_and_definitions_markdown": "### Método\n\nContar los registros por repositorio y herramienta y calcular su proporción dentro de cada herramienta.\nIncluir todos los repositorios del dataset, conservando el estado del análisis. Un conteo cero no demuestra ausencia de problemas si el análisis falló.\n\n### Resultados\n\n### Comparación visual\n\nCada panel ordena los repositorios con registros por su participación en el total de la herramienta. Las etiquetas muestran porcentaje y cantidad. Los repositorios sin registros se omiten del gráfico; su estado permanece en la cobertura. El sombreado identifica resultados de análisis incompletos.\n",
+      "method_and_definitions_markdown": "### Método\n\nContar los registros por repositorio y herramienta y calcular su proporción dentro de cada herramienta.\nIncluir todos los repositorios del dataset, conservando el estado del análisis. Un conteo cero no demuestra ausencia de problemas si el análisis falló.\n\n### Resultados\n\n### Comparación visual\n\nCada panel ordena los repositorios con registros por su participación en el total de la herramienta. Las etiquetas muestran porcentaje y cantidad. Los repositorios sin registros se omiten del gráfico; su estado permanece en la cobertura. El sombreado identifica resultados de análisis incompletos.\n\n\nLos datos confirman de forma categórica que **los hallazgos no se distribuyen de manera uniforme** en la organización, sino que se concentran fuertemente en focos muy específicos según la naturaleza del análisis:\n\n* En el **código fuente propietario (CodeQL)**, el riesgo está hiperconcentrado en el núcleo del framework (`django/django`).\n* En la **cadena de suministro (Grype)**, el problema se desplaza masivamente hacia los proyectos auxiliares de la comunidad y servicios complementarios (`django/djangosnippets.org` y `djangopeople`).",
       "population_and_denominators": "proporcion: registros de cada herramienta en todos los repositorios del dataset.",
       "limitations_markdown": "Los conteos no están ajustados por tamaño del código ni número de dependencias. Se cuentan coincidencias, no vulnerabilidades únicas. La participación de los tres repositorios principales describe concentración observada, sin aplicar un umbral arbitrario para calificarla. Los fallos y la cobertura parcial condicionan la comparación.",
       "metrics": {},
@@ -746,16 +742,12 @@
         {
           "id": "q01-o01",
           "text_markdown": "- **codeql**: **django/django** reúne 52 de 69 registros (75.4%). Los 3 repositorios principales concentran **91.3%**; hay registros en 7 de 31 repositorios y 12 análisis incompletos.",
-          "evidence_tables": [
-            "concentracion"
-          ]
+          "evidence_tables": ["concentracion"]
         },
         {
           "id": "q01-o02",
           "text_markdown": "- **grype**: **django/djangosnippets.org** reúne 91 de 133 registros (68.4%). Los 3 repositorios principales concentran **95.5%**; hay registros en 6 de 31 repositorios y 0 análisis incompletos.",
-          "evidence_tables": [
-            "concentracion"
-          ]
+          "evidence_tables": ["concentracion"]
         }
       ],
       "tables": {
@@ -1216,7 +1208,7 @@
       "id": "q02",
       "title": "¿Qué reglas de CodeQL son más frecuentes y cuáles se repiten entre proyectos?",
       "status": "partial_evidence",
-      "method_and_definitions_markdown": "### Método\n\nFiltrar CodeQL y agrupar por identificador de regla. Una regla compartida aparece en al menos dos repositorios distintos. Distinguir el número de repositorios afectados del total de coincidencias: muchos casos en un solo proyecto no significan repetición entre proyectos.\n\n### Resultados\n\n### Frecuencia global y por repositorio\n\nSe incluyen todas las reglas observadas, también las que aparecen en un único repositorio. El ranking global cuenta coincidencias; el ranking por repositorio presenta hasta cinco reglas, con desempate por identificador. Los mensajes de ejemplo proceden de la evidencia y ayudan a interpretar el tipo de alerta; no son una confirmación de vulnerabilidad.\n\n\n### Frecuencia y extensión de las reglas\n\nLos paneles comparan las diez reglas con más registros: a la izquierda su frecuencia y a la derecha cuántos repositorios distintos las presentan. Comparten el orden de las reglas para distinguir una alerta repetida muchas veces en un proyecto de otra extendida entre proyectos.\n\nEl mapa de calor muestra qué proporción de los hallazgos de cada repositorio corresponde a esas reglas. Solo incluye repositorios con CodeQL `analyzed` y al menos un hallazgo; las celdas indican porcentajes, con una escala común de 0 a 100. Como se muestran hasta diez reglas, una fila puede sumar menos del 100 %. Los rankings completos y mensajes permanecen en la exportación para el Visualizer.\n",
+      "method_and_definitions_markdown": "### Método\n\nFiltrar CodeQL y agrupar por identificador de regla. Una regla compartida aparece en al menos dos repositorios distintos. Distinguir el número de repositorios afectados del total de coincidencias: muchos casos en un solo proyecto no significan repetición entre proyectos.\n\n### Resultados\n\n### Frecuencia global y por repositorio\n\nSe incluyen todas las reglas observadas, también las que aparecen en un único repositorio. El ranking global cuenta coincidencias; el ranking por repositorio presenta hasta cinco reglas, con desempate por identificador. Los mensajes de ejemplo proceden de la evidencia y ayudan a interpretar el tipo de alerta; no son una confirmación de vulnerabilidad.\n\n\n### Frecuencia y extensión de las reglas\n\nLos paneles comparan las diez reglas con más registros: a la izquierda su frecuencia y a la derecha cuántos repositorios distintos las presentan. Comparten el orden de las reglas para distinguir una alerta repetida muchas veces en un proyecto de otra extendida entre proyectos.\n\nEl mapa de calor muestra qué proporción de los hallazgos de cada repositorio corresponde a esas reglas. Solo incluye repositorios con CodeQL `analyzed` y al menos un hallazgo; las celdas indican porcentajes, con una escala común de 0 a 100. Como se muestran hasta diez reglas, una fila puede sumar menos del 100 %. Los rankings completos y mensajes permanecen en la exportación para el Visualizer.\n\n\nDel análisis detallado de las reglas de CodeQL se desprenden los siguientes hallazgos clave:\n\n* **Regla más frecuente:** La alerta **`py/url-redirection`** encabeza el volumen total con **20 registros (29.0%)** en toda la organización.\n* **Regla más extendida:** La misma regla, **`py/url-redirection`**, es la que presenta mayor transversalidad, estando presente en **4 repositorios distintos**.\n* **Perfil de repositorio:** Mientras que en proyectos principales como `django/django` las alertas se diversifican entre múltiples reglas (destacando `py/reflective-xss` y `py/url-redirection`), existen proyectos más pequeños y específicos —como `django/djangobench` y `django/django-asv`— donde el 100% de sus pocos hallazgos se concentra en una sola regla (`js/functionality-from-untrusted-source`).",
       "population_and_denominators": "proporcion: registros CodeQL globales; proporcion_en_repositorio: registros CodeQL de ese repositorio.",
       "limitations_markdown": "Compartir una regla significa compartir un tipo de alerta, no la misma vulnerabilidad concreta. La comparación depende de los lenguajes y repositorios analizados correctamente; no prueba que el problema sea explotable. Los identificadores y mensajes describen lo detectado por la herramienta, sin añadir explicaciones causales no verificadas. El ranking muestra frecuencia, no severidad ni riesgo.",
       "metrics": {},
@@ -1631,7 +1623,7 @@
       "id": "q03",
       "title": "¿Cómo se distribuyen las severidades y los puntajes, y dónde se concentran los altos?",
       "status": "partial_evidence",
-      "method_and_definitions_markdown": "### Introducción\n\nEsta pregunta estudia la distribución de los hallazgos según los puntajes originales disponibles. Queremos distinguir los repositorios que acumulan muchos hallazgos con puntajes altos de aquellos donde estos representan una proporción importante de los hallazgos puntuados.\n\nLas escalas de CodeQL y Grype se estudian por separado. Una puntuación alta orienta la revisión, pero no confirma la explotabilidad ni determina por sí sola el riesgo del repositorio.\n\n### Método\n\n#### CodeQL: puntaje de la regla\n\nUsaremos el valor original `security-severity` que el Miner extrae de los metadatos de la regla en el SARIF. Es un valor entre **0,0 y 10,0** asociado a la regla o query que generó el hallazgo. GitHub clasifica sus valores como **Low** (0,1–3,9), **Medium** (4,0–6,9), **High** (7,0–8,9) y **Critical** (9,0–10,0). En el dataset se conserva en `scores`, con `system = \"security-severity\"` y `source = \"codeql\"`. El Analyzer utiliza `value` directamente: no consulta cada identificador ni convierte `warning`, `error` o `note` en números.\n\nPara las consultas de seguridad incorporadas a las suites Default o Extended, GitHub documenta que el puntaje se asigna a la regla a partir del percentil 75 de los puntajes CVSS de CVE asociados a sus etiquetas CWE. Por ello, representa la severidad del tipo de problema detectado; no es una evaluación CVSS individual de cada ubicación de código ni demuestra su explotabilidad.\n\nFuente: [GitHub: cálculo de la severidad de seguridad](https://docs.github.com/en/code-security/concepts/code-scanning/code-scanning-alerts#calculation-of-security-severity-levels).\n\n#### Grype: puntajes CVSS publicados\n\nUsaremos los puntajes base que Grype proporciona en `scores`, con `system = \"CVSS\"`, conservando la fuente, versión, vector e identificador relacionado cuando estén disponibles. No se calcula una puntuación nueva a partir de la etiqueta cualitativa.\n\n#### Decisiones metodológicas\n\n- Se considera puntaje alto un valor mayor o igual a **7,0**.\n- Cada hallazgo se cuenta una sola vez. Cuando contiene varios puntajes, se utiliza el máximo como valor representativo para priorización; las fuentes originales permanecen en `scores`.\n- Una lista `scores` vacía significa que no hay puntuación disponible: no equivale a cero ni a severidad baja.\n- CodeQL y Grype se resumen en filas separadas. Sus valores no se suman ni se promedian entre herramientas.\n- La concentración se estudia mediante el número de hallazgos altos, su proporción entre los hallazgos puntuados y la cobertura de puntuación.\n\n\n### Resultados\n\nLa tabla resume la cobertura de puntuación por herramienta. Los gráficos comparan la concentración y las distribuciones; las métricas completas por repositorio se conservan en la exportación para el Visualizer. `proporcion_altos` utiliza como denominador únicamente los hallazgos con puntaje; `proporcion_altos_herramienta` muestra qué fracción de todos los hallazgos altos de esa herramienta pertenece al repositorio.\n\n### Distribución completa de severidades y puntajes\n\nLas etiquetas se agrupan por herramienta y `severity_kind`; se conservan los valores ausentes como **Sin dato**. No se convierten etiquetas SARIF ni categorías de Grype en números.\n\nPara los puntajes se utiliza el mismo máximo representativo por hallazgo definido antes. Los gráficos de severidad y los histogramas separan sus escalas; las tablas completas se conservan en la exportación. Los histogramas distinguen herramienta, sistema y versión del puntaje. Cada proporción usa el total puntuado de ese grupo. Los hallazgos sin puntaje permanecen en la tabla de cobertura y no se imputan como cero.\n",
+      "method_and_definitions_markdown": "### Introducción\n\nEsta pregunta estudia la distribución de los hallazgos según los puntajes originales disponibles. Queremos distinguir los repositorios que acumulan muchos hallazgos con puntajes altos de aquellos donde estos representan una proporción importante de los hallazgos puntuados.\n\nLas escalas de CodeQL y Grype se estudian por separado. Una puntuación alta orienta la revisión, pero no confirma la explotabilidad ni determina por sí sola el riesgo del repositorio.\n\n### Método\n\n#### CodeQL: puntaje de la regla\n\nUsaremos el valor original `security-severity` que el Miner extrae de los metadatos de la regla en el SARIF. Es un valor entre **0,0 y 10,0** asociado a la regla o query que generó el hallazgo. GitHub clasifica sus valores como **Low** (0,1–3,9), **Medium** (4,0–6,9), **High** (7,0–8,9) y **Critical** (9,0–10,0). En el dataset se conserva en `scores`, con `system = \"security-severity\"` y `source = \"codeql\"`. El Analyzer utiliza `value` directamente: no consulta cada identificador ni convierte `warning`, `error` o `note` en números.\n\nPara las consultas de seguridad incorporadas a las suites Default o Extended, GitHub documenta que el puntaje se asigna a la regla a partir del percentil 75 de los puntajes CVSS de CVE asociados a sus etiquetas CWE. Por ello, representa la severidad del tipo de problema detectado; no es una evaluación CVSS individual de cada ubicación de código ni demuestra su explotabilidad.\n\nFuente: [GitHub: cálculo de la severidad de seguridad](https://docs.github.com/en/code-security/concepts/code-scanning/code-scanning-alerts#calculation-of-security-severity-levels).\n\n#### Grype: puntajes CVSS publicados\n\nUsaremos los puntajes base que Grype proporciona en `scores`, con `system = \"CVSS\"`, conservando la fuente, versión, vector e identificador relacionado cuando estén disponibles. No se calcula una puntuación nueva a partir de la etiqueta cualitativa.\n\n#### Decisiones metodológicas\n\n- Se considera puntaje alto un valor mayor o igual a **7,0**.\n- Cada hallazgo se cuenta una sola vez. Cuando contiene varios puntajes, se utiliza el máximo como valor representativo para priorización; las fuentes originales permanecen en `scores`.\n- Una lista `scores` vacía significa que no hay puntuación disponible: no equivale a cero ni a severidad baja.\n- CodeQL y Grype se resumen en filas separadas. Sus valores no se suman ni se promedian entre herramientas.\n- La concentración se estudia mediante el número de hallazgos altos, su proporción entre los hallazgos puntuados y la cobertura de puntuación.\n\n\n### Resultados\n\nLa tabla resume la cobertura de puntuación por herramienta. Los gráficos comparan la concentración y las distribuciones; las métricas completas por repositorio se conservan en la exportación para el Visualizer. `proporcion_altos` utiliza como denominador únicamente los hallazgos con puntaje; `proporcion_altos_herramienta` muestra qué fracción de todos los hallazgos altos de esa herramienta pertenece al repositorio.\n\nEl análisis de la distribución de puntajes y severidades arroja conclusiones críticas sobre el perfil de riesgo de la organización:\n\nCobertura total de puntuación: Tanto CodeQL como Grype presentan una cobertura del 100% (1.0), lo que significa que la totalidad de los hallazgos analizados cuentan con una puntuación asignada, garantizando una base sólida para la evaluación.\n\nPrevalencia de alta severidad (≥7.0): Cerca de la mitad o más de los hallazgos superan el umbral de alto riesgo, registrando un 56.5% en CodeQL (39 hallazgos altos) y un 49.6% en Grype (66 hallazgos altos).\n\nConcentración del riesgo alto: Los puntajes elevados replican la disparidad observada en los volúmenes generales:\n\nEn CodeQL, las vulnerabilidades graves de código fuente se concentran fuertemente en el núcleo de django/django.\n\nEn Grype, las dependencias con severidad alta se desplazan masivamente hacia los proyectos auxiliares, destacando django/djangosnippets.org y django/djangopeople como los principales focos de vulnerabilidad en la cadena de suministro.",
       "population_and_denominators": "En severidades: registros por herramienta y severity_kind. En puntajes: hallazgos puntuados por herramienta, sistema y versión. Las proporciones altas excluyen hallazgos sin puntaje.",
       "limitations_markdown": "Los puntajes de CodeQL pertenecen a las reglas; los CVSS de Grype provienen de vulnerabilidades conocidas. El máximo elegido entre varias fuentes sirve para priorizar y puede ser conservador, pero no sustituye una evaluación de riesgo. No se combinan las herramientas en una única escala ni se infieren valores ausentes. La cobertura del análisis, las versiones CVSS y el tamaño de los proyectos condicionan las conclusiones.",
       "metrics": {
@@ -2382,7 +2374,7 @@
       "id": "q04",
       "title": "¿Qué paquetes e identificadores de Grype son más frecuentes y cuáles se comparten?",
       "status": "answered",
-      "method_and_definitions_markdown": "### Método\n\nSe filtran los hallazgos de Grype y se estudian dos agrupaciones complementarias:\n\n1. **Vulnerabilidades compartidas:** un identificador aparece en al menos dos repositorios distintos.\n2. **Paquetes compartidos:** un paquete vulnerable aparece en al menos dos repositorios distintos.\n\n`repositorios_afectados` mide la extensión dentro de la organización. `coincidencias_totales` conserva el número de registros producidos por el Miner. Las versiones y ubicaciones se mantienen para interpretar si los repositorios comparten realmente la misma dependencia afectada.\n\n### Paquetes e identificadores más frecuentes\n\nEstos rankings incluyen los registros de un único repositorio. Los paquetes se distinguen por nombre y tipo de ecosistema. Para cada uno se presentan tanto coincidencias totales como identificadores distintos; esas medidas no son intercambiables. Los identificadores CVE/GHSA se mantienen como aparecen en la evidencia, sin resolver posibles alias.\n",
+      "method_and_definitions_markdown": "### Método\n\nSe filtran los hallazgos de Grype y se estudian dos agrupaciones complementarias:\n\n1. **Vulnerabilidades compartidas:** un identificador aparece en al menos dos repositorios distintos.\n2. **Paquetes compartidos:** un paquete vulnerable aparece en al menos dos repositorios distintos.\n\n`repositorios_afectados` mide la extensión dentro de la organización. `coincidencias_totales` conserva el número de registros producidos por el Miner. Las versiones y ubicaciones se mantienen para interpretar si los repositorios comparten realmente la misma dependencia afectada.\n\n### Preparativos\n\n### Pregunta 4.1: ¿Cuáles son los paquetes e identificadores de Grype más frecuentes en la organización?\n\n**Enfoque**: Volumen total y rankings generales de las dependencias y vulnerabilidades detectadas por la herramienta en toda la muestra.\n\n### Pregunta 4.2: ¿Qué paquetes y vulnerabilidades se comparten entre múltiples repositorios?\n\n**Enfoque**: Transversalidad y alcance sistémico (aquello que no es un caso aislado, sino un problema presente en 2 o más repositorios a la vez).\n\n* **Transversalidad de vulnerabilidades:** Los identificadores `GHSA-q238-5cxm-5c9h` y `GHSA-gc5v-m9x4-r6x2` representan el mayor alcance sistémico al encontrarse presentes simultáneamente en **3 repositorios**. El resto de las incidencias transversales se distribuyen de forma uniforme afectando a **2 repositorios**.\n* **Paquetes compartidos:** `django` y `requests` lideran la propagación organizacional con presencia en **3 repositorios**, seguidos por dependencias de soporte como `psf/black`, `urllib3` y `gunicorn` en **2 repositorios**, lo que evidencia patrones comunes de reutilización de bases tecnológicas que replican riesgos idénticos en múltiples proyectos.\n\nEl análisis de Grype evidencia que el riesgo en la organización se concentra de manera sistémica en torno al ecosistema Python, destacando dos frentes principales:\n\n* **Volumen y Frecuencia Global (4.1):** El paquete `python: django` lidera ampliamente el volumen de registros con más de 50 coincidencias, impulsado principalmente por la vulnerabilidad de denegación de servicio `GHSA-q238-5cxm-5c9h` (GeoDjango). A su vez, `GHSA-gc5v-m9x4-r6x2` en `requests` destaca por su alta recurrencia en el manejo de archivos temporales.\n* **Transversalidad Organizacional (4.2):** Los paquetes `django` y `requests`, junto con sus respectivas vulnerabilidades críticas, son también los elementos con mayor alcance transversal, replicándose de forma idéntica en **3 repositorios**. Esto demuestra que la reutilización de estos componentes base propaga vulnerabilidades de manera uniforme a lo largo del portafolio de proyectos de la organización.",
       "population_and_denominators": "Se presentan conteos de registros y repositorios distintos; no se suman herramientas ni se deduplican alias.",
       "limitations_markdown": "Grype analiza componentes declarados en los SBOM y los contrasta con bases de vulnerabilidades conocidas. Una coincidencia no demuestra que el código vulnerable sea alcanzable durante la ejecución. Un mismo paquete puede aparecer con versiones distintas, y un identificador puede relacionarse con más de una fuente o paquete. Los resultados dependen de la completitud del SBOM y del estado de la base de datos de Grype al momento del análisis.",
       "metrics": {},
@@ -2478,11 +2470,7 @@
               "repositorios_afectados": 3,
               "vulnerabilidades_distintas": 42,
               "coincidencias_totales": 53,
-              "versiones_observadas": [
-                "2.1.10",
-                "5.2.7",
-                "6.1"
-              ]
+              "versiones_observadas": ["2.1.10", "5.2.7", "6.1"]
             },
             {
               "package": "pillow",
@@ -2490,9 +2478,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 19,
               "coincidencias_totales": 19,
-              "versiones_observadas": [
-                "12.0.0"
-              ]
+              "versiones_observadas": ["12.0.0"]
             },
             {
               "package": "urllib3",
@@ -2500,10 +2486,7 @@
               "repositorios_afectados": 2,
               "vulnerabilidades_distintas": 7,
               "coincidencias_totales": 9,
-              "versiones_observadas": [
-                "2.5.0",
-                "2.7.0"
-              ]
+              "versiones_observadas": ["2.5.0", "2.7.0"]
             },
             {
               "package": "requests",
@@ -2511,11 +2494,7 @@
               "repositorios_afectados": 3,
               "vulnerabilidades_distintas": 4,
               "coincidencias_totales": 8,
-              "versiones_observadas": [
-                "2.22.0",
-                "2.31.0",
-                "2.32.4"
-              ]
+              "versiones_observadas": ["2.22.0", "2.31.0", "2.32.4"]
             },
             {
               "package": "sqlparse",
@@ -2523,9 +2502,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 6,
               "coincidencias_totales": 6,
-              "versiones_observadas": [
-                "0.5.3"
-              ]
+              "versiones_observadas": ["0.5.3"]
             },
             {
               "package": "virtualenv",
@@ -2533,9 +2510,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 5,
               "coincidencias_totales": 5,
-              "versiones_observadas": [
-                "20.35.4"
-              ]
+              "versiones_observadas": ["20.35.4"]
             },
             {
               "package": "gunicorn",
@@ -2543,10 +2518,7 @@
               "repositorios_afectados": 2,
               "vulnerabilidades_distintas": 2,
               "coincidencias_totales": 4,
-              "versiones_observadas": [
-                "19.9.0",
-                "20.1.0"
-              ]
+              "versiones_observadas": ["19.9.0", "20.1.0"]
             },
             {
               "package": "django-allauth",
@@ -2554,9 +2526,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 3,
               "coincidencias_totales": 3,
-              "versiones_observadas": [
-                "65.9.0"
-              ]
+              "versiones_observadas": ["65.9.0"]
             },
             {
               "package": "werkzeug",
@@ -2564,9 +2534,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 3,
               "coincidencias_totales": 3,
-              "versiones_observadas": [
-                "3.1.3"
-              ]
+              "versiones_observadas": ["3.1.3"]
             },
             {
               "package": "bleach",
@@ -2574,9 +2542,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 2,
               "coincidencias_totales": 2,
-              "versiones_observadas": [
-                "6.2.0"
-              ]
+              "versiones_observadas": ["6.2.0"]
             },
             {
               "package": "djangorestframework",
@@ -2584,9 +2550,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 2,
               "coincidencias_totales": 2,
-              "versiones_observadas": [
-                "3.15.2"
-              ]
+              "versiones_observadas": ["3.15.2"]
             },
             {
               "package": "filelock",
@@ -2594,9 +2558,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 2,
               "coincidencias_totales": 2,
-              "versiones_observadas": [
-                "3.20.0"
-              ]
+              "versiones_observadas": ["3.20.0"]
             },
             {
               "package": "oauthlib",
@@ -2604,9 +2566,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 2,
               "coincidencias_totales": 2,
-              "versiones_observadas": [
-                "3.3.1"
-              ]
+              "versiones_observadas": ["3.3.1"]
             },
             {
               "package": "sentry-sdk",
@@ -2614,9 +2574,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 2,
               "coincidencias_totales": 2,
-              "versiones_observadas": [
-                "1.5.12"
-              ]
+              "versiones_observadas": ["1.5.12"]
             },
             {
               "package": "psf/black",
@@ -2624,10 +2582,7 @@
               "repositorios_afectados": 2,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 2,
-              "versiones_observadas": [
-                "25.9.0",
-                "stable"
-              ]
+              "versiones_observadas": ["25.9.0", "stable"]
             },
             {
               "package": "django-debug-toolbar",
@@ -2635,9 +2590,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "1.10.1"
-              ]
+              "versiones_observadas": ["1.10.1"]
             },
             {
               "package": "django-ses",
@@ -2645,9 +2598,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "0.8.10"
-              ]
+              "versiones_observadas": ["0.8.10"]
             },
             {
               "package": "geopy",
@@ -2655,9 +2606,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "1.18.1"
-              ]
+              "versiones_observadas": ["1.18.1"]
             },
             {
               "package": "gevent",
@@ -2665,9 +2614,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "1.4.0"
-              ]
+              "versiones_observadas": ["1.4.0"]
             },
             {
               "package": "idna",
@@ -2675,9 +2622,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "3.11"
-              ]
+              "versiones_observadas": ["3.11"]
             },
             {
               "package": "ipython",
@@ -2685,9 +2630,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "7.33.0"
-              ]
+              "versiones_observadas": ["7.33.0"]
             },
             {
               "package": "markdown",
@@ -2695,9 +2638,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "3.4.4"
-              ]
+              "versiones_observadas": ["3.4.4"]
             },
             {
               "package": "multipart",
@@ -2705,9 +2646,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "1.1.0"
-              ]
+              "versiones_observadas": ["1.1.0"]
             },
             {
               "package": "pygments",
@@ -2715,9 +2654,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "2.19.2"
-              ]
+              "versiones_observadas": ["2.19.2"]
             },
             {
               "package": "python-dotenv",
@@ -2725,9 +2662,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "1.1.1"
-              ]
+              "versiones_observadas": ["1.1.1"]
             },
             {
               "package": "setuptools",
@@ -2735,9 +2670,7 @@
               "repositorios_afectados": 1,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 1,
-              "versiones_observadas": [
-                "80.9.0"
-              ]
+              "versiones_observadas": ["80.9.0"]
             }
           ]
         },
@@ -2761,1017 +2694,791 @@
               "repositorios_afectados": 3,
               "coincidencias_totales": 3,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-q238-5cxm-5c9h",
               "repositorios_afectados": 3,
               "coincidencias_totales": 3,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-3h9f-r86x-qvjx",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-8988-9cw3-xx77",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-8cjm-8mp7-r2xf",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-8qcx-xf44-272x",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-923m-gv2p-w5qp",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-9hjg-9r4m-mvj7",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-9wx4-h78v-vm56",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-crhf-3pfg-w68w",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-frmv-pr5f-9mcr",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Critical"
-              ]
+              "severidades": ["Critical"]
             },
             {
               "vulnerability_id": "GHSA-h7pc-vwp9-298g",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-hc5x-x2vx-497g",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-qw25-v68c-qjf3",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-v53h-f6m7-xcgm",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-vxq7-64xx-v4gw",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-w3h3-4rj7-4ph4",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-wvqv-fj8w-qmhm",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-27jp-wm6q-gp25",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-29gw-9793-fvw7",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-29pr-6jr8-q5jm",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-29vq-49wr-vm6x",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-2jpr-83rg-v67j",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-2m8g-3cmr-wg3w",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-2mcm-79hx-8fxw",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-2xpw-w6gg-jr37",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-33mw-q7rj-mjwj",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-3496-9g83-7v6x",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-38jv-5279-wg99",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-45hq-cxwh-f6vc",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-4rrr-2h4v-f3j9",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-4x4j-2g7c-83w6",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-5239-wwwm-4pmq",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-597g-3phw-6986",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-5hrc-gvxj-w55p",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-5mf9-h53q-7mhq",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-5wmx-573v-2qwq",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-5x94-69rx-g8h2",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-5xmw-vc9v-4wf2",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-62p4-gmf7-7g93",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-6426-9fv3-65x8",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-65pc-fj4g-8rjx",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-68w8-qjq3-2gfm",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-6r8x-57c9-28j4",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-6r97-cj55-9hrq",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Critical"
-              ]
+              "severidades": ["Critical"]
             },
             {
               "vulnerability_id": "GHSA-6w2r-r2m5-xq5w",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-7h2m-m8vj-598h",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-7xr5-9hcq-chf9",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-87hc-h4r5-73f7",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-8m3c-c723-h4p4",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-8p8v-wh79-9r56",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-8rfp-98v4-mmr6",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-8v84-f9pq-wr9x",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-8x94-hmjh-97hq",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-933h-hp56-hf7m",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-94p9-xgh2-xp45",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-9h9j-4vrj-gf7g",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-9hw9-ch79-4vh6",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-c4qh-4vgv-qc6g",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-cfh3-3jmp-rvhc",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-cfqr-cjx5-5jcm",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-f2ff-p2ww-7p4p",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-fj7v-r99m-22gq",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-g47c-3xmw-q6m2",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-g92j-qhmh-64v2",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-gh4c-6fx4-qh6g",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-gj48-438w-jh9v",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-gm62-xv2j-4w53",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-gvg8-93h5-g6qq",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-h35f-9h28-mq5c",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-h5jv-4p7w-64jg",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-hgf8-39gv-g3f2",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-hj66-6f7g-4r5v",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-hmr4-m2h5-33qx",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Critical"
-              ]
+              "severidades": ["Critical"]
             },
             {
               "vulnerability_id": "GHSA-hvmf-r92r-27hr",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-j8r2-6x86-q33q",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-jjj6-mw9f-p565",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-mf9w-mj56-hr94",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-mhvh-fq92-pfmr",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-mjgh-79qc-68w3",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-mm6v-q8q9-pgcf",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-mmwr-2jhp-mc7j",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-mvfq-ggxm-9mc5",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-mwm9-4648-f68q",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-p2m9-wcp5-6qw3",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-p58f-9548-mpm2",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-pg7v-jwj7-p798",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-pghf-347x-c2gj",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-phj9-mv4w-65pm",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-prg7-hcfm-mfcr",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-pwgv-4x5q-6m9f",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-pwjp-ccjc-ghwg",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-pwv6-vv43-88gr",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-qccp-gfcp-xxvc",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-qg36-9jxh-fj25",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-qhmc-3mvr-f2j4",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-qmgc-5h2g-mvrw",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-qpc8-7fxc-cm4p",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-r73j-pqj5-w3x7",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-rqw2-ghq9-44m7",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-rrqc-c2jx-6jgv",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-v9qg-3j8p-r63v",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-vfq6-hq5r-27r6",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Critical"
-              ]
+              "severidades": ["Critical"]
             },
             {
               "vulnerability_id": "GHSA-vjc4-5qp5-m44j",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-vrcr-9hj9-jcg6",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-w26r-rmm8-9c29",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-w853-jp5j-5j7f",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-whj4-6x5x-4v2j",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-wjx4-4jcj-g98j",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-x78j-v8h9-3j2q",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-x7m3-jprg-wc5g",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Critical"
-              ]
+              "severidades": ["Critical"]
             },
             {
               "vulnerability_id": "GHSA-xj96-63gp-2gmr",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-xpv3-w29h-x7cv",
               "repositorios_afectados": 1,
               "coincidencias_totales": 1,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             }
           ]
         },
@@ -3798,11 +3505,7 @@
               "repositorios_afectados": 3,
               "vulnerabilidades_distintas": 42,
               "coincidencias_totales": 53,
-              "versiones_observadas": [
-                "2.1.10",
-                "5.2.7",
-                "6.1"
-              ]
+              "versiones_observadas": ["2.1.10", "5.2.7", "6.1"]
             },
             {
               "package": "requests",
@@ -3810,11 +3513,7 @@
               "repositorios_afectados": 3,
               "vulnerabilidades_distintas": 4,
               "coincidencias_totales": 8,
-              "versiones_observadas": [
-                "2.22.0",
-                "2.31.0",
-                "2.32.4"
-              ]
+              "versiones_observadas": ["2.22.0", "2.31.0", "2.32.4"]
             },
             {
               "package": "urllib3",
@@ -3822,10 +3521,7 @@
               "repositorios_afectados": 2,
               "vulnerabilidades_distintas": 7,
               "coincidencias_totales": 9,
-              "versiones_observadas": [
-                "2.5.0",
-                "2.7.0"
-              ]
+              "versiones_observadas": ["2.5.0", "2.7.0"]
             },
             {
               "package": "gunicorn",
@@ -3833,10 +3529,7 @@
               "repositorios_afectados": 2,
               "vulnerabilidades_distintas": 2,
               "coincidencias_totales": 4,
-              "versiones_observadas": [
-                "19.9.0",
-                "20.1.0"
-              ]
+              "versiones_observadas": ["19.9.0", "20.1.0"]
             },
             {
               "package": "psf/black",
@@ -3844,10 +3537,7 @@
               "repositorios_afectados": 2,
               "vulnerabilidades_distintas": 1,
               "coincidencias_totales": 2,
-              "versiones_observadas": [
-                "25.9.0",
-                "stable"
-              ]
+              "versiones_observadas": ["25.9.0", "stable"]
             }
           ]
         },
@@ -3871,162 +3561,126 @@
               "repositorios_afectados": 3,
               "coincidencias_totales": 3,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-q238-5cxm-5c9h",
               "repositorios_afectados": 3,
               "coincidencias_totales": 3,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-3h9f-r86x-qvjx",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-8988-9cw3-xx77",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-8cjm-8mp7-r2xf",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-8qcx-xf44-272x",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-923m-gv2p-w5qp",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-9hjg-9r4m-mvj7",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-9wx4-h78v-vm56",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-crhf-3pfg-w68w",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Medium"
-              ]
+              "severidades": ["Medium"]
             },
             {
               "vulnerability_id": "GHSA-frmv-pr5f-9mcr",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Critical"
-              ]
+              "severidades": ["Critical"]
             },
             {
               "vulnerability_id": "GHSA-h7pc-vwp9-298g",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "Low"
-              ]
+              "severidades": ["Low"]
             },
             {
               "vulnerability_id": "GHSA-hc5x-x2vx-497g",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-qw25-v68c-qjf3",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-v53h-f6m7-xcgm",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-vxq7-64xx-v4gw",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-w3h3-4rj7-4ph4",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             },
             {
               "vulnerability_id": "GHSA-wvqv-fj8w-qmhm",
               "repositorios_afectados": 2,
               "coincidencias_totales": 2,
               "paquetes_afectados": 1,
-              "severidades": [
-                "High"
-              ]
+              "severidades": ["High"]
             }
           ]
         },
@@ -4659,7 +4313,7 @@
       "id": "q05",
       "title": "¿Existe relación entre los conteos de CodeQL y Grype?",
       "status": "answered",
-      "method_and_definitions_markdown": "### Introducción\n\nEsta pregunta estudia si los repositorios con más hallazgos de código también tienden a presentar más vulnerabilidades conocidas en sus dependencias. Solo se incluyen repositorios cuyo estado sea `analyzed` tanto en CodeQL como en Grype; así, un análisis fallido no se interpreta como un conteo igual a cero.\n\n### Método: correlación de Spearman\n\nLa correlación de Spearman mide si dos variables mantienen una relación **monotónica**: cuando una aumenta, la otra tiende a aumentar o disminuir, aunque la relación no sea lineal. En lugar de comparar directamente los conteos, el método realiza estos pasos:\n\n1. Ordena los repositorios según sus hallazgos de CodeQL y asigna un rango a cada uno.\n2. Repite el proceso con los hallazgos de Grype.\n3. Cuando varios repositorios empatan, les asigna el rango promedio de las posiciones que ocupan.\n4. Calcula la correlación de Pearson entre ambas columnas de rangos.\n\nEl coeficiente resultante, **rho de Spearman (`ρ`)**, está entre `-1` y `1`:\n\n- `ρ` cercano a `1`: los repositorios con más hallazgos de CodeQL tienden a tener más hallazgos de Grype.\n- `ρ` cercano a `-1`: los repositorios con más hallazgos de una herramienta tienden a tener menos de la otra.\n- `ρ` cercano a `0`: no se observa una relación monotónica clara.\n\nSe usa Spearman porque los conteos tienen muchos empates y valores extremos, y no se puede asumir una distribución normal ni una relación lineal. El cálculo se realiza directamente con los rangos para no incorporar una dependencia adicional.",
+      "method_and_definitions_markdown": "### Introducción\n\nEsta pregunta estudia si los repositorios con más hallazgos de código también tienden a presentar más vulnerabilidades conocidas en sus dependencias. Solo se incluyen repositorios cuyo estado sea `analyzed` tanto en CodeQL como en Grype; así, un análisis fallido no se interpreta como un conteo igual a cero.\n\n### Método: correlación de Spearman\n\nLa correlación de Spearman mide si dos variables mantienen una relación **monotónica**: cuando una aumenta, la otra tiende a aumentar o disminuir, aunque la relación no sea lineal. En lugar de comparar directamente los conteos, el método realiza estos pasos:\n\n1. Ordena los repositorios según sus hallazgos de CodeQL y asigna un rango a cada uno.\n2. Repite el proceso con los hallazgos de Grype.\n3. Cuando varios repositorios empatan, les asigna el rango promedio de las posiciones que ocupan.\n4. Calcula la correlación de Pearson entre ambas columnas de rangos.\n\nEl coeficiente resultante, **rho de Spearman (`ρ`)**, está entre `-1` y `1`:\n\n- `ρ` cercano a `1`: los repositorios con más hallazgos de CodeQL tienden a tener más hallazgos de Grype.\n- `ρ` cercano a `-1`: los repositorios con más hallazgos de una herramienta tienden a tener menos de la otra.\n- `ρ` cercano a `0`: no se observa una relación monotónica clara.\n\nSe usa Spearman porque los conteos tienen muchos empates y valores extremos, y no se puede asumir una distribución normal ni una relación lineal. El cálculo se realiza directamente con los rangos para no incorporar una dependencia adicional.\n\n* **Tendencia general y asociación moderada ($\\rho = 0.513$):** El coeficiente obtenido indica una tendencia monótona positiva moderada entre ambos analizadores. Esto sugiere que, a nivel general, los repositorios que acumulan una mayor cantidad de vulnerabilidades de código detectadas por CodeQL también tienden a presentar un volumen mayor de vulnerabilidades en sus dependencias según Grype.\n* **Presencia de valores atípicos significativos:** \n  * **`djangosnippets.org`** destaca de forma masiva en la parte superior con un volumen crítico de hallazgos en Grype (~90) a pesar de tener un conteo bajo en CodeQL, lo que evidencia que el riesgo principal de este repositorio reside en sus dependencias externas de terceros más que en su código fuente propio.\n  * **`djangopeople`** se posiciona de forma separada en la zona intermedia-alta, acumulando un volumen importante en dependencias (~32) frente a un conteo bajo-moderado en CodeQL (~5).\n  * **`django`** se comporta de manera inversa y aislada en el extremo derecho, registrando una gran cantidad de hallazgos de código en CodeQL (~52) pero con un conteo mínimo en Grype, reflejando un proyecto fuertemente expuesto a nivel de lógica interna o código base pero con dependencias relativamente controladas.\n* **Concentración del portafolio:** La gran mayoría de los repositorios restantes se agrupan densamente en la esquina inferior izquierda con conteos bajos para ambas herramientas, lo que denota que un porcentaje importante del portafolio mantiene una superficie de exposición reducida tanto en código como en dependencias.",
       "population_and_denominators": "Población restringida a repositorios con ambas herramientas analyzed y conteos con variación.",
       "limitations_markdown": "La correlación describe asociación, no causalidad: los hallazgos de código no producen necesariamente vulnerabilidades en dependencias. Los conteos no están normalizados por líneas de código, cantidad de dependencias ni tamaño del repositorio. La muestra es pequeña y contiene empates y valores extremos; por ello se informan el coeficiente, el gráfico y el número de repositorios incluidos, sin afirmar significancia estadística. CodeQL y Grype además observan dimensiones de seguridad diferentes.",
       "metrics": {
@@ -4671,9 +4325,7 @@
         {
           "id": "q05-o01",
           "text_markdown": "Entre 19 repositorios con cobertura completa, Spearman ρ = 0.513: relación positiva y moderada. La asociación no demuestra causalidad ni significancia estadística.",
-          "evidence_tables": [
-            "relacion_conteos"
-          ]
+          "evidence_tables": ["relacion_conteos"]
         }
       ],
       "tables": {
@@ -4870,7 +4522,7 @@
       "id": "q06",
       "title": "¿En qué archivos se concentran los hallazgos de CodeQL dentro de cada repositorio?",
       "status": "partial_evidence",
-      "method_and_definitions_markdown": "### Método\n\nSe estudian los hallazgos de CodeQL y sus rutas en `locations`. Cada registro del dataset recibe un `finding_index`; si menciona varias veces el mismo archivo, se cuenta una sola vez en ese archivo. Si menciona archivos distintos, contribuye una vez a cada uno.\n\nSe presentan los tres archivos con más hallazgos por repositorio, el número de reglas distintas y la proporción respecto de todos los hallazgos de CodeQL del repositorio. Los empates se resuelven por ruta alfabética para obtener un máximo de tres archivos reproducible.\n\nLa concentración conjunta del top 3 usa la **unión de hallazgos** asociados a esos archivos: un hallazgo presente en dos archivos del top se cuenta una sola vez. Las proporciones individuales por archivo no deben sumarse.\n\nSe informa además la cobertura de ubicación y el estado de CodeQL para todos los repositorios. Los repositorios sin hallazgos tienen proporciones no definidas; un fallo de análisis no se interpreta como ausencia de problemas.\n\n### Resultados\n\nCada panel muestra los archivos principales de un repositorio. Las etiquetas indican el conteo y su porcentaje respecto de los hallazgos de CodeQL de ese repositorio. Las escalas horizontales son independientes; la tabla anterior permite comparar cantidades exactas y consultar la cobertura.\n",
+      "method_and_definitions_markdown": "### Método\n\nSe estudian los hallazgos de CodeQL y sus rutas en `locations`. Cada registro del dataset recibe un `finding_index`; si menciona varias veces el mismo archivo, se cuenta una sola vez en ese archivo. Si menciona archivos distintos, contribuye una vez a cada uno.\n\nSe presentan los tres archivos con más hallazgos por repositorio, el número de reglas distintas y la proporción respecto de todos los hallazgos de CodeQL del repositorio. Los empates se resuelven por ruta alfabética para obtener un máximo de tres archivos reproducible.\n\nLa concentración conjunta del top 3 usa la **unión de hallazgos** asociados a esos archivos: un hallazgo presente en dos archivos del top se cuenta una sola vez. Las proporciones individuales por archivo no deben sumarse.\n\nSe informa además la cobertura de ubicación y el estado de CodeQL para todos los repositorios. Los repositorios sin hallazgos tienen proporciones no definidas; un fallo de análisis no se interpreta como ausencia de problemas.\n\n* **Concentración en el repositorio principal (`django/django`):** En el proyecto de mayor envergadura, los hallazgos se distribuyen de manera más dispersa entre archivos clave del framework, destacando `tests/test_client_regress/views.py` con el mayor volumen (7 hallazgos, representando el 13.5% del total del repositorio), seguido por módulos de vistas estáticas y autenticación.\n* **Proyectos de bajo volumen y alta concentración:** En repositorios más acotados (como `django/django-asv`, `django/django-contrib-comments` o `django/djangosnippets.org`), el 100% de los hallazgos se concentra en un único archivo (`base.html`, `utils.py` o `admin.py` respectivamente), lo que indica que las incidencias de código están altamente localizadas en componentes específicos o scripts puntuales de administración y pruebas.\n* **Distribución equilibrada en utilidades y documentación:** Repositorios como `django/djangobench` y `django/djangoproject.com` muestran una distribución más equitativa entre sus tres principales archivos afectados, repartiendo el peso de los hallazgos de manera uniforme entre documentación, scripts de rendimiento y vistas de cuentas o recaudación.",
       "population_and_denominators": "Todos los hallazgos CodeQL del repositorio, incluidos los que carecen de ubicación. El top 3 cuenta la unión de hallazgos.",
       "limitations_markdown": "Se cuentan alertas de CodeQL, no vulnerabilidades confirmadas. Las rutas proceden de las ubicaciones conservadas por el Miner; no representan necesariamente todo el recorrido del flujo de datos de una alerta.\n\nLa concentración no está normalizada por líneas de código ni tamaño del archivo. Un porcentaje alto puede corresponder a muy pocos hallazgos o a un repositorio pequeño. Se incluyen archivos de pruebas y ejemplos: su contexto debe revisarse antes de priorizar. Los análisis fallidos o parciales y las ubicaciones ausentes limitan las conclusiones.",
       "metrics": {},
@@ -5830,7 +5482,7 @@
       "id": "q07",
       "title": "¿Qué ecosistemas predominan en el inventario de componentes y cómo varían entre repositorios?",
       "status": "answered",
-      "method_and_definitions_markdown": "### Método\n\nSe utiliza el inventario CycloneDX completo de la ejecución seleccionada en `SBOM_REPORT_PATH`, incluidos componentes sin coincidencias de Grype. El reporte `sbom-results.json` identifica cada repositorio, su estado y el archivo que corresponde cargar. Las rutas originales se resuelven por nombre de archivo dentro de la copia local de esa ejecución.\n\nLa unidad de conteo es cada registro de `components`, coherente con `component_count` del Miner. Se cuentan apariciones en los inventarios: un paquete repetido en distintos repositorios contribuye a cada uno. No se interpreta este total como paquetes únicos ni como dependencias directas.\n\nPara clasificar el ecosistema se utiliza `syft:package:type`: `python` se presenta como **PyPI**, `npm` como **npm** y los tipos `github-action` y `github-action-workflow` como **GitHub Actions**. Si falta ese dato, se usa el tipo de PURL (`pypi`, `npm`, etc.); un PURL `github` sin el tipo de Syft se mantiene como **GitHub (PURL)**, sin asumir que sea una acción. Los demás tipos se conservan identificados por su fuente y los componentes sin clasificación se agrupan como **Sin clasificar**. El campo CycloneDX `type` (por ejemplo, `library`) no se usa como ecosistema.\n\nSe calculan cantidades, proporciones y repositorios con presencia de cada ecosistema. La distribución por repositorio usa como denominador sus componentes inventariados. Un SBOM válido sin componentes se muestra como vacío, con proporciones no definidas; fallos, archivos ausentes y documentos inválidos se muestran aparte y no cuentan como inventarios vacíos.\n\n### Resultados\n\nLa primera tabla presenta la composición global y el número de repositorios en los que aparece cada ecosistema. `proporcion_repositorios` usa todos los SBOM válidos cargados, incluidos los vacíos. La segunda tabla muestra cantidades y proporciones por repositorio con componentes. La tabla de cobertura anterior conserva también los repositorios vacíos o no disponibles.\n",
+      "method_and_definitions_markdown": "### Método\n\nSe utiliza el inventario CycloneDX completo de la ejecución seleccionada en `SBOM_REPORT_PATH`, incluidos componentes sin coincidencias de Grype. El reporte `sbom-results.json` identifica cada repositorio, su estado y el archivo que corresponde cargar. Las rutas originales se resuelven por nombre de archivo dentro de la copia local de esa ejecución.\n\nLa unidad de conteo es cada registro de `components`, coherente con `component_count` del Miner. Se cuentan apariciones en los inventarios: un paquete repetido en distintos repositorios contribuye a cada uno. No se interpreta este total como paquetes únicos ni como dependencias directas.\n\nPara clasificar el ecosistema se utiliza `syft:package:type`: `python` se presenta como **PyPI**, `npm` como **npm** y los tipos `github-action` y `github-action-workflow` como **GitHub Actions**. Si falta ese dato, se usa el tipo de PURL (`pypi`, `npm`, etc.); un PURL `github` sin el tipo de Syft se mantiene como **GitHub (PURL)**, sin asumir que sea una acción. Los demás tipos se conservan identificados por su fuente y los componentes sin clasificación se agrupan como **Sin clasificar**. El campo CycloneDX `type` (por ejemplo, `library`) no se usa como ecosistema.\n\nSe calculan cantidades, proporciones y repositorios con presencia de cada ecosistema. La distribución por repositorio usa como denominador sus componentes inventariados. Un SBOM válido sin componentes se muestra como vacío, con proporciones no definidas; fallos, archivos ausentes y documentos inválidos se muestran aparte y no cuentan como inventarios vacíos.\n\n* **Volumen global:** Se analizaron 31 SBOM válidos que suman 310 componentes en total (10 de estos inventarios se encuentran vacíos por la naturaleza de los repositorios).\n* **Polarización de ecosistemas:** El portafolio se divide casi por completo entre **PyPI** (61.0% de los registros, concentrados en 7 repositorios) y **GitHub Actions** (38.7%, distribuidos en 19 proyectos), dejando a `npm` con una presencia puramente marginal (0.3%).\n* **Distribución por proyecto:** Las dependencias funcionales de Python pertenecen estrictamente al núcleo de desarrollo de Django, mientras que los flujos de integración continua abarcan de forma transversal a la mayor parte del portafolio.",
       "population_and_denominators": "Global: todos los componentes cargados. Presencia: todos los SBOM válidos, incluidos vacíos. Local: componentes del repositorio.",
       "limitations_markdown": "La distribución describe lo que Syft inventarió en esta ejecución. Un inventario vacío no demuestra que el proyecto carezca de dependencias; el resultado depende de los archivos presentes y de los catalogadores utilizados.\n\nSe incluyen componentes de desarrollo, pruebas y automatización. GitHub Actions describe un ecosistema de automatización, no un lenguaje de programación; tampoco se deduce el lenguaje principal del repositorio a partir de sus componentes. Los conteos no distinguen dependencias directas de transitivas y pueden incluir varias versiones o apariciones de un mismo paquete.\n\nLa presencia de un componente no implica una vulnerabilidad ni demuestra uso durante la ejecución. Los porcentajes por repositorio ponderan todos sus registros por igual y los porcentajes globales dan más peso a los inventarios grandes. Las preguntas sobre componentes vulnerables y paquetes compartidos se estudian por separado.",
       "metrics": {},
@@ -6203,12 +5855,7 @@
         },
         "ecosistemas_por_repositorio": {
           "grain": "Repositorio y ecosistema; conteos y composición local.",
-          "columns": [
-            "repository",
-            "ecosistema",
-            "componentes",
-            "proporcion"
-          ],
+          "columns": ["repository", "ecosistema", "componentes", "proporcion"],
           "row_count": 27,
           "metric_definitions": {
             "proporcion": "Fracción entre 0 y 1; el denominador específico se define en la pregunta."
@@ -6384,7 +6031,7 @@
       "id": "q08",
       "title": "¿Qué repositorios tienen más componentes y qué proporción presenta coincidencias con vulnerabilidades conocidas?",
       "status": "answered",
-      "method_and_definitions_markdown": "### Método\n\nSe cruzan los componentes cargados en la pregunta 7 con los hallazgos de Grype del dataset de la misma ejecución. La clave de correspondencia contiene **repositorio, ecosistema, nombre y versión**. Para PyPI se comparan los nombres en minúsculas y se sustituyen secuencias de guiones, puntos y guiones bajos por un guion. En los demás ecosistemas se conserva el nombre; las versiones se comparan como texto exacto, sin inferir equivalencias entre versiones ni resolver etiquetas a commits.\n\nSe mantiene la unidad de la pregunta 7: registros de componentes del SBOM. Cada registro se marca una sola vez como afectado si su clave tiene al menos una coincidencia de Grype, independientemente del número de identificadores asociados. Si la misma identidad aparece en varios registros del SBOM, cada registro contribuye al inventario y al numerador; por eso también se informa el número de identidades distintas afectadas.\n\n**Proporción afectada = registros de componentes con coincidencias / registros de componentes inventariados.** Los identificadores distintos por componente se conservan como detalle, pero no se suman para calcular esa proporción.\n\nLa proporción solo se presenta cuando el SBOM está disponible y es válido, Grype terminó como `analyzed`, todos los componentes tienen una clave utilizable y todos los hallazgos de Grype tienen correspondencia en el inventario. Si alguna condición falla, queda no definida. Un inventario vacío también tiene proporción no definida. Una proporción cero significa ausencia de coincidencias observadas bajo esas condiciones, no ausencia demostrada de vulnerabilidades.\n\n### Resultados\n\nLa tabla principal ordena los repositorios por tamaño de inventario. Incluye el estado de ambas herramientas, la cobertura de identificación, las coincidencias sin correspondencia y la proporción afectada cuando se puede calcular. El detalle permite revisar qué componentes e identificadores producen el numerador.\n",
+      "method_and_definitions_markdown": "### Método\n\nSe cruzan los componentes cargados en la pregunta 7 con los hallazgos de Grype del dataset de la misma ejecución. La clave de correspondencia contiene **repositorio, ecosistema, nombre y versión**. Para PyPI se comparan los nombres en minúsculas y se sustituyen secuencias de guiones, puntos y guiones bajos por un guion. En los demás ecosistemas se conserva el nombre; las versiones se comparan como texto exacto, sin inferir equivalencias entre versiones ni resolver etiquetas a commits.\n\nSe mantiene la unidad de la pregunta 7: registros de componentes del SBOM. Cada registro se marca una sola vez como afectado si su clave tiene al menos una coincidencia de Grype, independientemente del número de identificadores asociados. Si la misma identidad aparece en varios registros del SBOM, cada registro contribuye al inventario y al numerador; por eso también se informa el número de identidades distintas afectadas.\n\n**Proporción afectada = registros de componentes con coincidencias / registros de componentes inventariados.** Los identificadores distintos por componente se conservan como detalle, pero no se suman para calcular esa proporción.\n\nLa proporción solo se presenta cuando el SBOM está disponible y es válido, Grype terminó como `analyzed`, todos los componentes tienen una clave utilizable y todos los hallazgos de Grype tienen correspondencia en el inventario. Si alguna condición falla, queda no definida. Un inventario vacío también tiene proporción no definida. Una proporción cero significa ausencia de coincidencias observadas bajo esas condiciones, no ausencia demostrada de vulnerabilidades.\n\n* **Liderazgo en volumen de inventario:** `django/djangoproject.com` encabeza el portafolio con el mayor número de registros, alcanzando 87 componentes inventariados.\n* **Proporción de afectación por vulnerabilidades:** La mayor densidad de coincidencias observada corresponde a `django/ticketbot` con un 50.0% de afectación (1 de 2 componentes), seguido por proyectos de mayor tamaño como `django/djangopeople` (30.4%, 7/23) y `django/djangosnippets.org` (23.3%, 20/86).\n* **Ausencia de correlación directa entre volumen y vulnerabilidades:** El análisis demuestra que no existe una dependencia lineal directa entre la cantidad de dependencias inventariadas y la presencia de vulnerabilidades conocidas. Un claro ejemplo es `djangoproject.com`, que a pesar de poseer el mayor volumen de componentes en su inventario, presenta una tasa de afectación marginal (2.3%), lo que refleja una gestión de la cadena de suministro considerablemente más robusta frente a repositorios con menor inventario pero mayor densidad de fallos (como `djangosnippets.org`).\n* **Consistencia y cobertura analítica:** Se obtuvieron proporciones calculables para 21 repositorios (mientras que 10 registran inventarios vacíos). El 100% de los registros analizados por Grype cuenta con correspondencia exacta en el inventario de componentes, sin hallazgos huérfanos ni fallos de cobertura.",
       "population_and_denominators": "Todos los registros de componentes del repositorio; proporción solo con cobertura y correspondencia completas y denominador positivo.",
       "limitations_markdown": "Una coincidencia indica que Grype relaciona un componente con una vulnerabilidad conocida; no confirma que sea explotable en ese repositorio. La proporción no pondera severidad, uso en producción ni alcance durante la ejecución. Un porcentaje elevado sobre pocos componentes debe leerse junto con su numerador y denominador.\n\nLa comparación depende de la completitud del SBOM, la cobertura de Grype por ecosistema y la base de vulnerabilidades utilizada. El estado `analyzed` indica que la herramienta terminó, no que cubra todas las vulnerabilidades posibles. Se incluyen dependencias de pruebas, desarrollo y automatización.\n\nLa correspondencia por nombre, ecosistema y versión puede asociar varios registros del inventario a una misma identidad. No se infieren equivalencias para versiones textualmente distintas ni se resuelven alias CVE/GHSA; los identificadores asociados se muestran tal como aparecen en la evidencia. Al cambiar de ejecución deben seleccionarse reportes compatibles con la misma revisión del código.",
       "metrics": {},
@@ -7371,9 +7018,7 @@
               "purl": "pkg:pypi/multipart@1.1.0",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-p2m9-wcp5-6qw3"
-              ],
+              "identificadores_grype": ["GHSA-p2m9-wcp5-6qw3"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -7399,9 +7044,7 @@
               "purl": "pkg:github/psf/black@25.9.0",
               "ecosistema": "GitHub Actions",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-v53h-f6m7-xcgm"
-              ],
+              "identificadores_grype": ["GHSA-v53h-f6m7-xcgm"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -7973,9 +7616,7 @@
               "purl": "pkg:github/psf/black@stable",
               "ecosistema": "GitHub Actions",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-v53h-f6m7-xcgm"
-              ],
+              "identificadores_grype": ["GHSA-v53h-f6m7-xcgm"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -8349,9 +7990,7 @@
               "purl": "pkg:pypi/django-debug-toolbar@1.10.1",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-pghf-347x-c2gj"
-              ],
+              "identificadores_grype": ["GHSA-pghf-347x-c2gj"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -8403,9 +8042,7 @@
               "purl": "pkg:pypi/django-ses@0.8.10",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-qg36-9jxh-fj25"
-              ],
+              "identificadores_grype": ["GHSA-qg36-9jxh-fj25"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -8457,9 +8094,7 @@
               "purl": "pkg:pypi/geopy@1.18.1",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-mhvh-fq92-pfmr"
-              ],
+              "identificadores_grype": ["GHSA-mhvh-fq92-pfmr"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -8472,9 +8107,7 @@
               "purl": "pkg:pypi/gevent@1.4.0",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-x7m3-jprg-wc5g"
-              ],
+              "identificadores_grype": ["GHSA-x7m3-jprg-wc5g"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -8833,9 +8466,7 @@
               "purl": "pkg:pypi/django@6.1",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-q238-5cxm-5c9h"
-              ],
+              "identificadores_grype": ["GHSA-q238-5cxm-5c9h"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -10290,9 +9921,7 @@
               "purl": "pkg:pypi/idna@3.11",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-65pc-fj4g-8rjx"
-              ],
+              "identificadores_grype": ["GHSA-65pc-fj4g-8rjx"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -10305,9 +9934,7 @@
               "purl": "pkg:pypi/ipython@7.33.0",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-29gw-9793-fvw7"
-              ],
+              "identificadores_grype": ["GHSA-29gw-9793-fvw7"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -10333,9 +9960,7 @@
               "purl": "pkg:pypi/markdown@3.4.4",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-5wmx-573v-2qwq"
-              ],
+              "identificadores_grype": ["GHSA-5wmx-573v-2qwq"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -10579,9 +10204,7 @@
               "purl": "pkg:pypi/pygments@2.19.2",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-5239-wwwm-4pmq"
-              ],
+              "identificadores_grype": ["GHSA-5239-wwwm-4pmq"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -10607,9 +10230,7 @@
               "purl": "pkg:pypi/python-dotenv@1.1.1",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-mf9w-mj56-hr94"
-              ],
+              "identificadores_grype": ["GHSA-mf9w-mj56-hr94"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -10661,9 +10282,7 @@
               "purl": "pkg:pypi/requests@2.32.4",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-gc5v-m9x4-r6x2"
-              ],
+              "identificadores_grype": ["GHSA-gc5v-m9x4-r6x2"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -10718,9 +10337,7 @@
               "purl": "pkg:pypi/setuptools@80.9.0",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-h35f-9h28-mq5c"
-              ],
+              "identificadores_grype": ["GHSA-h35f-9h28-mq5c"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true
@@ -11173,7 +10790,7 @@
       "id": "q09",
       "title": "¿Qué componentes y versiones se comparten entre repositorios, tengan o no hallazgos?",
       "status": "answered",
-      "method_and_definitions_markdown": "### Método\n\nSe utiliza el inventario completo de la pregunta 7. Se distinguen dos niveles: **paquete compartido**, identificado por ecosistema y nombre normalizado, y **versión compartida**, que añade la versión textual exacta. En ambos casos deben aparecer en al menos dos repositorios distintos. Varias apariciones dentro de un único repositorio no convierten un paquete en compartido.\n\nSe reutiliza la normalización de nombres de PyPI de la pregunta 8. Los registros sin nombre o ecosistema identificable se excluyen de las agrupaciones; los que carecen de versión pueden contribuir a un paquete compartido, pero no a una versión compartida. No se eliminan versiones ni se resuelven tags de GitHub a SHA.\n\nSe muestran repositorios, versiones observadas y registros de inventario. La columna `alguna_coincidencia_grype` solo indica si alguna aparición tiene coincidencias observadas; no filtra el inventario ni convierte su ausencia en garantía de seguridad. La cobertura de SBOM y Grype se conserva en las preguntas 7 y 8.\n\n### Resultados\n\nLos gráficos ordenan por número de repositorios distintos. El primer panel permite compartir un paquete con versiones diferentes; el segundo exige la misma versión textual. Las tablas conservan todas las agrupaciones y los gráficos muestran hasta quince.\n",
+      "method_and_definitions_markdown": "### Método\n\nSe utiliza el inventario completo de la pregunta 7. Se distinguen dos niveles: **paquete compartido**, identificado por ecosistema y nombre normalizado, y **versión compartida**, que añade la versión textual exacta. En ambos casos deben aparecer en al menos dos repositorios distintos. Varias apariciones dentro de un único repositorio no convierten un paquete en compartido.\n\nSe reutiliza la normalización de nombres de PyPI de la pregunta 8. Los registros sin nombre o ecosistema identificable se excluyen de las agrupaciones; los que carecen de versión pueden contribuir a un paquete compartido, pero no a una versión compartida. No se eliminan versiones ni se resuelven tags de GitHub a SHA.\n\nSe muestran repositorios, versiones observadas y registros de inventario. La columna `alguna_coincidencia_grype` solo indica si alguna aparición tiene coincidencias observadas; no filtra el inventario ni convierte su ausencia en garantía de seguridad. La cobertura de SBOM y Grype se conserva en las preguntas 7 y 8.\n\n**Dominio de CI/CD**: La gran mayoría de los componentes compartidos corresponde a herramientas de automatización e infraestructura mediante GitHub Actions, destacando actions/checkout (19 repositorios) y actions/setup-python (13 repositorios).   \n**Fragmentación de versiones**: A pesar de la alta reutilización de paquetes comunes, se observa una marcada dispersión en las iteraciones empleadas; por ejemplo, actions/checkout se despliega a través de múltiples versiones textuales distintas en el portafolio (como v7, v4, v3, v6 y v2), evidenciando ritmos de actualización descentralizados entre proyectos.    \n**Dependencias de backend**: Librerías de Python como django, gunicorn y requests se reutilizan de forma idéntica en 4 repositorios cada una.   \n**Perfil de seguridad**: 33 de estos paquetes compartidos no presentan coincidencias con Grype, reflejando una base común estable pero sujeta a monitoreo continuo.",
       "population_and_denominators": "Presencia en repositorios distintos; repetición local no aumenta la extensión entre proyectos.",
       "limitations_markdown": "La coincidencia de nombre y versión no demuestra que dos repositorios utilicen el mismo artefacto binario, configuración o contexto de ejecución. Tags como `main` o `stable` pueden representar revisiones distintas y no se resuelven en este análisis. Las PURL originales se conservan como detalle, pero la comparación no utiliza sus qualifiers ni subrutas.\n\nLa ausencia de coincidencias de Grype no prueba ausencia de vulnerabilidades. Los componentes de desarrollo y automatización también forman parte del inventario. Los SBOM ausentes o incompletos limitan el número de repositorios en los que se puede observar una dependencia compartida.",
       "metrics": {
@@ -11316,10 +10933,7 @@
                 "django/new-features",
                 "django/online-community-working-group"
               ],
-              "versiones_observadas": [
-                "v7",
-                "v9"
-              ],
+              "versiones_observadas": ["v7", "v9"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11333,12 +10947,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "2.1.10",
-                "5.2.17",
-                "5.2.7",
-                "6.1"
-              ],
+              "versiones_observadas": ["2.1.10", "5.2.17", "5.2.7", "6.1"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11352,12 +10961,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "19.9.0",
-                "20.1.0",
-                "23.0.0",
-                "26.0.0"
-              ],
+              "versiones_observadas": ["19.9.0", "20.1.0", "23.0.0", "26.0.0"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11371,12 +10975,7 @@
                 "django/djangosnippets.org",
                 "django/ticketbot"
               ],
-              "versiones_observadas": [
-                "2.22.0",
-                "2.31.0",
-                "2.32.4",
-                "2.34.2"
-              ],
+              "versiones_observadas": ["2.22.0", "2.31.0", "2.32.4", "2.34.2"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11389,11 +10988,7 @@
                 "django/django",
                 "django/django-asv"
               ],
-              "versiones_observadas": [
-                "v3",
-                "v4",
-                "v6"
-              ],
+              "versiones_observadas": ["v3", "v4", "v6"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11406,10 +11001,7 @@
                 "django/djangogigs.com",
                 "django/dsf-minutes"
               ],
-              "versiones_observadas": [
-                "v4",
-                "v5"
-              ],
+              "versiones_observadas": ["v4", "v5"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11422,9 +11014,7 @@
                 "django/djangogigs.com",
                 "django/dsf-minutes"
               ],
-              "versiones_observadas": [
-                "v4"
-              ],
+              "versiones_observadas": ["v4"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11437,9 +11027,7 @@
                 "django/djangogigs.com",
                 "django/dsf-minutes"
               ],
-              "versiones_observadas": [
-                "v3"
-              ],
+              "versiones_observadas": ["v3"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11452,11 +11040,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "0.4.15",
-                "3.2.4",
-                "3.5.5"
-              ],
+              "versiones_observadas": ["0.4.15", "3.2.4", "3.5.5"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11469,11 +11053,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "3.2.1",
-                "3.5.3",
-                "8.1.0"
-              ],
+              "versiones_observadas": ["3.2.1", "3.5.3", "8.1.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11486,11 +11066,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "1.5.12",
-                "2.66.1",
-                "2.8.0"
-              ],
+              "versiones_observadas": ["1.5.12", "2.66.1", "2.8.0"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11514,10 +11090,7 @@
               "nombre_normalizado": "conda-incubator/setup-miniconda",
               "repositorios": 2,
               "registros": 3,
-              "lista_repositorios": [
-                "django/django",
-                "django/django-asv"
-              ],
+              "lista_repositorios": ["django/django", "django/django-asv"],
               "versiones_observadas": [
                 "835234971496cad1653abb28a638a281cf32541f",
                 "8ee1f361103df19b6f8c8655fd3967a8ecb162d5",
@@ -11534,10 +11107,7 @@
                 "django/birthday20",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "v6",
-                "v7"
-              ],
+              "versiones_observadas": ["v6", "v7"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11549,10 +11119,7 @@
                 "django/code.djangoproject.com",
                 "django/djangoproject.com"
               ],
-              "versiones_observadas": [
-                "v3",
-                "v4.6.0"
-              ],
+              "versiones_observadas": ["v3", "v4.6.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11564,10 +11131,7 @@
                 "django/code.djangoproject.com",
                 "django/djangoproject.com"
               ],
-              "versiones_observadas": [
-                "v5",
-                "v6.2.0"
-              ],
+              "versiones_observadas": ["v5", "v6.2.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11579,9 +11143,7 @@
                 "django/new-features",
                 "django/online-community-working-group"
               ],
-              "versiones_observadas": [
-                "v1"
-              ],
+              "versiones_observadas": ["v1"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11593,10 +11155,7 @@
                 "django/code.djangoproject.com",
                 "django/django"
               ],
-              "versiones_observadas": [
-                "25.9.0",
-                "stable"
-              ],
+              "versiones_observadas": ["25.9.0", "stable"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11608,10 +11167,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "3.10.0",
-                "3.12.1"
-              ],
+              "versiones_observadas": ["3.10.0", "3.12.1"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11623,10 +11179,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "2025.10.5",
-                "2026.7.22"
-              ],
+              "versiones_observadas": ["2025.10.5", "2026.7.22"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11638,10 +11191,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "3.4.4",
-                "3.5.0"
-              ],
+              "versiones_observadas": ["3.4.4", "3.5.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11653,9 +11203,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "0.4.6"
-              ],
+              "versiones_observadas": ["0.4.6"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11667,10 +11215,7 @@
                 "django/djangopeople",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "0.5.0",
-                "3.0.1"
-              ],
+              "versiones_observadas": ["0.5.0", "3.0.1"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11682,10 +11227,7 @@
                 "django/djangopeople",
                 "django/djangoproject.com"
               ],
-              "versiones_observadas": [
-                "1.10.1",
-                "7.0.0"
-              ],
+              "versiones_observadas": ["1.10.1", "7.0.0"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11697,9 +11239,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "4.1.0"
-              ],
+              "versiones_observadas": ["4.1.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11711,10 +11251,7 @@
                 "django/djangopeople",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "2.0.0",
-                "3.0.1"
-              ],
+              "versiones_observadas": ["2.0.0", "3.0.1"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11726,10 +11263,7 @@
                 "django/djangopeople",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "1.4.0",
-                "25.9.1"
-              ],
+              "versiones_observadas": ["1.4.0", "25.9.1"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11741,10 +11275,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "3.11",
-                "3.18"
-              ],
+              "versiones_observadas": ["3.11", "3.18"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11756,9 +11287,7 @@
                 "django/code.djangoproject.com",
                 "django/djangoproject.com"
               ],
-              "versiones_observadas": [
-                "0.23.0"
-              ],
+              "versiones_observadas": ["0.23.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11770,10 +11299,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "3.10.2",
-                "3.4.4"
-              ],
+              "versiones_observadas": ["3.10.2", "3.4.4"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11785,9 +11311,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "3.0.3"
-              ],
+              "versiones_observadas": ["3.0.3"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11799,10 +11323,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "12.0.0",
-                "12.3.0"
-              ],
+              "versiones_observadas": ["12.0.0", "12.3.0"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11814,10 +11335,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "4.11.3",
-                "4.5.0"
-              ],
+              "versiones_observadas": ["4.11.3", "4.5.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11829,10 +11347,7 @@
                 "django/code.djangoproject.com",
                 "django/djangopeople"
               ],
-              "versiones_observadas": [
-                "2.8.3",
-                "2.9.9"
-              ],
+              "versiones_observadas": ["2.8.3", "2.9.9"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11844,10 +11359,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "2.19.2",
-                "2.20.0"
-              ],
+              "versiones_observadas": ["2.19.2", "2.20.0"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11859,9 +11371,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "6.0.3"
-              ],
+              "versiones_observadas": ["6.0.3"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11873,9 +11383,7 @@
                 "django/djangopeople",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "6.10.0"
-              ],
+              "versiones_observadas": ["6.10.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11887,10 +11395,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "0.14.3",
-                "0.16.3"
-              ],
+              "versiones_observadas": ["0.14.3", "0.16.3"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11902,10 +11407,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "1.15.0",
-                "1.17.0"
-              ],
+              "versiones_observadas": ["1.15.0", "1.17.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11917,10 +11419,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "0.5.3",
-                "0.6.0"
-              ],
+              "versiones_observadas": ["0.5.3", "0.6.0"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11932,10 +11431,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "4.15.0",
-                "4.16.0"
-              ],
+              "versiones_observadas": ["4.15.0", "4.16.0"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11947,10 +11443,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "2025.2",
-                "2026.3"
-              ],
+              "versiones_observadas": ["2025.2", "2026.3"],
               "alguna_coincidencia_grype": false
             },
             {
@@ -11962,10 +11455,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "2.5.0",
-                "2.7.0"
-              ],
+              "versiones_observadas": ["2.5.0", "2.7.0"],
               "alguna_coincidencia_grype": true
             },
             {
@@ -11977,9 +11467,7 @@
                 "django/djangoproject.com",
                 "django/djangosnippets.org"
               ],
-              "versiones_observadas": [
-                "6.0.0"
-              ],
+              "versiones_observadas": ["6.0.0"],
               "alguna_coincidencia_grype": false
             }
           ]
@@ -12705,9 +12193,7 @@
               "purl": "pkg:github/psf/black@25.9.0",
               "ecosistema": "GitHub Actions",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-v53h-f6m7-xcgm"
-              ],
+              "identificadores_grype": ["GHSA-v53h-f6m7-xcgm"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -13232,9 +12718,7 @@
               "purl": "pkg:github/psf/black@stable",
               "ecosistema": "GitHub Actions",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-v53h-f6m7-xcgm"
-              ],
+              "identificadores_grype": ["GHSA-v53h-f6m7-xcgm"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -13572,9 +13056,7 @@
               "purl": "pkg:pypi/django-debug-toolbar@1.10.1",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-pghf-347x-c2gj"
-              ],
+              "identificadores_grype": ["GHSA-pghf-347x-c2gj"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -13604,9 +13086,7 @@
               "purl": "pkg:pypi/gevent@1.4.0",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-x7m3-jprg-wc5g"
-              ],
+              "identificadores_grype": ["GHSA-x7m3-jprg-wc5g"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -13884,9 +13364,7 @@
               "purl": "pkg:pypi/django@6.1",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-q238-5cxm-5c9h"
-              ],
+              "identificadores_grype": ["GHSA-q238-5cxm-5c9h"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -14554,9 +14032,7 @@
               "purl": "pkg:pypi/idna@3.11",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-65pc-fj4g-8rjx"
-              ],
+              "identificadores_grype": ["GHSA-65pc-fj4g-8rjx"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -14571,9 +14047,7 @@
               "purl": "pkg:pypi/markdown@3.4.4",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-5wmx-573v-2qwq"
-              ],
+              "identificadores_grype": ["GHSA-5wmx-573v-2qwq"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -14653,9 +14127,7 @@
               "purl": "pkg:pypi/pygments@2.19.2",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-5239-wwwm-4pmq"
-              ],
+              "identificadores_grype": ["GHSA-5239-wwwm-4pmq"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -14715,9 +14187,7 @@
               "purl": "pkg:pypi/requests@2.32.4",
               "ecosistema": "PyPI",
               "fuente_clasificacion": "syft:package:type",
-              "identificadores_grype": [
-                "GHSA-gc5v-m9x4-r6x2"
-              ],
+              "identificadores_grype": ["GHSA-gc5v-m9x4-r6x2"],
               "identificadores_distintos": 1,
               "con_coincidencias": true,
               "clave_disponible": true,
@@ -15031,318 +14501,6 @@
               "version_identificada": "2.31.0"
             }
           ]
-        }
-      }
-    },
-    {
-      "id": "q10",
-      "title": "¿Qué problemas de seguridad se repiten en los workflows de CI y qué cobertura tiene su análisis?",
-      "status": "insufficient_evidence",
-      "method_and_definitions_markdown": "### Método\n\nSe carga el reporte de CodeQL señalado por `source_reports.codeql` del dataset, dentro de la copia local. La cobertura de CI requiere un resultado explícito del lenguaje **`actions`** por repositorio. Un análisis correcto de Python, JavaScript o Ruby no acredita análisis de workflows.\n\nSe conservan el estado general de CodeQL y el estado específico de Actions. Sin resultado de ese lenguaje, se informa `not_reported`, con conteo no definido. Los hallazgos de resultados parciales o fallidos se mantienen visibles como observados, pero solo `analyzed` acredita una ejecución completa para ese lenguaje.\n\nCuando existe evidencia, se presentan reglas de CI por frecuencia y número de repositorios, niveles SARIF y archivos asociados. Se usa la lista de hallazgos por lenguaje una sola vez, sin volver a sumar el agregado del repositorio. La presencia de componentes GitHub Actions en el SBOM describe inventario y no sustituye esta evidencia de análisis.\n\n### Resultados\n\nLa cobertura se muestra para todos los repositorios. Las tablas de reglas y niveles solo contienen evidencia explícita de Actions; pueden estar vacías por falta de análisis y no necesariamente por ausencia de alertas.\n",
-      "population_and_denominators": "Cobertura por repositorio; sin resultado actions el conteo es null, no cero. Frecuencias solo sobre registros observados.",
-      "limitations_markdown": "Esta sección estudia GitHub Actions cuando existe evidencia explícita en el reporte de CodeQL; no cubre otros sistemas de CI. Un estado general `analyzed` no garantiza cobertura de Actions. Los niveles SARIF no son puntajes CVSS, y las alertas no confirman explotabilidad. Sin cobertura de Actions, no se elaboran rankings de seguridad ni conclusiones sobre ausencia de problemas.",
-      "metrics": {
-        "repositories_analyzed": 0,
-        "repositories_not_reported": 31
-      },
-      "observations": [
-        {
-          "id": "q10-o01",
-          "text_markdown": "**La pregunta de seguridad de CI no puede responderse con esta ejecución.** Los 31 repositorios carecen de un resultado explícito de Actions. Esto no significa que tengan cero problemas ni que carezcan de workflows. Se necesita una ejecución de análisis de Actions con estados y hallazgos por repositorio.",
-          "evidence_tables": [
-            "cobertura_ci",
-            "reglas_ci",
-            "reglas_ci_compartidas",
-            "severidades_ci",
-            "hallazgos_ci"
-          ]
-        }
-      ],
-      "tables": {
-        "cobertura_ci": {
-          "grain": "Repositorio; exige resultado explícito del lenguaje actions.",
-          "columns": [
-            "repository",
-            "codeql_status",
-            "actions_status",
-            "hallazgos_ci_observados",
-            "error_ci"
-          ],
-          "row_count": 31,
-          "metric_definitions": {
-            "hallazgos_ci_observados": "Registros explícitos del lenguaje actions; null cuando no hay resultado de ese lenguaje."
-          },
-          "rows": [
-            {
-              "repository": "django/.github",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/accessibility",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/asgi_ipc",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/asgiref",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/birthday20",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/channels",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/channels_redis",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/code-of-conduct",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/code.djangoproject.com",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/daphne",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/deps",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/django",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/django-asv",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/django-box",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/django-contrib-comments",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/django-docker-box",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/django-docs-translations",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/django-fuzzers",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/django-localflavor",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/djangobench",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/djangogigs.com",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/djangopeople",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/djangoproject.com",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/djangosnippets.org",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/dsf-bylaws",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/dsf-minutes",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/dsf-working-groups",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/new-features",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/online-community-working-group",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/steering-council",
-              "codeql_status": "database_failed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            },
-            {
-              "repository": "django/ticketbot",
-              "codeql_status": "analyzed",
-              "actions_status": "not_reported",
-              "hallazgos_ci_observados": null,
-              "error_ci": null
-            }
-          ]
-        },
-        "reglas_ci": {
-          "grain": "Regla de Actions observada; los estados parciales permanecen en el detalle.",
-          "columns": [
-            "rule_id",
-            "coincidencias",
-            "repositorios",
-            "ejemplo_mensaje"
-          ],
-          "row_count": 0,
-          "metric_definitions": {
-            "coincidencias": "Número de registros; no equivale a vulnerabilidades únicas confirmadas."
-          },
-          "rows": []
-        },
-        "reglas_ci_compartidas": {
-          "grain": "Regla de Actions presente en al menos dos repositorios.",
-          "columns": [
-            "rule_id",
-            "coincidencias",
-            "repositorios",
-            "ejemplo_mensaje"
-          ],
-          "row_count": 0,
-          "metric_definitions": {
-            "coincidencias": "Número de registros; no equivale a vulnerabilidades únicas confirmadas."
-          },
-          "rows": []
-        },
-        "severidades_ci": {
-          "grain": "Nivel SARIF; no representa un puntaje CVSS.",
-          "columns": [
-            "sarif_level",
-            "hallazgos"
-          ],
-          "row_count": 0,
-          "metric_definitions": {},
-          "rows": []
-        },
-        "hallazgos_ci": {
-          "grain": "Hallazgo observado por lenguaje Actions, con archivo y estado.",
-          "columns": [
-            "repository",
-            "rule_id",
-            "sarif_level",
-            "file",
-            "message",
-            "actions_status"
-          ],
-          "row_count": 0,
-          "metric_definitions": {},
-          "rows": []
         }
       }
     }
