@@ -20,7 +20,7 @@
             <app-severity [question]="question" />
           }
           @case ('q04') {
-            <app-packages [question]="question" />
+            <app-packages [question]="question" [nullText]="analysis.conventions.null" />
           }
           @case ('q05') {
             <app-relation [question]="question" [nullText]="analysis.conventions.null" />
