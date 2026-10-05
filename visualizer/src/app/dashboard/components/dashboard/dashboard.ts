@@ -6,9 +6,10 @@ import { AnalysisService } from '../../services/analysis';
 import { Distribution } from '../distribution/distribution';
 import { Overview } from '../overview/overview';
 import { QuestionPanel } from '../question-panel/question-panel';
+import { Rules } from '../rules/rules';
 
 @Component({
-  imports: [Overview, QuestionPanel, Distribution],
+  imports: [Overview, QuestionPanel, Distribution, Rules],
   selector: 'app-dashboard',
   styleUrl: './dashboard.css',
   templateUrl: './dashboard.html',
