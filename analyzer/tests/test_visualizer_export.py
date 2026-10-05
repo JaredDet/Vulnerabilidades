@@ -46,12 +46,14 @@ class PublishedContractTests(unittest.TestCase):
 
     def test_all_questions_have_consistent_tables_and_observations(self):
         validate_export(self.payload)
-        self.assertEqual(len(self.payload["questions"]), 10)
-
-    def test_ci_without_analysis_is_not_exported_as_zero_findings(self):
-        ci = self.payload["questions"][9]
-        self.assertEqual(ci["status"], "insufficient_evidence")
-        self.assertTrue(all(row["hallazgos_ci_observados"] is None for row in ci["tables"]["cobertura_ci"]["rows"]))
+        self.assertEqual(len(self.payload["questions"]), 9)
+        for question in self.payload["questions"]:
+            visualization_ids = {item["id"] for item in question["visualizations"]}
+            for visualization in question["visualizations"]:
+                self.assertIn(visualization["data_table"], question["tables"])
+            for observation in question["observations"]:
+                self.assertTrue(observation["text_markdown"])
+                self.assertTrue(set(observation["visualization_ids"]).issubset(visualization_ids))
 
     def test_export_contains_relationship_and_concentration_not_just_counts(self):
         correlation = self.payload["questions"][4]

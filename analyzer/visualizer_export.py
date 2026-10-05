@@ -18,7 +18,7 @@ from typing import Any
 import pandas as pd
 
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 
 # Table names are stable public identifiers, independent of plot presentation.
 TABLES = {
@@ -62,13 +62,46 @@ TABLES = {
         "versiones_compartidas": ("versiones_sbom_compartidas", "Ecosistema, nombre normalizado y versión textual exacta."),
         "detalle_compartidos": ("detalle_compartidos_sbom", "Componentes de paquetes compartidos, con o sin coincidencias de Grype."),
     },
-    10: {
-        "cobertura_ci": ("cobertura_ci", "Repositorio; exige resultado explícito del lenguaje actions."),
-        "reglas_ci": ("reglas_ci", "Regla de Actions observada; los estados parciales permanecen en el detalle."),
-        "reglas_ci_compartidas": ("reglas_ci_compartidas", "Regla de Actions presente en al menos dos repositorios."),
-        "severidades_ci": ("severidades_ci", "Nivel SARIF; no representa un puntaje CVSS."),
-        "hallazgos_ci": ("hallazgos_ci", "Hallazgo observado por lenguaje Actions, con archivo y estado."),
-    },
+}
+
+# Explicitly connect each plot to its quantitative table and visual encodings.
+# The Visualizer can render these datasets without reverse engineering notebook code.
+VISUALIZATIONS = {
+    1: [
+        {"id": "concentracion_hallazgos", "type": "bar_horizontal", "title": "Concentración de hallazgos por repositorio", "table": "concentracion", "value_format": "percent", "encoding": {"x": "proporcion", "y": "repository", "series": "tool", "tooltip": ["coincidencias", "status"]}},
+    ],
+    2: [
+        {"id": "reglas_frecuentes", "type": "bar_horizontal", "title": "Reglas de CodeQL más frecuentes", "table": "reglas_globales", "encoding": {"x": "coincidencias", "y": "vulnerability_id", "tooltip": ["repositorios", "proporcion"]}},
+        {"id": "reglas_por_repositorio", "type": "heatmap", "title": "Proporción de reglas por repositorio", "table": "reglas_por_repositorio", "encoding": {"x": "vulnerability_id", "y": "repository", "value": "proporcion_en_repositorio"}},
+    ],
+    3: [
+        {"id": "hallazgos_altos", "type": "bar_horizontal", "title": "Hallazgos con puntaje alto por repositorio", "table": "puntajes_por_repositorio", "encoding": {"x": "hallazgos_altos", "y": "repository", "series": "tool", "tooltip": ["hallazgos_puntuados", "cobertura", "proporcion_altos"]}},
+        {"id": "distribucion_severidades", "type": "bar", "title": "Severidades observadas", "table": "severidades", "encoding": {"x": "severity", "y": "coincidencias", "series": "tool"}},
+    ],
+    4: [
+        {"id": "paquetes_frecuentes", "type": "bar_horizontal", "title": "Paquetes con más coincidencias de Grype", "table": "paquetes", "encoding": {"x": "coincidencias_totales", "y": "package", "tooltip": ["package_type", "repositorios_afectados"]}},
+        {"id": "identificadores_frecuentes", "type": "bar_horizontal", "title": "Identificadores de Grype más frecuentes", "table": "identificadores", "encoding": {"x": "coincidencias_totales", "y": "vulnerability_id", "tooltip": ["repositorios_afectados", "paquetes_afectados"]}},
+        {"id": "paquetes_compartidos", "type": "bar_horizontal", "title": "Paquetes vulnerables compartidos", "table": "paquetes_compartidos", "encoding": {"x": "repositorios_afectados", "y": "package", "tooltip": ["coincidencias_totales", "vulnerabilidades_distintas"]}},
+        {"id": "identificadores_compartidos", "type": "bar_horizontal", "title": "Vulnerabilidades compartidas", "table": "identificadores_compartidos", "encoding": {"x": "repositorios_afectados", "y": "vulnerability_id", "tooltip": ["coincidencias_totales", "paquetes_afectados"]}},
+    ],
+    5: [
+        {"id": "relacion_conteos", "type": "scatter", "title": "Conteos por repositorio: CodeQL y Grype", "table": "relacion_conteos", "encoding": {"x": "hallazgos_codeql", "y": "hallazgos_grype", "label": "repository", "tooltip": ["codeql_status", "grype_status"]}},
+    ],
+    6: [
+        {"id": "hallazgos_por_archivo", "type": "bar_horizontal_facets", "title": "Archivos con más hallazgos por repositorio", "table": "top_archivos", "encoding": {"x": "hallazgos", "y": "archivo", "facet": "repository", "tooltip": ["reglas_distintas", "proporcion_del_repositorio"]}},
+    ],
+    7: [
+        {"id": "componentes_por_ecosistema", "type": "bar_horizontal", "title": "Componentes por ecosistema", "table": "ecosistemas", "encoding": {"x": "componentes", "y": "ecosistema", "tooltip": ["repositorios", "proporcion_componentes"]}},
+        {"id": "composicion_por_repositorio", "type": "bar_stacked", "title": "Composición de ecosistemas por repositorio", "table": "ecosistemas_por_repositorio", "value_format": "percent", "encoding": {"x": "proporcion", "y": "repository", "series": "ecosistema", "tooltip": ["componentes"]}},
+    ],
+    8: [
+        {"id": "inventario_por_repositorio", "type": "bar_horizontal", "title": "Componentes inventariados por repositorio", "table": "componentes_por_repositorio", "encoding": {"x": "componentes_totales", "y": "repository", "tooltip": ["sbom_status", "componentes_identificables"]}},
+        {"id": "proporcion_afectada", "type": "bar_horizontal", "title": "Proporción de componentes con coincidencias", "table": "componentes_por_repositorio", "value_format": "percent", "encoding": {"x": "proporcion_afectada", "y": "repository", "tooltip": ["componentes_con_coincidencias", "componentes_totales", "comparacion_completa"]}},
+    ],
+    9: [
+        {"id": "paquetes_sbom_compartidos", "type": "bar_horizontal", "title": "Paquetes compartidos entre repositorios", "table": "paquetes_compartidos", "encoding": {"x": "repositorios", "y": "nombre_normalizado", "series": "ecosistema", "tooltip": ["registros", "versiones_observadas", "alguna_coincidencia_grype"]}},
+        {"id": "versiones_sbom_compartidas", "type": "bar_horizontal", "title": "Versiones compartidas entre repositorios", "table": "versiones_compartidas", "encoding": {"x": "repositorios", "y": "version_identificada", "series": "ecosistema", "tooltip": ["nombre_normalizado", "registros", "alguna_coincidencia_grype"]}},
+    ],
 }
 
 METRIC_DEFINITIONS = {
@@ -92,7 +125,6 @@ METRIC_DEFINITIONS = {
     "componentes_con_coincidencias": "Registros del SBOM con alguna coincidencia; múltiples identificadores no multiplican este conteo.",
     "comparacion_completa": "SBOM válido, Grype analyzed, componentes identificables y hallazgos con correspondencia; no acredita cobertura universal de vulnerabilidades.",
     "alguna_coincidencia_grype": "Al menos una aparición tiene coincidencias observadas; false no demuestra ausencia de vulnerabilidades.",
-    "hallazgos_ci_observados": "Registros explícitos del lenguaje actions; null cuando no hay resultado de ese lenguaje.",
     "rho_spearman": "Correlación de Pearson entre rangos promedio; asociación monotónica, sin inferencia causal ni prueba de significancia.",
 }
 
@@ -106,7 +138,6 @@ DENOMINATORS = {
     7: "Global: todos los componentes cargados. Presencia: todos los SBOM válidos, incluidos vacíos. Local: componentes del repositorio.",
     8: "Todos los registros de componentes del repositorio; proporción solo con cobertura y correspondencia completas y denominador positivo.",
     9: "Presencia en repositorios distintos; repetición local no aumenta la extensión entre proyectos.",
-    10: "Cobertura por repositorio; sin resultado actions el conteo es null, no cero. Frecuencias solo sobre registros observados.",
 }
 
 
@@ -148,10 +179,25 @@ def table(frame: pd.DataFrame, grain: str) -> dict:
     }
 
 
+def export_table_data(namespace: dict, variable: str) -> pd.DataFrame:
+    """Resolve table inputs, deriving simple summaries from current notebook data."""
+    if variable == "distribucion_severidades":
+        findings = namespace["findings"]
+        return (
+            findings.dropna(subset=["severity"])
+            .groupby(["tool", "severity_kind", "severity"], dropna=False)
+            .size().rename("coincidencias").reset_index()
+        )
+    if variable == "distribucion_puntajes":
+        return namespace["scores"].copy()
+    return namespace[variable]
+
+
 def question_documentation(notebook_path: Path) -> dict:
     notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
     questions = {}
     current = None
+    in_interpretation = False
     for cell in notebook["cells"]:
         if cell["cell_type"] != "markdown":
             continue
@@ -159,40 +205,42 @@ def question_documentation(notebook_path: Path) -> dict:
         match = re.match(r"## Pregunta (\d+)\. (.+)", source)
         if match:
             current = int(match[1])
-            questions[current] = {"title": match[2], "method": [], "limitations": []}
+            questions[current] = {"title": match[2], "method": [], "limitations": [], "interpretations": []}
+            in_interpretation = False
             source = source[match.end():].strip()
         elif source.startswith("## "):
             current = None
+            in_interpretation = False
         if current is None:
             continue
         if source.startswith("### Limitaciones"):
+            in_interpretation = False
             questions[current]["limitations"].append(source.removeprefix("### Limitaciones").strip())
-        elif source and not source.startswith("### Interpretación"):
-            questions[current]["method"].append(source)
+        elif source.startswith("### Interpretación"):
+            in_interpretation = True
+            questions[current]["interpretations"].append(
+                source.removeprefix("### Interpretación").strip()
+            )
+        elif source.startswith("### "):
+            in_interpretation = False
+            continue
+        elif source:
+            if in_interpretation:
+                if questions[current]["interpretations"][-1]:
+                    questions[current]["interpretations"][-1] += "\n\n" + source
+                else:
+                    questions[current]["interpretations"][-1] = source
+            elif questions[current]["interpretations"] and not questions[current]["limitations"]:
+                questions[current]["interpretations"][-1] += "\n\n" + source
+            else:
+                questions[current]["method"].append(source)
     if set(questions) != set(TABLES):
-        raise ValueError("The notebook must document questions 1 through 10.")
+        raise ValueError("The notebook must document questions 1 through 9.")
     return questions
 
 
-def observations(namespace: dict) -> dict:
-    ns = namespace
-    relation = (
-        f'Entre {len(ns["conteos_relacion"])} repositorios con cobertura completa, '
-        f'Spearman ρ = {ns["rho_spearman"]:.3f}: relación {ns["direccion"]} y {ns["intensidad"]}. '
-        "La asociación no demuestra causalidad ni significancia estadística."
-    )
-    return {
-        1: ns["observaciones_concentracion"],
-        2: ns["observaciones_reglas"],
-        3: ns["observaciones"] + ns["observaciones_distribucion"],
-        4: ns["observaciones_pregunta_4"] + ns["observaciones_ranking_grype"],
-        5: [relation],
-        6: ns["observaciones_archivos"],
-        7: ns["observaciones_sbom"],
-        8: ns["observaciones_componentes"],
-        9: ns["observaciones_compartidos"],
-        10: [ns["interpretacion_ci"]],
-    }
+def observations(documentation: dict) -> dict:
+    return {number: docs["interpretations"] for number, docs in documentation.items()}
 
 
 def evidence_statuses(ns: dict) -> dict:
@@ -210,17 +258,16 @@ def evidence_statuses(ns: dict) -> dict:
         7: sbom_partial or ns["componentes_sbom"]["ecosistema"].eq("Sin clasificar").any(),
         8: (~ns["resumen_componentes"]["comparacion_completa"]).any(),
         9: sbom_partial or any(ns["exclusiones_compartidos"].values()),
-        10: ns["cobertura_ci"]["actions_status"].ne("analyzed").any(),
     }
     result = {number: "partial_evidence" if flag else "answered" for number, flag in partial.items()}
-    if ns["cobertura_ci"].empty or ns["cobertura_ci"]["actions_status"].eq("not_reported").all():
-        result[10] = "insufficient_evidence"
     return result
 
 
 def evidence_files(ns: dict) -> list[dict]:
     root = Path(ns["REPOSITORY_ROOT"]).resolve()
-    paths = {Path(ns[name]).resolve() for name in ("DATASET_PATH", "SBOM_REPORT_PATH", "CODEQL_REPORT_PATH")}
+    paths = {Path(ns[name]).resolve() for name in ("DATASET_PATH", "SBOM_REPORT_PATH")}
+    if ns.get("CODEQL_REPORT_PATH"):
+        paths.add(Path(ns["CODEQL_REPORT_PATH"]).resolve())
     report_path = Path(ns["SBOM_REPORT_PATH"])
     report = json.loads(report_path.read_text(encoding="utf-8"))
     for item in report["repositories"]:
@@ -243,13 +290,13 @@ def evidence_files(ns: dict) -> list[dict]:
 def build_export(namespace: dict, notebook_path: Path) -> dict:
     ns = namespace
     documentation = question_documentation(notebook_path)
-    statements = observations(ns)
+    statements = observations(documentation)
     statuses = evidence_statuses(ns)
     questions = []
     for number, specifications in TABLES.items():
         question_id = f"q{number:02d}"
         docs = documentation[number]
-        tables = {name: table(ns[variable], grain) for name, (variable, grain) in specifications.items()}
+        tables = {name: table(export_table_data(ns, variable), grain) for name, (variable, grain) in specifications.items()}
         metrics = {}
         if number == 3:
             metrics["high_score_threshold"] = ns["HIGH_SCORE_THRESHOLD"]
@@ -257,8 +304,6 @@ def build_export(namespace: dict, notebook_path: Path) -> dict:
             metrics = {"rho_spearman": ns["rho_spearman"], "sample_size": len(ns["conteos_relacion"]), "p_value": None}
         elif number == 9:
             metrics["excluded_records"] = ns["exclusiones_compartidos"]
-        elif number == 10:
-            metrics = {"repositories_analyzed": ns["ci_completos"], "repositories_not_reported": ns["ci_sin_evidencia"]}
         questions.append({
             "id": question_id,
             "title": docs["title"],
@@ -269,8 +314,16 @@ def build_export(namespace: dict, notebook_path: Path) -> dict:
             "metrics": json_value(metrics),
             "observations": [
                 {"id": f"{question_id}-o{index:02d}", "text_markdown": value,
-                 "evidence_tables": list(tables)}
+                 "evidence_tables": list(tables),
+                 "visualization_ids": observation_visualization_ids(number, index)}
                 for index, value in enumerate(statements[number], 1)
+            ],
+            "visualizations": [
+                {
+                    **{key: value for key, value in visualization.items() if key != "table"},
+                    "data_table": visualization["table"],
+                }
+                for visualization in VISUALIZATIONS[number]
             ],
             "tables": tables,
         })
@@ -309,7 +362,6 @@ def build_export(namespace: dict, notebook_path: Path) -> dict:
         "coverage": {
             "tools": table(ns["coverage"], "Etapa y estado; número de repositorios."),
             "sbom": table(ns["cobertura_sbom"], "Repositorio y estado del inventario."),
-            "ci": table(ns["cobertura_ci"], "Repositorio y estado específico de Actions."),
         },
         "questions": questions,
     }
@@ -320,7 +372,7 @@ def build_export(namespace: dict, notebook_path: Path) -> dict:
 def validate_export(payload: dict) -> None:
     if payload["schema_version"] != SCHEMA_VERSION:
         raise ValueError("Unsupported export schema version.")
-    if [question["id"] for question in payload["questions"]] != [f"q{n:02d}" for n in range(1, 11)]:
+    if [question["id"] for question in payload["questions"]] != [f"q{n:02d}" for n in range(1, 10)]:
         raise ValueError("The export must contain each research question exactly once.")
     for question in payload["questions"]:
         if question["status"] not in payload["conventions"]["statuses"]:
@@ -330,12 +382,43 @@ def validate_export(payload: dict) -> None:
         for observation in question["observations"]:
             if not set(observation["evidence_tables"]).issubset(question["tables"]):
                 raise ValueError("An observation references a missing table.")
+            visualization_ids = {item["id"] for item in question["visualizations"]}
+            if not set(observation["visualization_ids"]).issubset(visualization_ids):
+                raise ValueError("An observation references a missing visualization.")
+        for visualization in question["visualizations"]:
+            table_name = visualization["data_table"]
+            if table_name not in question["tables"]:
+                raise ValueError("A visualization references a missing table.")
+            columns = set(question["tables"][table_name]["columns"])
+            fields = {
+                value for value in visualization["encoding"].values()
+                if isinstance(value, str)
+            }
+            fields.update(
+                field
+                for value in visualization["encoding"].values()
+                if isinstance(value, list)
+                for field in value
+            )
+            if not fields.issubset(columns):
+                raise ValueError("A visualization encoding references a missing column.")
         for exported_table in question["tables"].values():
             if len(exported_table["rows"]) != exported_table["row_count"]:
                 raise ValueError("Table row count mismatch.")
             if any(set(row) != set(exported_table["columns"]) for row in exported_table["rows"]):
                 raise ValueError("Table columns and row fields differ.")
     json.dumps(payload, ensure_ascii=False, allow_nan=False)
+
+
+def observation_visualization_ids(question_number: int, observation_number: int) -> list[str]:
+    """Link qualitative findings to the chart data that can substantiate them."""
+    if question_number == 4 and observation_number == 1:
+        indexes = (0, 1)
+    elif question_number == 4 and observation_number == 2:
+        indexes = (2, 3)
+    else:
+        indexes = tuple(range(len(VISUALIZATIONS[question_number])))
+    return [VISUALIZATIONS[question_number][index]["id"] for index in indexes]
 
 
 def export_analysis(namespace: dict, notebook_path: Path, output_path: Path) -> Path:

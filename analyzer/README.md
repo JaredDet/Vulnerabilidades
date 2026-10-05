@@ -1,6 +1,6 @@
 # Analyzer
 
-Estudia concentraciones, diferencias y relaciones mediante diez preguntas de
+Estudia concentraciones, diferencias y relaciones mediante nueve preguntas de
 investigación. Exporta tablas y observaciones para el Visualizer.
 
 ## Ejecutar
@@ -24,5 +24,4 @@ La última celda genera
 Incluye resultados, interpretaciones, cobertura, limitaciones y procedencia.
 El [contrato del Visualizer](docs/visualizer-contract.md) describe su estructura.
 
-La pregunta 10 queda sin respuesta de seguridad de CI porque esta ejecución
-no contiene análisis de Actions. Los fallos y datos ausentes no equivalen a cero.
+Los fallos y datos ausentes no equivalen a cero.

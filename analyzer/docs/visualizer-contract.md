@@ -1,4 +1,4 @@
-# Entrada del Visualizer · versión 1.0
+# Entrada del Visualizer · versión 1.1
 
 Ejecutar todas las celdas de `notebooks/analyzer.ipynb` genera
 `outputs/<organización>/<clone-run>/analysis.json`. La exportación reemplaza
@@ -9,14 +9,14 @@ También se genera al ejecutar `scripts/validate_notebook.py`.
 
 | Campo | Contenido |
 | --- | --- |
-| `schema_version` | Versión del contrato; actualmente `1.0`. |
+| `schema_version` | Versión del contrato; actualmente `1.1`. |
 | `generated_at_utc` | Fecha y hora ISO 8601 de generación. |
 | `organization`, `clone_run` | Ejecución estudiada. |
 | `summary` | Tamaño de la evidencia y alcance del análisis. |
 | `conventions` | Significado de nulos, proporciones y estados. |
 | `provenance` | Rutas relativas, hashes de evidencia y código, versiones de Python y librerías. |
-| `coverage` | Tablas de cobertura de herramientas, SBOM y CI. |
-| `questions` | Diez objetos con identificadores estables `q01` a `q10`. |
+| `coverage` | Tablas de cobertura de herramientas y SBOM. |
+| `questions` | Nueve objetos con identificadores estables `q01` a `q09`. |
 
 Cada pregunta contiene `title`, `status`, `method_and_definitions_markdown`,
 `population_and_denominators`, `limitations_markdown`, `metrics`,
@@ -29,6 +29,16 @@ estables, listas de versiones o identificadores y valores nulos.
 No se exportan solo los primeros registros mostrados por el notebook: los
 rankings globales y detalles completos permanecen disponibles.
 
+Cada pregunta incluye `visualizations`: especificaciones con `id`, `type`,
+título, `data_table`, codificaciones (`x`, `y`, `series`, `facet` y `tooltip`,
+según corresponda) y, cuando aplica, `value_format`. Los tipos usados son
+`bar`, `bar_horizontal`, `bar_stacked`, `bar_horizontal_facets`, `heatmap` y
+`scatter`. `data_table` referencia la tabla cuantitativa completa en
+`question.tables`; no duplica las filas. Cada observación cualitativa declara
+`visualization_ids` para vincular su texto con los gráficos que lo respaldan.
+El Visualizer puede mostrar juntos la interpretación Markdown, los gráficos y
+las tablas de datos.
+
 ## Estados y métricas
 
 - `answered`: respuesta para la población declarada, con sus limitaciones.
@@ -38,10 +48,6 @@ rankings globales y detalles completos permanecen disponibles.
 - Las proporciones usan escala **0–1**. El denominador está definido en la pregunta y en las métricas.
 - `q05.metrics` incluye `rho_spearman`, `sample_size` y `p_value: null`: no se realizó una prueba de significancia.
 - Los niveles SARIF, `security-severity` y CVSS se mantienen separados.
-
-En Django, `q10.status` es `insufficient_evidence`: las tablas de cobertura
-existen, pero no hay resultados de Actions. El Visualizer no debe representar
-esa falta de análisis como cero problemas de CI.
 
 ## Uso
 
