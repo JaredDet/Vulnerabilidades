@@ -1,7 +1,8 @@
 import { Component, computed, input } from '@angular/core';
 
-import { AnalysisQuestion, AnalysisTable, AnalysisValue } from '../../interfaces/analysis';
-import { Chart, ChartSeries, formatAnalysisNumber } from '../chart/chart';
+import { AnalysisQuestion, AnalysisValue } from '../../interfaces/analysis';
+import { Chart, ChartSeries } from '../chart/chart';
+import { DataTable, DataTableColumn } from '../data-table/data-table';
 
 function text(value: AnalysisValue | undefined): string {
   if (value === null || value === undefined) {
@@ -17,7 +18,7 @@ function text(value: AnalysisValue | undefined): string {
 }
 
 @Component({
-  imports: [Chart],
+  imports: [Chart, DataTable],
   selector: 'app-ecosystems',
   styleUrl: './ecosystems.css',
   templateUrl: './ecosystems.html',
@@ -27,6 +28,10 @@ export class Ecosystems {
   readonly nullText = input('');
 
   readonly ecosystems = computed(() => this.question().tables['ecosistemas']);
+
+  readonly ecosystemColumns = computed<DataTableColumn[]>(() =>
+    (this.ecosystems()?.columns ?? []).map((key) => ({ key, filter: key === 'ecosistema' })),
+  );
 
   readonly doughnut = computed(() => {
     const rows = this.ecosystems()?.rows ?? [];
@@ -58,14 +63,4 @@ export class Ecosystems {
     return { labels: repositories, series };
   });
 
-  cell(table: AnalysisTable, row: Record<string, AnalysisValue>, column: string): string {
-    const value = row[column];
-    if (value === null || value === undefined) {
-      return this.nullText();
-    }
-    if (typeof value === 'number') {
-      return formatAnalysisNumber(value, column);
-    }
-    return text(value);
-  }
 }
