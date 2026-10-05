@@ -12,6 +12,7 @@ import {
 import { Chart as ChartJs, ChartConfiguration, registerables } from 'chart.js';
 
 ChartJs.register(...registerables);
+ChartJs.defaults.font.family = 'Google Sans Flex';
 
 export interface ChartSeries {
   label: string;
@@ -34,6 +35,7 @@ const COLORS = [
 
 @Component({
   selector: 'app-chart',
+  host: { class: 'block w-full' },
   styleUrl: './chart.css',
   templateUrl: './chart.html',
 })
@@ -71,9 +73,6 @@ export class Chart {
       return;
     }
 
-    this.chart?.destroy();
-    this.chart = null;
-
     const labels = this.labels();
     const series = this.series();
     if (labels.length === 0 || series.length === 0) {
@@ -81,7 +80,15 @@ export class Chart {
     }
 
     const kind = this.kind();
+    const horizontal = kind === 'bar' && this.horizontal();
     const stacked = this.stacked();
+    const percent = series.some((item) => item.label.includes('proporcion'));
+    const formatTick = (value: string | number): string =>
+      formatAnalysisNumber(Number(value), percent ? 'proporcion' : '');
+
+    this.chart?.destroy();
+    this.chart = null;
+
     const configuration: ChartConfiguration = {
       type: kind,
       data: {
@@ -99,14 +106,35 @@ export class Chart {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        indexAxis: kind === 'bar' && this.horizontal() ? 'y' : 'x',
+        indexAxis: horizontal ? 'y' : 'x',
         scales:
           kind === 'doughnut'
             ? undefined
             : {
-                x: { stacked, beginAtZero: true },
-                y: { stacked, beginAtZero: true },
+                x: {
+                  stacked,
+                  beginAtZero: true,
+                  ...(horizontal ? { ticks: { callback: formatTick } } : {}),
+                },
+                y: {
+                  stacked,
+                  beginAtZero: true,
+                  ...(horizontal ? { ticks: { autoSkip: false } } : { ticks: { callback: formatTick } }),
+                },
               },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const parsed = context.parsed as number | { x: number; y: number };
+                const numeric = typeof parsed === 'number' ? parsed : horizontal ? parsed.x : parsed.y;
+                const shown =
+                  typeof numeric === 'number' ? formatAnalysisNumber(numeric, percent ? 'proporcion' : '') : '';
+                return `${context.dataset.label}: ${shown}`;
+              },
+            },
+          },
+        },
       },
     };
 

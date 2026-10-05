@@ -1,6 +1,13 @@
 @if (title()) {
   <h2 class="text-xl font-semibold tracking-tight text-neutral-900">{{ title() }}</h2>
 }
-<div class="relative h-80 w-full">
+<div
+  class="relative w-full"
+  [class.h-80]="!horizontal()"
+  [class.h-[24rem]]="horizontal() && labels().length <= 8"
+  [class.h-[48rem]]="horizontal() && labels().length > 8 && labels().length <= 20"
+  [class.h-[72rem]]="horizontal() && labels().length > 20 && labels().length <= 36"
+  [class.h-[96rem]]="horizontal() && labels().length > 36"
+>
   <canvas #canvas class="h-full w-full"></canvas>
 </div>

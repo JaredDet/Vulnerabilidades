@@ -11,9 +11,25 @@
     <div class="mt-4 flex flex-col gap-4">
       <p class="text-base leading-relaxed text-neutral-600">{{ statuses()[question().status] }}</p>
       @for (observation of question().observations; track observation.id) {
-        <p class="text-base leading-relaxed text-neutral-600">{{ observation.text_markdown }}</p>
+        <p class="text-base leading-relaxed text-neutral-600">
+          @for (part of segments(observation.text_markdown); track $index) {
+            @if (part.bold) {
+              <span class="font-semibold">{{ part.text }}</span>
+            } @else {
+              {{ part.text }}
+            }
+          }
+        </p>
       }
-      <p class="text-base leading-relaxed text-neutral-600">{{ question().limitations_markdown }}</p>
+      <p class="text-base leading-relaxed text-neutral-600">
+        @for (part of segments(question().limitations_markdown); track $index) {
+          @if (part.bold) {
+            <span class="font-semibold">{{ part.text }}</span>
+          } @else {
+            {{ part.text }}
+          }
+        }
+      </p>
       <ng-content />
     </div>
   }

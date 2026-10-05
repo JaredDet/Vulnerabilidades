@@ -1,6 +1,7 @@
 <div class="grid grid-cols-2 gap-4">
   <app-chart kind="doughnut" [title]="'ecosistemas'" [labels]="doughnut().labels" [series]="doughnut().series" />
   @if (ecosystems(); as table) {
+    <div class="min-w-0 overflow-x-auto">
     <table class="w-full text-center">
       <thead>
         <tr>
@@ -19,6 +20,7 @@
         }
       </tbody>
     </table>
+    </div>
   }
 </div>
 <app-chart [title]="'ecosistemas_por_repositorio'" [stacked]="true" [labels]="stacked().labels" [series]="stacked().series" />

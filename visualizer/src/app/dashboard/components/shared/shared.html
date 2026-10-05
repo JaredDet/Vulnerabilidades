@@ -1,5 +1,6 @@
 <app-chart [title]="'versiones_compartidas - repositorios'" [horizontal]="true" [labels]="chart().labels" [series]="chart().series" />
 @if (versions(); as table) {
+  <div class="overflow-x-auto">
   <table class="w-full text-center">
     <thead>
       <tr>
@@ -18,4 +19,5 @@
       }
     </tbody>
   </table>
+  </div>
 }

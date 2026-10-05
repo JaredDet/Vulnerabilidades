@@ -12,4 +12,8 @@ export class QuestionPanel {
   readonly question = input.required<AnalysisQuestion>();
   readonly open = input(false);
   readonly toggled = output<void>();
+
+  segments(markdown: string): Array<{ bold: boolean; text: string }> {
+    return markdown.split('**').map((text, index) => ({ bold: index % 2 === 1, text }));
+  }
 }

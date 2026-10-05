@@ -3,9 +3,9 @@
   <p class="text-base leading-relaxed text-neutral-600">{{ analysis().summary.scope }}</p>
   <div class="grid grid-cols-4">
     @for (item of summaryItems(); track item.label) {
-      <div class="flex flex-col items-center justify-center text-center">
+      <div class="flex min-w-0 flex-col items-center justify-center text-center">
         <p class="text-xl font-semibold">{{ item.value }}</p>
-        <p class="text-sm text-neutral-500">{{ item.label }}</p>
+        <p class="w-full break-words text-sm text-neutral-500">{{ item.label }}</p>
       </div>
     }
   </div>
