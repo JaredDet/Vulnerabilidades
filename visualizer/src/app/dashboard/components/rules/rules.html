@@ -1,5 +1,11 @@
 <div class="grid grid-cols-2 gap-4">
-  @for (chart of charts(); track chart.series[0].label) {
-    <app-chart [title]="(chart.series[0].label === 'coincidencias' ? 'reglas_globales' : 'reglas_compartidas') + ' - ' + chart.series[0].label" [horizontal]="true" [labels]="chart.labels" [series]="chart.series" />
-  }
+  <app-chart [title]="'reglas_globales - coincidencias'" [horizontal]="true" [labels]="frequency().labels" [series]="frequency().series" />
+  <app-data-table
+    [title]="'reglas_globales'"
+    [columns]="ruleColumns"
+    [rows]="ruleRows()"
+    [nullText]="nullText()"
+    [initialSort]="ruleSort"
+  />
 </div>
+<app-chart [title]="'reglas_compartidas - repositorios_afectados'" [horizontal]="true" [labels]="sharedRules().labels" [series]="sharedRules().series" />

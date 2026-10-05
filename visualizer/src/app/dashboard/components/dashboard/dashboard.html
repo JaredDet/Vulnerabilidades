@@ -14,7 +14,7 @@
             <app-distribution [question]="question" />
           }
           @case ('q02') {
-            <app-rules [question]="question" />
+            <app-rules [question]="question" [nullText]="analysis.conventions.null" />
           }
           @case ('q03') {
             <app-severity [question]="question" />
