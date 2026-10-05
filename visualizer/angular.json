@@ -22,11 +22,6 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "analysis.json",
-                "input": "../analyzer/outputs/django/clone-x269596i",
-                "output": "/"
               }
             ],
             "styles": [
