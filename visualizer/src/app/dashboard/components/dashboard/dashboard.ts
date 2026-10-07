@@ -1,0 +1,46 @@
+import { isPlatformBrowser } from '@angular/common';
+import { Component, PLATFORM_ID, afterNextRender, inject, signal } from '@angular/core';
+
+import { Analysis } from '../../interfaces/analysis';
+import { AnalysisService } from '../../services/analysis';
+import { Distribution } from '../distribution/distribution';
+import { Ecosystems } from '../ecosystems/ecosystems';
+import { Exposure } from '../exposure/exposure';
+import { Files } from '../files/files';
+import { Overview } from '../overview/overview';
+import { Packages } from '../packages/packages';
+import { QuestionPanel } from '../question-panel/question-panel';
+import { Relation } from '../relation/relation';
+import { Rules } from '../rules/rules';
+import { Severity } from '../severity/severity';
+import { Shared } from '../shared/shared';
+
+@Component({
+  imports: [Overview, QuestionPanel, Distribution, Rules, Severity, Packages, Relation, Files, Ecosystems, Exposure, Shared],
+  selector: 'app-dashboard',
+  styleUrl: './dashboard.css',
+  templateUrl: './dashboard.html',
+})
+export class Dashboard {
+  private readonly analysisService = inject(AnalysisService);
+  private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  readonly analysis = signal<Analysis | null>(null);
+  readonly openId = signal<string | null>(null);
+
+  constructor() {
+    afterNextRender(() => {
+      if (!this.browser) {
+        return;
+      }
+      this.analysisService.load().subscribe((analysis) => {
+        this.analysis.set(analysis);
+        this.openId.set(analysis.questions[0]?.id ?? null);
+      });
+    });
+  }
+
+  toggle(id: string): void {
+    this.openId.update((current) => (current === id ? null : id));
+  }
+}

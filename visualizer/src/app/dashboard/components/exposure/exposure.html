@@ -1,0 +1,12 @@
+<div class="grid grid-cols-2 gap-4">
+  @for (chart of charts(); track chart.series[0].label) {
+    <app-chart [title]="'componentes_por_repositorio - ' + chart.series[0].label" [horizontal]="true" [labels]="chart.labels" [series]="chart.series" />
+  }
+</div>
+<app-data-table
+  [title]="'componentes_por_repositorio'"
+  [columns]="exposureColumns"
+  [rows]="exposureRows()"
+  [nullText]="nullText()"
+  [initialSort]="exposureSort"
+/>

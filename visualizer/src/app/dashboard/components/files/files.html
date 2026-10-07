@@ -1,0 +1,7 @@
+<select class="rounded-xl bg-white p-2 text-sm text-neutral-700" [value]="selected()" (change)="select($event)">
+  @for (repository of repositories(); track repository) {
+    <option [value]="repository">{{ repository }}</option>
+  }
+</select>
+<app-chart [title]="'top_archivos - hallazgos'" [horizontal]="true" [labels]="chart().labels" [series]="chart().series" />
+<app-data-table [title]="'top_archivos'" [columns]="fileColumns" [rows]="fileRows()" [nullText]="nullText()" [initialSort]="fileSort" />

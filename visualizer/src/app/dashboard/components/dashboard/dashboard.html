@@ -1,0 +1,45 @@
+<div class="min-h-screen bg-white font-['Google_Sans_Flex'] text-neutral-900">
+  <div class="mx-auto flex w-full flex-col gap-4 px-6 py-10">
+  @if (analysis(); as analysis) {
+    <app-overview [analysis]="analysis" />
+    @for (question of analysis.questions; track question.id) {
+      <app-question-panel
+        [statuses]="analysis.conventions.statuses"
+        [question]="question"
+        [open]="openId() === question.id"
+        (toggled)="toggle(question.id)"
+      >
+        @switch (question.id) {
+          @case ('q01') {
+            <app-distribution [question]="question" />
+          }
+          @case ('q02') {
+            <app-rules [question]="question" [nullText]="analysis.conventions.null" />
+          }
+          @case ('q03') {
+            <app-severity [question]="question" />
+          }
+          @case ('q04') {
+            <app-packages [question]="question" [nullText]="analysis.conventions.null" />
+          }
+          @case ('q05') {
+            <app-relation [question]="question" [nullText]="analysis.conventions.null" />
+          }
+          @case ('q06') {
+            <app-files [question]="question" [nullText]="analysis.conventions.null" />
+          }
+          @case ('q07') {
+            <app-ecosystems [question]="question" [nullText]="analysis.conventions.null" />
+          }
+          @case ('q08') {
+            <app-exposure [question]="question" [nullText]="analysis.conventions.null" />
+          }
+          @case ('q09') {
+            <app-shared [question]="question" [nullText]="analysis.conventions.null" />
+          }
+        }
+      </app-question-panel>
+    }
+  }
+  </div>
+</div>

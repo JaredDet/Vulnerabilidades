@@ -1,0 +1,17 @@
+<div class="grid grid-cols-2 gap-4">
+  <app-chart [title]="'paquetes_compartidos - coincidencias_totales'" [horizontal]="true" [labels]="chart().labels" [series]="chart().series" />
+  <app-data-table
+    [title]="'paquetes_compartidos'"
+    [columns]="packageColumns"
+    [rows]="packageRows()"
+    [nullText]="nullText()"
+    [initialSort]="packageSort"
+  />
+</div>
+<app-data-table
+  [title]="'identificadores_compartidos'"
+  [columns]="identifierColumns"
+  [rows]="identifierRows()"
+  [nullText]="nullText()"
+  [initialSort]="identifierSort"
+/>

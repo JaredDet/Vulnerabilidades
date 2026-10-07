@@ -1,0 +1,4 @@
+<app-chart [title]="'versiones_compartidas - repositorios'" [horizontal]="true" [labels]="chart().labels" [series]="chart().series" />
+@if (versions(); as table) {
+  <app-data-table [title]="'versiones_compartidas'" [columns]="versionColumns()" [rows]="table.rows" [nullText]="nullText()" />
+}

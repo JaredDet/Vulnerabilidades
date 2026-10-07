@@ -1,0 +1,11 @@
+<div class="grid grid-cols-2 gap-4">
+  <app-chart [title]="'reglas_globales - coincidencias'" [horizontal]="true" [labels]="frequency().labels" [series]="frequency().series" />
+  <app-data-table
+    [title]="'reglas_globales'"
+    [columns]="ruleColumns"
+    [rows]="ruleRows()"
+    [nullText]="nullText()"
+    [initialSort]="ruleSort"
+  />
+</div>
+<app-chart [title]="'reglas_compartidas - repositorios_afectados'" [horizontal]="true" [labels]="sharedRules().labels" [series]="sharedRules().series" />

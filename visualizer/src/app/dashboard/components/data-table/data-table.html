@@ -1,0 +1,83 @@
+<div class="flex flex-col gap-3">
+  @if (title()) {
+    <h2 class="text-xl font-semibold tracking-tight text-neutral-900">{{ title() }}</h2>
+  }
+  <div class="flex flex-wrap items-center gap-2">
+    <input
+      class="rounded-xl bg-white p-2 text-sm text-neutral-700"
+      [value]="search()"
+      (input)="onSearch($event)"
+    />
+    @for (column of filterColumns(); track column.key) {
+      <select
+        class="rounded-xl bg-white p-2 text-sm text-neutral-700"
+        [value]="filters()[column.key] ?? ''"
+        (change)="onFilter(column.key, $event)"
+      >
+        <option value="">{{ column.key }}</option>
+        @for (option of filterOptions()[column.key]; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+    }
+  </div>
+  <div class="overflow-hidden rounded-2xl bg-white">
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-left text-sm text-neutral-700">
+        <thead>
+          <tr>
+            @for (column of columns(); track column.key) {
+              <th class="border-b-2 border-neutral-900 p-3 text-left font-semibold text-neutral-900">
+                <button type="button" class="font-semibold" (click)="toggleSort(column.key)">
+                  {{ column.key }}
+                  @if (activeSort()?.key === column.key) {
+                    {{ activeSort()?.direction === 'asc' ? '▲' : '▼' }}
+                  }
+                </button>
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of pageRows(); track $index; let last = $last) {
+            <tr>
+              @for (column of columns(); track column.key) {
+                <td
+                  class="p-3 align-top whitespace-pre-line"
+                  [class.border-b]="!last"
+                  [class.border-neutral-200]="!last"
+                >
+                  {{ cell(row, column.key) }}
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="flex flex-wrap items-center gap-2 text-sm text-neutral-700">
+    <button
+      type="button"
+      class="rounded-xl bg-white px-3 py-2 disabled:opacity-40"
+      [disabled]="safePage() === 0"
+      (click)="previous()"
+    >
+      ‹
+    </button>
+    <button
+      type="button"
+      class="rounded-xl bg-white px-3 py-2 disabled:opacity-40"
+      [disabled]="safePage() >= pageCount() - 1"
+      (click)="next()"
+    >
+      ›
+    </button>
+    <p>{{ rangeLabel() }}</p>
+    <select #pageSizeSelect class="rounded-xl bg-white p-2" (change)="onPageSize($event)">
+      @for (size of pageSizes; track size) {
+        <option [value]="size">{{ size }}</option>
+      }
+    </select>
+  </div>
+</div>
