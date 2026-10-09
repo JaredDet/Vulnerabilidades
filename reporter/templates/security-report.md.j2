@@ -1,0 +1,56 @@
+# Reporte de seguridad
+
+- Repositorio: {{ evidence.repository }}
+- Commit: {{ evidence.commit }}
+- Fecha: {{ evidence.analyzed_at }}
+
+## Cobertura
+
+| Herramienta | Versión | Estado |
+|---|---|---|
+{% for tool in evidence.tools -%}
+| {{ tool.name }} | {{ tool.version }} | {{ tool.status }}{% if tool.error %} ({{ tool.error }}){% endif %} |
+{% endfor %}
+
+## Resumen ejecutivo
+
+{{ analysis.executive_summary }}
+
+## Hallazgos
+
+{% for group in analyzed -%}
+### {{ group.ids }} — {{ group.identifier }} ({{ group.severity }})
+
+{{ group.summary }}
+
+{% for finding in group.findings -%}
+**Evidencia:** `{{ finding.location.file }}{% if finding.location.start_line %}:{{ finding.location.start_line }}{% endif %}`, identificador `{{ finding.id }}`.
+{% if finding.package %}Paquete `{{ finding.package }}` versión `{{ finding.version }}`.
+{% endif %}
+{% if finding.snippet -%}
+```{{ finding.snippet.start_line }}:{{ finding.snippet.end_line }}:{{ finding.location.file }}
+{{ finding.snippet.text }}
+```
+{% endif %}
+{% endfor -%}
+**Relevancia:** {{ group.analysis.relevance }}
+
+**Mitigación:** {{ group.analysis.mitigation }}
+{% if group.analysis.fix %}
+```{{ group.analysis.fix.kind }}
+{{ group.analysis.fix.text }}
+```
+{% endif %}
+{% else -%}
+Ninguno de severidad media o superior.
+{% endfor %}
+
+{% if deferred %}
+## Otros hallazgos
+
+| Identificador | Severidad | Ids | Ubicaciones |
+|---|---|---|---|
+{% for group in deferred -%}
+| {{ group.identifier }} | {{ group.severity }} | {{ group.ids }} | {{ group.locations }} |
+{% endfor %}
+{% endif %}

@@ -3,6 +3,7 @@ FROM python:3.11-slim
 ARG CODEQL_VERSION=2.27.0
 ARG SYFT_VERSION=1.52.0
 ARG GRYPE_VERSION=0.119.0
+ARG NODE_VERSION=20.19.0
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -24,7 +25,9 @@ RUN mkdir -p /opt/codeql \
     && curl -fsSL \
         "https://github.com/anchore/grype/releases/download/v${GRYPE_VERSION}/grype_${GRYPE_VERSION}_linux_amd64.tar.gz" \
         | tar -xz -C /usr/local/bin grype \
-    && chmod +x /opt/codeql/codeql /usr/local/bin/syft /usr/local/bin/grype
+    && chmod +x /opt/codeql/codeql /usr/local/bin/syft /usr/local/bin/grype \
+    && curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz" \
+        | tar -xz -C /usr/local --strip-components=1
 
 COPY pyproject.toml README.md ./
 COPY src ./src

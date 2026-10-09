@@ -2,3 +2,5 @@
 *.json -text whitespace=cr-at-eol
 *.sarif -text whitespace=cr-at-eol
 *.ipynb text eol=lf
+
+.github/workflows/*.lock.yml linguist-generated=true
