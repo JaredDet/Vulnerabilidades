@@ -1,5 +1,6 @@
 FROM python:3.11-slim
 
+# Keep CODEQL_VERSION, SYFT_VERSION and GRYPE_VERSION aligned with .devcontainer/Dockerfile.
 ARG CODEQL_VERSION=2.27.0
 ARG SYFT_VERSION=1.52.0
 ARG GRYPE_VERSION=0.119.0
