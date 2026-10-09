@@ -41,9 +41,21 @@ export class Packages {
 
   readonly identifierSort: DataTableSort = { key: 'coincidencias_totales', direction: 'desc' };
 
+  readonly frequentIdentifierColumns: DataTableColumn[] = [
+    { key: 'vulnerability_id' },
+    { key: 'repository' },
+    { key: 'package' },
+    { key: 'version' },
+    { key: 'severity', filter: true },
+  ];
+
   readonly packageRows = computed(() => this.question().tables['paquetes_compartidos']?.rows ?? []);
 
   readonly identifierRows = computed(() => this.question().tables['identificadores_compartidos']?.rows ?? []);
+
+  readonly frequentIdentifierRows = computed(
+    () => this.question().tables['detalle_identificadores_frecuentes']?.rows ?? [],
+  );
 
   readonly chart = computed(() => {
     const rows = this.question().tables['paquetes_compartidos']?.rows ?? [];

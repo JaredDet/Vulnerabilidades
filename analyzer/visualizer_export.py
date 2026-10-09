@@ -37,6 +37,7 @@ TABLES = {
     4: {
         "paquetes": ("ranking_paquetes_grype", "Nombre y tipo de paquete; incluye los de un solo repositorio."),
         "identificadores": ("ranking_identificadores_grype", "Identificador original de Grype; sin resolver alias CVE/GHSA."),
+        "detalle_identificadores_frecuentes": ("detalle_identificadores_frecuentes", "Repositorio, paquete y versión para los identificadores más frecuentes de Grype."),
         "paquetes_compartidos": ("paquetes_compartidos", "Paquete y ecosistema presentes en varios repositorios."),
         "identificadores_compartidos": ("vulnerabilidades_compartidas", "Identificador presente en varios repositorios."),
         "detalle_paquetes_compartidos": ("detalle_paquetes_compartidos", "Registros originales asociados a paquetes compartidos."),

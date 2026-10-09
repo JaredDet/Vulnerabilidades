@@ -1,6 +1,6 @@
 {
   "schema_version": "1.1",
-  "generated_at_utc": "2026-10-05T04:32:35.733566+00:00",
+  "generated_at_utc": "2026-10-09T16:08:39.740620+00:00",
   "organization": "django",
   "clone_run": "clone-x269596i",
   "summary": {
@@ -22,8 +22,8 @@
   },
   "provenance": {
     "notebook": "analyzer/notebooks/analyzer.ipynb",
-    "notebook_source_sha256": "d1dccd93724e91cb71997a7f5d81466434f216c810308bc7e755efe52eb5abb9",
-    "exporter_sha256": "79cf0b3ee6d9f532662b36356ea36c6661cc63b8c45074fcfbe2a7a6feb9873c",
+    "notebook_source_sha256": "e547c1e831de27b3a540df5d8494a4fb2fb915f91a90f73041f1bd557a12fb09",
+    "exporter_sha256": "50b6d55d204907d3ef85a9a4e249391f6bfa58f49d0bfe85c11167c33847c357",
     "python": "3.11.14",
     "packages": {
       "pandas": "2.3.3",
@@ -6839,10 +6839,11 @@
       "observations": [
         {
           "id": "q04-o01",
-          "text_markdown": "Pregunta 4.1\n\nEn los paquetes, python: django domina abrumadoramente con más de 50 registros de coincidencias, seguido de lejos por python: pillow y otros paquetes del ecosistema Python.\n\nEn los identificadores, destacan como los más repetidos `GHSA-gc5v-m9x4-r6x2` y `GHSA-q238-5cxm-5c9h` con 3 registros, mientras que el resto se mantiene en 2.\n\n* **`GHSA-gc5v-m9x4-r6x2` (`requests`):** Vulnerabilidad de severidad media (CVSS 5.5) en `requests.utils.extract_zipped_paths()`, la cual utiliza nombres de archivo predecibles al extraer archivos ZIP en directorios temporales, permitiendo ataques deplantación de archivos locales si el destino ya existe.\n* **`GHSA-q238-5cxm-5c9h` (`django`):** Vulnerabilidad de denegación de servicio (DoS) por recursión no controlada en `django.contrib.gis.geos.GEOSGeometry` (GeoDjango) al procesar colecciones de geometrías con anidamientos profundos.",
+          "text_markdown": "Pregunta 4.1\n\nEn los paquetes, python: django domina abrumadoramente con más de 50 registros de coincidencias, seguido de lejos por python: pillow y otros paquetes del ecosistema Python.\n\nEn los identificadores, destacan como los más repetidos `GHSA-gc5v-m9x4-r6x2` y `GHSA-q238-5cxm-5c9h` con 3 registros, mientras que el resto se mantiene en 2.\n\n* **`GHSA-gc5v-m9x4-r6x2` (`requests`):** Aparece en `djangopeople`, `djangosnippets.org` y `ticketbot`. El advisory afecta solo a aplicaciones que llaman directamente a `requests.utils.extract_zipped_paths()` y presupone que un atacante local puede escribir en el directorio temporal; la dependencia por sí sola no demuestra que el sitio sea explotable.\n* **`GHSA-q238-5cxm-5c9h` (`django`):** Aparece en `djangopeople`, `djangoproject.com` y `djangosnippets.org`. Describe un DoS al procesar geometrías profundamente anidadas mediante GeoDjango; la coincidencia de Django no demuestra que GeoDjango esté instalado o que la aplicación alcance ese código.\n\nLa tabla `detalle_identificadores_frecuentes` desglosa estos identificadores por repositorio, paquete y versión. Son coincidencias de Grype; no acreditan uso en producción, alcanzabilidad ni explotación.",
           "evidence_tables": [
             "paquetes",
             "identificadores",
+            "detalle_identificadores_frecuentes",
             "paquetes_compartidos",
             "identificadores_compartidos",
             "detalle_paquetes_compartidos"
@@ -6858,6 +6859,7 @@
           "evidence_tables": [
             "paquetes",
             "identificadores",
+            "detalle_identificadores_frecuentes",
             "paquetes_compartidos",
             "identificadores_compartidos",
             "detalle_paquetes_compartidos"
@@ -6873,6 +6875,7 @@
           "evidence_tables": [
             "paquetes",
             "identificadores",
+            "detalle_identificadores_frecuentes",
             "paquetes_compartidos",
             "identificadores_compartidos",
             "detalle_paquetes_compartidos"
@@ -8261,6 +8264,62 @@
               "severidades": [
                 "Medium"
               ]
+            }
+          ]
+        },
+        "detalle_identificadores_frecuentes": {
+          "grain": "Repositorio, paquete y versión para los identificadores más frecuentes de Grype.",
+          "columns": [
+            "vulnerability_id",
+            "repository",
+            "package",
+            "version",
+            "severity"
+          ],
+          "row_count": 6,
+          "metric_definitions": {},
+          "rows": [
+            {
+              "vulnerability_id": "GHSA-gc5v-m9x4-r6x2",
+              "repository": "django/djangopeople",
+              "package": "requests",
+              "version": "2.22.0",
+              "severity": "Medium"
+            },
+            {
+              "vulnerability_id": "GHSA-gc5v-m9x4-r6x2",
+              "repository": "django/djangosnippets.org",
+              "package": "requests",
+              "version": "2.32.4",
+              "severity": "Medium"
+            },
+            {
+              "vulnerability_id": "GHSA-gc5v-m9x4-r6x2",
+              "repository": "django/ticketbot",
+              "package": "requests",
+              "version": "2.31.0",
+              "severity": "Medium"
+            },
+            {
+              "vulnerability_id": "GHSA-q238-5cxm-5c9h",
+              "repository": "django/djangopeople",
+              "package": "django",
+              "version": "2.1.10",
+              "severity": "Medium"
+            },
+            {
+              "vulnerability_id": "GHSA-q238-5cxm-5c9h",
+              "repository": "django/djangoproject.com",
+              "package": "django",
+              "version": "6.1",
+              "severity": "Medium"
+            },
+            {
+              "vulnerability_id": "GHSA-q238-5cxm-5c9h",
+              "repository": "django/djangosnippets.org",
+              "package": "django",
+              "version": "5.2.7",
+              "severity": "Medium"
             }
           ]
         },
