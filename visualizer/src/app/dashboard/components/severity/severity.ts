@@ -54,13 +54,20 @@ export class Severity {
     const tools = [...new Set(severities.map((row) => text(row['tool'])).filter((tool) => tool !== ''))];
     const top = tools.map((tool) => {
       const rows = severities.filter((row) => text(row['tool']) === tool);
+      const total = rows.reduce(
+        (sum, row) => sum + (typeof row['coincidencias'] === 'number' ? row['coincidencias'] : 0),
+        0,
+      );
       const best = rows.reduce((current, row) => {
-        const hallazgos = typeof row['hallazgos'] === 'number' ? row['hallazgos'] : -1;
-        const currentHallazgos = typeof current['hallazgos'] === 'number' ? current['hallazgos'] : -1;
-        return hallazgos > currentHallazgos ? row : current;
+        const count = typeof row['coincidencias'] === 'number' ? row['coincidencias'] : -1;
+        const currentCount = typeof current['coincidencias'] === 'number' ? current['coincidencias'] : -1;
+        return count > currentCount ? row : current;
       });
       return {
-        value: typeof best['proporcion'] === 'number' ? formatAnalysisNumber(best['proporcion'], 'proporcion') : '',
+        value:
+          total > 0 && typeof best['coincidencias'] === 'number'
+            ? formatAnalysisNumber(best['coincidencias'] / total, 'proporcion')
+            : '',
         label: text(best['severity']),
       };
     });
@@ -78,7 +85,7 @@ export class Severity {
       const series: ChartSeries[] = [
         {
           label: 'hallazgos',
-          data: matching.map((row) => (typeof row['hallazgos'] === 'number' ? row['hallazgos'] : null)),
+          data: matching.map((row) => (typeof row['coincidencias'] === 'number' ? row['coincidencias'] : null)),
           colors: labels.map((label) => severityColor(label)),
         },
       ];

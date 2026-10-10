@@ -12,7 +12,7 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-The dashboard reads `public/analysis.json`. That path is a link to `analyzer/outputs/django/clone-x269596i/analysis.json`. Replace the export and reload the page to show another run. The page renders the questions present in the file.
+The dashboard reads `public/analysis.json`. The publish step copies the selected Analyzer export there. Run `make publish` after generating an analysis, then reload the page to show the new results. The page renders the questions present in the file.
 
 ## Code scaffolding
 

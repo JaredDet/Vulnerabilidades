@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Points visualizer/public/analysis.json at the Analyzer export.
+# Copies the selected Analyzer export to the Visualizer's public data path.
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -24,6 +24,5 @@ if [[ ! -f "$absolute" ]]; then
 fi
 
 link="$root/visualizer/public/analysis.json"
-relative="$(realpath --relative-to="$(dirname "$link")" "$absolute")"
-ln -sfn "$relative" "$link"
-echo "Visualizer: visualizer/public/analysis.json -> $relative"
+cp "$absolute" "$link"
+echo "Visualizer: copied $target to visualizer/public/analysis.json"
